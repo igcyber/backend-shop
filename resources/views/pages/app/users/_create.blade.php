@@ -8,7 +8,7 @@
             <div class="form-group">
                 <label for="name">Nama Lengkap</label>
                 <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
-                    name="name" placeholder="Tuliskan Nama Lengkap">
+                    name="name" placeholder="Tuliskan Nama Lengkap" value="{{ old('name') }}">
                 @error('name')
                     <div class="invalid-feedback" style="display: block">
                         {{ $message }}
@@ -18,7 +18,7 @@
             <div class="form-group">
                 <label for="username">Nama Pengguna</label>
                 <input type="text" id="username" class="form-control @error('username') is-invalid @enderror"
-                    name="username" placeholder="Tuliskan Nama Pengguna">
+                    name="username" placeholder="Tuliskan Nama Pengguna" value="{{ old('username') }}">
                 @error('username')
                     <div class="invalid-feedback" style="display: block">
                         {{ $message }}
@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label for="email">Alamat E-Mail</label>
                 <input type="email" id="email" class="form-control @error('email') is-invalid @enderror"
-                    name="email" placeholder="Tuliskan E-Mail">
+                    name="email" placeholder="Tuliskan E-Mail" value="{{ old('email') }}">
                 @error('email')
                     <div class="invalid-feedback" style="display: block">
                         {{ $message }}
@@ -36,9 +36,9 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label class="fw-bold">Password</label>
-                <input class="form-control" name="password" type="password" placeholder="Tuliskan Password"
-                    value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" value="{{ old('password') }}"
+                    placeholder="Tuliskan Password" class="form-control @error('password') is-invalid @enderror">
                 @error('password')
                     <div class="invalid-feedback" style="display: block">
                         {{ $message }}
@@ -46,9 +46,10 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label class="fw-bold">Konfirmasi Password</label>
-                <input class="form-control" name="password_confirmation" type="password"
-                    placeholder="Konfirmasi Password" value="{{ old('password_confirmation') }}">
+                <label for="password_conf">Konfirmasi Password</label>
+                <input name="password_confirmation"
+                    class="form-control @error('password_confirmation') is-invalid @enderror" type="password"
+                    placeholder="Konfirmasi Password">
             </div>
             <div class="form-group">
                 <div class="mb-3">

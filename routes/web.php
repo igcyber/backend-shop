@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Permission;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
+use App\Http\Controllers\Apps\CategoryController;
 use App\Http\Controllers\Apps\PermissionController;
 
 Route::get('/', function () {
@@ -25,4 +26,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Users Route
     Route::resource('/users', UserController::class)->middleware('permission:users.index|users.create|users.edit|users.delete');
+
+    //Categories Route
+    Route::resource('/categories', CategoryController::class)->middleware('permission:categories.index|categories.create|categories.edit|categories.delete');
 });

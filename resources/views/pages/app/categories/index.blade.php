@@ -10,30 +10,18 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Halaman Pengguna</h1>
+                <h1>Halaman Tipe Produk</h1>
             </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Pengguna</h4>
+                                <h4>Data Tipe Produk</h4>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('app.users.index') }}" method="GET">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="q"
-                                            placeholder="cari berdasarkan nama pengguna">
-                                        <button class="btn btn-primary input-group-text" type="submit">
-                                            <i class="fa fa-search me-2 text-white"></i>
-                                        </button>
-                                        <button class="btn btn-primary input-group-text" onclick="resetPage()">
-                                            <i class="fas fa-sync-alt me-2 text-white"></i>
-                                        </button>
-                                    </div>
-                                </form>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-m">
+                                    {{-- <table class="table table-bordered table-m">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%">No</th>
@@ -83,16 +71,16 @@
                                             @endforeach
 
                                         </tbody>
-                                    </table>
+                                    </table> --}}
                                 </div>
                             </div>
                             <div class="card-footer pull-right">
-                                {{ $users->links('vendor.pagination.bootstrap-4') }}
+                                {{-- {{ $users->links('vendor.pagination.bootstrap-4') }} --}}
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4">
-                        @include('pages.app.users._create')
+                        {{-- @include('pages.app.users._create') --}}
                     </div>
                 </div>
             </div>

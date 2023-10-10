@@ -19,6 +19,11 @@
                     </li>
                 </ul>
             </li>
+            <li class="menu-header">Manajemen Produk</li>
+            <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('app.categories.index') }}"><i class="fas fa-tag"></i>
+                    <span>Kategori Produk</span></a>
+            </li>
             <li class="menu-header">Manajemen Pengguna</li>
             <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('app.users.index') }}"><i class="fas fa-user"></i>
@@ -32,6 +37,7 @@
                 <a class="nav-link" href="{{ route('app.roles.index') }}"><i class="fas fa-key"></i>
                     <span>Hak Akses</span></a>
             </li>
+
 
         </ul>
     </aside>
