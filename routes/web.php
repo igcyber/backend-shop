@@ -8,7 +8,7 @@ use App\Http\Controllers\Apps\CategoryController;
 use App\Http\Controllers\Apps\PermissionController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('front-end.index');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], function () {
@@ -29,4 +29,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Categories Route
     Route::resource('/categories', CategoryController::class)->middleware('permission:categories.index|categories.create|categories.edit|categories.delete');
+
+    //Categories Status Route
+    Route::put('/change-status', [CategoryController::class, 'changeStatus'])->name('categories.change-status');
 });

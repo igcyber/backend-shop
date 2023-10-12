@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tipe Produk')
+@section('title', 'Pabrikan Produk')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -10,14 +10,14 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Halaman Tipe Produk</h1>
+                <h1>Halaman Pabrikan Produk</h1>
             </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-8 col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Tipe Produk</h4>
+                                <h4>Data Pabrikan Produk</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table table-responsive">

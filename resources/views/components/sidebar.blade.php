@@ -20,20 +20,24 @@
                 </ul>
             </li>
             <li class="menu-header">Manajemen Produk</li>
-            <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
+            <li class="{{ setActive(['app.categories.*']) }}">
                 <a class="nav-link" href="{{ route('app.categories.index') }}"><i class="fas fa-tag"></i>
                     <span>Kategori Produk</span></a>
             </li>
+            {{-- <li class="{{ setActive(['app.categories.*']) }}">
+                <a class="nav-link" href="{{ route('app.categories.index') }}"><i class="fas fa-tag"></i>
+                    <span>Pabrikan Produk</span></a>
+            </li> --}}
             <li class="menu-header">Manajemen Pengguna</li>
-            <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
+            <li class="{{ setActive(['app.users.*']) }}">
                 <a class="nav-link" href="{{ route('app.users.index') }}"><i class="fas fa-user"></i>
                     <span>Pengguna</span></a>
             </li>
-            <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
+            <li class="{{ setActive(['app.permissions']) }}">
                 <a class="nav-link" href="{{ route('app.permissions') }}"><i class="fas fa-lock"></i>
                     <span>Izin Akses</span></a>
             </li>
-            <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
+            <li class="{{ setActive(['app.roles.*']) }}">
                 <a class="nav-link" href="{{ route('app.roles.index') }}"><i class="fas fa-key"></i>
                     <span>Hak Akses</span></a>
             </li>

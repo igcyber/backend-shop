@@ -23,3 +23,16 @@ if (!function_exists('dateID')) {
         return $parse->translatedFormat('l, d F Y');
     }
 }
+
+if (!function_exists('setActive')) {
+    function setActive(array $route)
+    {
+        if (is_array($route)) {
+            foreach ($route as $r) {
+                if (request()->routeIs($r)) {
+                    return 'active';
+                }
+            }
+        }
+    }
+}
