@@ -24,10 +24,10 @@
                 <a class="nav-link" href="{{ route('app.categories.index') }}"><i class="fas fa-tag"></i>
                     <span>Kategori Produk</span></a>
             </li>
-            {{-- <li class="{{ setActive(['app.categories.*']) }}">
-                <a class="nav-link" href="{{ route('app.categories.index') }}"><i class="fas fa-tag"></i>
+            <li class="{{ setActive(['app.vendors.*']) }}">
+                <a class="nav-link" href="{{ route('app.vendors.index') }}"><i class="fas fa-tag"></i>
                     <span>Pabrikan Produk</span></a>
-            </li> --}}
+            </li>
             <li class="menu-header">Manajemen Pengguna</li>
             <li class="{{ setActive(['app.users.*']) }}">
                 <a class="nav-link" href="{{ route('app.users.index') }}"><i class="fas fa-user"></i>

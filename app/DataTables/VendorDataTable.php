@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class CategoryDataTable extends DataTable
+class VendorDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,14 +23,14 @@ class CategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $editBtn = "<a href='" . route('app.categories.edit', $query->id) . "'
-                class='btn btn-primary btn-sm mx-2'>
-                <i class='fas fa-pencil-alt'></i>
-                </a>";
+                $editBtn = "<a href='" . route('app.vendors.edit', $query->id) . "'
+            class='btn btn-primary btn-sm mx-2'>
+            <i class='fas fa-pencil-alt'></i>
+            </a>";
                 $delBtn = "<button onClick='Delete(this.id)' class='btn btn-danger btn-sm'
-                id=$query->id>
-                <i class='fas fa-trash'></i>
-                </button>";
+            id=$query->id>
+            <i class='fas fa-trash'></i>
+            </button>";
 
                 return $editBtn . $delBtn;
             })
@@ -50,13 +50,12 @@ class CategoryDataTable extends DataTable
                 return $button;
             })
             ->rawColumns(['action', 'status']);
-        // ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Category $model): QueryBuilder
+    public function query(Vendor $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -67,7 +66,7 @@ class CategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('category-table')
+            ->setTableId('vendor-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
@@ -97,7 +96,7 @@ class CategoryDataTable extends DataTable
             Column::make('name')
                 ->width(400),
             Column::make('status')
-                ->width(10),
+                ->width(50),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -111,6 +110,6 @@ class CategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Category_' . date('YmdHis');
+        return 'Vendor_' . date('YmdHis');
     }
 }

@@ -45,16 +45,6 @@ class Product extends Model
     }
 
     /**
-     * Belongs to Relationship model with unit model
-     *
-     * @return void
-     */
-    public function unit()
-    {
-        return $this->belongsTo(Unit::class);
-    }
-
-    /**
      * Accesor Image
      *
      * @return Attribute

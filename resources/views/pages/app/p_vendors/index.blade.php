@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-4 col-lg-4">
-                        @include('pages.app.categories._create')
+                        @include('pages.app.p_vendors._create')
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
 
                     //ajax delete
                     jQuery.ajax({
-                        url: "/app/categories/" + id,
+                        url: "/app/vendors/" + id,
                         data: {
                             "id": id,
                             "_token": token
@@ -109,7 +109,7 @@
                 let id = $(this).data('id');
                 // console.log(typeof(isChecked));
                 jQuery.ajax({
-                    url: "{{ route('app.categories.change-status') }}",
+                    url: "{{ route('app.vendors.change-status') }}",
                     method: 'PUT',
                     data: {
                         status: status,

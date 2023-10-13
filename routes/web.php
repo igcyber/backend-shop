@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Permission;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
+use App\Http\Controllers\Apps\VendorController;
 use App\Http\Controllers\Apps\CategoryController;
 use App\Http\Controllers\Apps\PermissionController;
 
@@ -31,5 +32,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::resource('/categories', CategoryController::class)->middleware('permission:categories.index|categories.create|categories.edit|categories.delete');
 
     //Categories Status Route
-    Route::put('/change-status', [CategoryController::class, 'changeStatus'])->name('categories.change-status');
+    Route::put('category/change-status', [CategoryController::class, 'changeStatus'])->name('categories.change-status');
+
+    //Vendors Route
+    Route::resource('/vendors', VendorController::class)->middleware('permission:vendors.index|vendors.create|vendor.edit|vendors.delete');
+
+    //Vendors Status Route
+    Route::put('vendor/change-status', [VendorController::class, 'changeStatus'])->name('vendors.change-status');
 });
