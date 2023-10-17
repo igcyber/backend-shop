@@ -3,7 +3,11 @@
 @section('title', 'Pabrikan Produk')
 
 @push('style')
-    <!-- CSS Libraries -->
+    <style>
+        #vendor-table {
+            width: 100% !important
+        }
+    </style>
 @endpush
 
 @section('main')

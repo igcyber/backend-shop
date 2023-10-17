@@ -5,6 +5,7 @@ use Spatie\Permission\Contracts\Permission;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Apps\VendorController;
+use App\Http\Controllers\Apps\ProductController;
 use App\Http\Controllers\Apps\CategoryController;
 use App\Http\Controllers\Apps\PermissionController;
 
@@ -39,4 +40,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Vendors Status Route
     Route::put('vendor/change-status', [VendorController::class, 'changeStatus'])->name('vendors.change-status');
+
+    //Products Route
+    Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
 });

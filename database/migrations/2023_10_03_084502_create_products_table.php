@@ -16,17 +16,19 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('vendor_id');
+            $table->string('serial_number')->unique();
             $table->string('image')->nullable();
-            $table->string('barcode')->unique()->nullable();
             $table->string('title');
             $table->text('short_description')->nullable();
             $table->bigInteger('buy_price');
-            $table->bigInteger('sell_price');
+            $table->bigInteger('sell_price_duz');
+            $table->bigInteger('sell_price_pack');
+            $table->bigInteger('sell_price_pcs')->nullable();
             $table->integer('stock');
             $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
             $table->enum('periode', ['Regular', 'Seasonal'])->default('Regular');
             $table->enum('unit', ['Baal', 'Duz', 'Pack', 'Pcs'])->default('Duz');
-            $table->boolean('is_top')->default(0);
+            $table->boolean('is_top');
             $table->timestamps();
 
             //relationship categories

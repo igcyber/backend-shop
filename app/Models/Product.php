@@ -13,15 +13,19 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'vendor_id',
-        'unit_id',
         'image',
-        'barcode',
+        'serial_number',
         'title',
+        'short_descriptions',
         'buy_price',
-        'sell_price',
+        'sell_price_duz',
+        'sell_price_pack',
+        'sell_price_pcs',
         'stock',
         'tax_type',
         'periode',
+        'unit',
+        'is_top'
     ];
 
     /**

@@ -3,7 +3,11 @@
 @section('title', 'Tipe Produk')
 
 @push('style')
-    <!-- CSS Libraries -->
+    <style>
+        #category-table {
+            width: 100% !important
+        }
+    </style>
 @endpush
 
 @section('main')
@@ -20,8 +24,10 @@
                                 <h4>Data Tipe Produk</h4>
                             </div>
                             <div class="card-body">
-                                <div class="table table-responsive">
+                                <div class="table table-responsive table-l">
+
                                     {{ $dataTable->table() }}
+
                                 </div>
                             </div>
                         </div>
