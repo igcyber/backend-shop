@@ -7,11 +7,11 @@ use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Apps\VendorController;
 use App\Http\Controllers\Apps\ProductController;
 use App\Http\Controllers\Apps\CategoryController;
+use App\Http\Controllers\Apps\CustomerController;
+use App\Http\Controllers\Apps\HomeController;
 use App\Http\Controllers\Apps\PermissionController;
 
-Route::get('/', function () {
-    return view('front-end.index');
-});
+Route::get('/', [HomeController::class, 'index']);
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], function () {
     // Dashboard Route
@@ -43,4 +43,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Products Route
     Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
+
+    //Customer's Route
+    Route::resource('/customers', CustomerController::class);
 });

@@ -30,6 +30,7 @@
                         <span>Tipe Produk</span></a>
                 </li>
             @endrole
+
             @role('Admin Gudang')
                 <li class="{{ setActive(['app.products.*']) }}">
                     <a class="nav-link" href="{{ route('app.products.index') }}"><i class="fas fa-window-restore"></i>
@@ -38,6 +39,11 @@
             @endrole
 
             @role('Supervisor')
+                <li class="menu-header">Manajemen Customer</li>
+                <li class="{{ setActive(['app.customers.*']) }}">
+                    <a class="nav-link" href="{{ route('app.customers.index') }}"><i class="fas fa-user-alt"></i>
+                        <span>Customer</span></a>
+                </li>
                 <li class="menu-header">Manajemen Pengguna</li>
                 <li class="{{ setActive(['app.users.*']) }}">
                     <a class="nav-link" href="{{ route('app.users.index') }}"><i class="fas fa-user"></i>

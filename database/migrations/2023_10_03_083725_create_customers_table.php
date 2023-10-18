@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('klasifikasi', ['Toko', 'Perorangan', 'MT', 'PS. Basah', 'Grosir', 'Toko', 'Retail']);
-            $table->integer('no_telp');
-            $table->text('adress');
-            $table->timestamps();
+            $table->string('no_telp');
+            $table->text('address');
+            $table->$table->timestamps();
         });
     }
 

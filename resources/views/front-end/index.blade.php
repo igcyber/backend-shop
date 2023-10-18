@@ -9,8 +9,7 @@
     <!-- fontawesome cdn -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-      crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
@@ -42,8 +41,8 @@
                             <a class = "nav-link text-uppercase text-dark" href = "#">Shop</a>
                         </li>
                         <li class = "nav-item px-2 py-2">
-                            <a class = "nav-link text-uppercase text-dark" href = "#"><i class="fas fa-user-circle"
-                                    style="font-size: 27px;"></i></a>
+                            <a class = "nav-link text-uppercase text-dark" href = "{{ route('login') }}"><i
+                                    class="fas fa-user-circle" style="font-size: 27px;"></i></a>
                         </li>
                         </li>
                     </ul>
@@ -130,6 +129,10 @@
 
             <!-- Start Produk Kami -->
             <section id = "collection" class = "py-5">
+                @php
+                    $list_category = json_decode($category);
+                    // dd($list_category);
+                @endphp
                 <div class = "container">
                     <div class = "title text-center">
                         <h2>PRODUK KAMI</h2>
@@ -137,145 +140,45 @@
                     </div>
                     <div class = "row g-0">
                         <div class = "d-flex flex-wrap justify-content-center mt-5 filter-button-group">
-                            <button type = "button" class = "btn m-2 text-dark active-filter-btn"
-                                data-filter = "*">All</button>
-                            <button type = "button" class = "btn m-2 text-dark" data-filter = ".Produk2">Produk
-                                2</button>
-                            <button type = "button" class = "btn m-2 text-dark" data-filter = ".Produk3">Produk
-                                3</button>
-                            <button type = "button" class = "btn m-2 text-dark" data-filter = ".Produk4">Produk
-                                4</button>
-                            <button type = "button" class = "btn m-2 text-dark" data-filter = ".Produk5">Produk
-                                5</button>
-                        </div>
-                        <!-- bagian foto produk -->
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="{{ asset('front-end/img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png') }}"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
-                        </div>
+                            <button type="button" class="btn m-2 text-dark" data-filter="*">All</button>
+                            @php
+                                $products = [];
+                            @endphp
+                            @foreach ($category as $key => $filterCat)
+                                @php
+                                    $products[] = \App\Models\Product::where('category_id', $filterCat->id)
+                                        ->orderBy('id', 'DESC')
+                                        ->take(8)
+                                        ->get();
+                                @endphp
+                                <button class="btn m-2 text-dark"
+                                    data-filter=".category-{{ $loop->index }}">{{ $filterCat->name }}</button>
+                            @endforeach
 
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
                         </div>
+                        {{-- @dd($products) --}}
 
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
+                        <!-- bagian produk -->
+                        @foreach ($products as $key => $product)
+                            @foreach ($product as $item)
+                                <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat category-{{ $key }}">
+                                    <div class="card" style="width: 18rem; margin: 10px;">
+                                        <img src="{{ asset('front-end/img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png') }}"
+                                            class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $item->title }}</h5>
+                                            <span>Stok : {{ $item->stock }}</span><br>
+                                            <span class="fw-bold">Harga
+                                                : {{ moneyFormat($item->sell_price_duz) }}/Duz</span>
+                                            <p class="card-text">Keterangan : {!! $item->short_description !!}</p>
+                                            <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
+                                            <a href="#" class="btn btn-primary"><i
+                                                    class="fas fa-shopping-cart"></i></span></a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class = "col-md-6 col-lg-4 col-xl-3 p-2 feat">
-                            <div class="card" style="width: 18rem; margin: 10px;">
-                                <img src="img/produk upindo/BISKUIT MELLISA BOX (10 G X 30 PCS X 16 BOX)-min.png"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Nama Barang</h5>
-                                    <span>-Stok Barang-</span><br>
-                                    <span class = "fw-bold">Rp. Harga</span>
-                                    <p class="card-text">Keterangan Barang.</p>
-                                    <a href="detail.html" class="btn btn-primary">Lihat Barang</a>
-                                    <a href="#" class="btn btn-primary"><i
-                                            class="fas fa-shopping-cart"></i></span></a>
-                                </div>
-                            </div>
-                        </div>
+                            @endforeach
+                        @endforeach
 
                         <!-- Tombol "Lihat Lebih Lengkap" -->
                         <div class="container mt-5 text-end">
