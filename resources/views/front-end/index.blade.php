@@ -13,13 +13,9 @@
     </section>
     <!-- end of header -->
 
-    <!-- about us -->
-    <section id="collection" class="py-5 mx-3">
-        @include('front-end.layouts._about')
-    </section>
-
+    {{-- main content --}}
     <div class="container">
-        <div class="title text-center">
+        <div class="title text-center mt-5">
             <h2>PRODUK KAMI</h2>
             <div class="custom-horizontal-line"></div>
         </div>
@@ -58,21 +54,28 @@
                                             <i class="fas fa-shopping-cart"></i> Pesan Sekarang
                                         </button>
 
-
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
+                        <!-- Tombol "Lihat Lebih Lengkap" -->
+                        <div class="container text-end">
+                            <a href="#" class="btn btn-primary shadow">Lihat Lebih Lengkap <i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Tombol "Lihat Lebih Lengkap" -->
-            <div class="container text-end pb-5">
-                <a href="#" class="btn btn-primary shadow">Lihat Lebih Lengkap <i class="fas fa-arrow-right"></i></a>
-            </div>
+
         </div>
     </div>
+
+    <!-- about us -->
+    <section id="collection" class="py-5 mx-3 font-gone">
+        @include('front-end.layouts._about')
+    </section>
 
     <!-- Modal -->
     @include('front-end.layouts._modal')

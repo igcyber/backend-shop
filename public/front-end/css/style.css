@@ -279,6 +279,9 @@ footer .copyright {
     .text-size-custom {
         display: none;
     }
+    .font-gone {
+        display: none;
+    }
 }
 
 @media (min-width: 576px) {
