@@ -13,6 +13,11 @@
     </section>
     <!-- end of header -->
 
+    <!-- about us -->
+    <section id="collection" class="py-5 mx-3 font-gone">
+        @include('front-end.layouts._about')
+    </section>
+
     {{-- main content --}}
     <div class="container">
         <div class="title text-center mt-5">
@@ -43,15 +48,15 @@
                                     <!-- Product details-->
                                     <div class="card-body p-3">
 
-                                        <span class="badge bg-info py-1">Nama Barang</span>
+                                        <span class="badge bg-info py-1">Nama Produk</span>
                                         <h5 class="card-title mt-1 mb-2" style="font-size: 1rem">
                                             {{ $detail->product->title }}</h5>
-                                        <span class="badge bg-success py-1">Stok Barang</span>
+                                        <span class="badge bg-success py-1">Persediaan</span>
                                         <p class="mt-1 mb-2">{{ $detail->product->stock }}
                                             {{ $detail->product->unit }}</p>
                                         <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
                                             data-bs-target="#detailModal-{{ $detail->id }}">
-                                            <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+                                            <i class="fas fa-eye"></i> Detail Produk
                                         </button>
 
                                     </div>
@@ -72,11 +77,6 @@
         </div>
     </div>
 
-    <!-- about us -->
-    <section id="collection" class="py-5 mx-3 font-gone">
-        @include('front-end.layouts._about')
-    </section>
-
     <!-- Modal -->
     @include('front-end.layouts._modal')
 
@@ -84,4 +84,7 @@
 
 @push('scripts')
     <!-- JS Libraries -->
+    <script>
+        AOS.init();
+    </script>
 @endpush

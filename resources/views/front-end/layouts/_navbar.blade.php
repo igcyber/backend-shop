@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse order-lg-1" id="navMenu">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item px-2">
-                <a class="nav-link text-capitalize text-dark" href="{{ url('/') }}">
+                <a class="nav-link active text-capitalize text-dark" href="{{ url('/') }}">
                     <i class="fas fa-home" style="font-size: 20px;"></i> Beranda</a>
             </li>
             <li class="nav-item px-2">

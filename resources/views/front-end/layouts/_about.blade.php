@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-aos="zoom-out-down">
     <div class="row justify-content-center">
         <div class="col-lg-12">
             <h2 class="text-center">TENTANG KAMI</h2>

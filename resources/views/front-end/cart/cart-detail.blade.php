@@ -12,138 +12,98 @@
             <h2>PESANAN ANDA</h2>
             <div class="custom-horizontal-line"></div>
         </div>
-        <div class="row">
-            <div class="col-md-12 mb-4">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
+        <div class="container-fluid">
+            <div class="row px-xl-5">
+                <div class="col-lg-12 table-responsive mb-5">
+                    <table class="table table-bordered text-center mb-0">
+                        <thead class="bg-secondary text-dark">
                             <tr>
-                                <th class="bg-primary text-light">Gambar Produk</th>
-                                <th class="bg-primary text-light">Nama Barang</th>
-                                <th class="bg-primary text-light">Kuantitas Duz</th>
-                                <th class="bg-primary text-light">Kuantitas Pack</th>
-                                <th class="bg-primary text-light">Kuantitas Pcs</th>
-                                <th class="bg-primary text-light">Harga</th>
-                                <th class="bg-primary text-light">Hapus</th>
+                                <th class="bg-primary text-light pb-3">Produk</th>
+                                <th class="bg-primary text-light pb-3">Harga</th>
+                                <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Duz/Bal)</th>
+                                <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pack)</th>
+                                <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pcs)</th>
+                                <th class="bg-primary text-light pb-3">Total</th>
+                                <th class="bg-primary text-light pb-3">Hapus</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="align-middle">
                             <tr id="elemenHapus">
-                                <td><img src="img/produk upindo/ALFITO ( 6 PACK x 20 PCS ).jpg" alt=""
-                                        style="width: 150px" /></td>
-                                <td>ALFITO</td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
+                                <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;">
+                                    ALTO EGG ROLL</td>
+                                <td class="align-middle">Rp.50.000</td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center"
+                                            value="1">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center"
+                                            value="1">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center"
+                                            value="1">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td>Rp.50.000</td>
-                                <td class="text-center" style="padding-top: 45px"><button id="tombolTutup" type="button"
-                                        class="btn-close" aria-label="Close"></button></td>
+                                <td class="align-middle">Rp.100.000</td>
+                                <td class="align-middle" id="tombolTutup"><button class="btn btn-sm btn-primary"><i
+                                            class="fa fa-times"></i></button></td>
                             </tr>
-
-                            <tr>
-                                <td><img src="img/produk upindo/ALTO EGG ROLL ( 6 PACK x 20 PCS ).jpg" alt=""
-                                        style="width: 150px" /></td>
-                                <td>ALTO EGG ROLL</td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>Rp.50.000</td>
-                                <td class="text-center" style="padding-top: 45px"><button type="button" class="btn-close"
-                                        aria-label="Close"></button></td>
-                            </tr>
-
-                            <tr>
-                                <td><img src="img/produk upindo/APALLA ( 6 PACK x 20 PCS ).jpg" alt=""
-                                        style="width: 150px" /></td>
-                                <td>APALLA</td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>Rp.50.000</td>
-                                <td class="text-center" style="padding-top: 45px"><button type="button" class="btn-close"
-                                        aria-label="Close"></button></td>
-                            </tr>
-
-                            <tr>
-                                <td><img src="img/produk upindo/BAKSO UDANG ( 6 PACK x 20 PCS ).jpg" alt=""
-                                        style="width: 150px" /></td>
-                                <td>BAKSO UDANG</td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(-1)">-</button>
-                                    <span id="totalClicks">0</span>
-                                    <button class="bg-primary border-0 text-light" onclick="totalClick(1)">+</button>
-                                </td>
-                                <td>Rp.50.000</td>
-                                <td class="text-center" style="padding-top: 45px"><button type="button"
-                                        class="btn-close" aria-label="Close"></button></td>
-                            </tr>
-
-                            <!-- Add more rows as needed -->
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 mx-auto">
-                <div class="card">
-                    <h5 class="card-header bg-primary text-light">Total Belajaan</h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Sub Total :</h5>
-                        <span>Rp.500.000</span>
-                        <p class="card-text"></p>
-                        <a href="verifikasi.html" class="btn btn-primary">Pesan Sekarang</a>
+                <div class="row">
+                    <div class="col-sm-6 mx-auto">
+                        <div class="card">
+                            <h5 class="card-header bg-primary text-light">Total Belajaan</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">Sub Total :</h5>
+                                <span>Rp.500.000</span>
+                                <p class="card-text"></p>
+                                <a href="verifikasi.html" class="btn btn-primary">Pesan Sekarang</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Cart End -->
 @endsection
 
 @push('scripts')

@@ -87,6 +87,30 @@ body {
 .nav-link:hover {
     color: var(--green) !important;
 }
+.navbar .nav-item {
+    margin-right: 20px;
+}
+
+.navbar .nav-item .nav-link {
+    padding: 5px 0;
+    position: relative;
+}
+.navbar .nav-item .nav-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: #059305;
+    transition: all 0.5s ease;
+    transform: scale(0);
+}
+.navbar .nav-item .nav-link.active::before,
+.navbar .nav-item .nav-link:hover::before {
+    transform: scale(1);
+}
+
 .nav-item {
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
 }
@@ -146,9 +170,9 @@ body {
 footer .copyright {
     width: 100%;
     text-align: center;
-    min-height: 10%;
+    min-height: 5%;
     padding: 10px;
-    background-color: #d0cdcd;
+    background-color: #3b3b3b;
     color: #fff;
 }
 
