@@ -12,11 +12,12 @@ use App\Http\Controllers\Controller;
 class ProductController extends Controller
 {
     //
-    public function index(ProductDataTable $dataTable)
+    public function index()
     {
         $categories = Category::where('status', 1)->get();
         $vendors = Vendor::where('status', 1)->get();
-        return $dataTable->render('pages.app.products.index', compact('categories', 'vendors'));
+        $products = Product::latest()->get();
+        return view('pages.app.products.index', compact('categories', 'vendors', 'products'));
     }
 
     public function store(Request $request)
@@ -28,14 +29,9 @@ class ProductController extends Controller
             'category_id' => 'required',
             'vendor_id' => 'required',
             'title' => 'required',
-            'buy_price' => 'required',
-            'sell_price_duz' => 'required',
-            'sell_price_pack' => 'required',
             'stock' => 'required',
-            'tax_type' => 'required',
-            'periode' => 'required',
             'unit' => 'required',
-            'is_top' => 'required'
+
         ]);
 
         //check image request
@@ -51,14 +47,9 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'vendor_id' => $request->vendor_id,
                 'title' => $request->title,
-                'buy_price' => $request->buy_price,
-                'sell_price_duz' => $request->sell_price_duz,
-                'sell_price_pack' => $request->sell_price_pack,
                 'stock' => $request->stock,
-                'tax_type' => $request->tax_type,
-                'periode' => $request->periode,
                 'unit' => $request->unit,
-                'is_top' => $request->is_top
+                'short_description' => $request->short_description
             ]);
         } else {
             $product = Product::create([
@@ -66,14 +57,9 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'vendor_id' => $request->vendor_id,
                 'title' => $request->title,
-                'buy_price' => $request->buy_price,
-                'sell_price_duz' => $request->sell_price_duz,
-                'sell_price_pack' => $request->sell_price_pack,
                 'stock' => $request->stock,
-                'tax_type' => $request->tax_type,
-                'periode' => $request->periode,
                 'unit' => $request->unit,
-                'is_top' => $request->is_top
+                'short_description' => $request->short_description
             ]);
         }
 

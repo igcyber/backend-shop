@@ -6,18 +6,25 @@
         <form action="{{ route('app.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- INPUT GAMBAR PRODUK --}}
-            <div class="form-group">
-                <label for="img">Gambar Produk</label>
-                <input type="file" name="image" class="form-control @error('image') is-invalid @enderror">
-                @error('image')
-                    <div class="invalid-feedback" style="display: block">
-                        {{ $message }}
-                    </div>
-                @enderror
+            <div class="form-row">
+                <div class="col-md-6">
+                    <label for="img">Gambar Produk</label>
+                    <input type="file" name="image" class="form-control @error('image') is-invalid @enderror"
+                        onChange="showImage(this)">
+                    @error('image')
+                        <div class="invalid-feedback" style="display: block">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                <div class="col-md-6">
+                    <img src="" alt="" id="img">
+                </div>
+
             </div>
 
             {{-- INPUT NAMA & NOMOR --}}
-            <div class="form-row">
+            <div class="form-row mt-5">
                 <div class="col-md-6">
                     <label for="title">Nama Produk</label>
                     <input type="text" id="title" class="form-control @error('title') is-invalid @enderror"
@@ -78,7 +85,7 @@
             </div>
 
             {{-- INPUT JENIS PAJAK & PERIODE PRODUK --}}
-            <div class="form-row mt-3">
+            {{-- <div class="form-row mt-3">
                 <div class="col-md-6">
                     <label for="tax">Jenis Pajak</label>
                     <select name="tax_type" id="tax" class="form-control @error('tax_type') is-invalid @enderror">
@@ -106,7 +113,7 @@
                         </div>
                     @enderror
                 </div>
-            </div>
+            </div> --}}
 
             {{-- INPUT Stok & Unit PRODUK --}}
             <div class="form-row mt-3">
@@ -140,11 +147,12 @@
             </div>
 
             {{-- INPUT HARGA BELI --}}
-            <div class="form-row mt-3">
+            {{-- <div class="form-row mt-3">
                 <div class="col-md-12">
                     <label for="buy">Harga Beli</label>
-                    <input type="text" id="buy" class="form-control @error('buy_price') is-invalid @enderror"
-                        name="buy_price" placeholder="Rp. " value="{{ old('buy_price') }}">
+                    <input type="text" id="buy"
+                        class="form-control @error('buy_price') is-invalid @enderror" name="buy_price"
+                        placeholder="Rp. " value="{{ old('buy_price') }}">
                     @error('buy_price')
                         <div class="invalid-feedback" style="display: block">
                             {{ $message }}
@@ -152,10 +160,10 @@
                     @enderror
                 </div>
 
-            </div>
+            </div> --}}
 
             {{-- INPUT HARGA JUAL --}}
-            <div class="form-row mt-3">
+            {{-- <div class="form-row mt-3">
                 <div class="col-md-4">
                     <label for="duz">Harga Jual Duz/Baal</label>
                     <input type="text" id="duz"
@@ -189,10 +197,10 @@
                         </div>
                     @enderror
                 </div>
-            </div>
+            </div>  --}}
 
             {{-- INPUT PRODUK TERBAIK --}}
-            <div class="form-row mt-3">
+            {{-- <div class="form-row mt-3">
                 <div class="col-md-12">
                     <label for="top">Produk Terbaik</label>
                     <select name="is_top" id="top"
@@ -207,14 +215,14 @@
                         </div>
                     @enderror
                 </div>
-            </div>
+            </div> --}}
 
             {{-- INPUT DESKRIPSI SINGKAT --}}
             <div class="form-row mt-3">
                 <div class="col-md-12">
                     <label for="desc">Deskripsi Singkat</label>
                     <textarea id="desc" class="summernote-simple @error('short_descriptions') is-invalid @enderror"
-                        name="short_descriptions">
+                        name="short_description">
                         {{ old('short_descriptions') }}
                     </textarea>
                 </div>

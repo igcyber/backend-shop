@@ -16,16 +16,9 @@ class Product extends Model
         'image',
         'serial_number',
         'title',
-        'short_descriptions',
-        'buy_price',
-        'sell_price_duz',
-        'sell_price_pack',
-        'sell_price_pcs',
+        'short_description',
         'stock',
-        'tax_type',
-        'periode',
         'unit',
-        'is_top'
     ];
 
     /**
@@ -36,6 +29,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function detailProducts()
+    {
+        return $this->hasMany(DetailProduct::class);
     }
 
     /**

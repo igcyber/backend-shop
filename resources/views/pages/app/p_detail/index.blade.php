@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Produk')
+@section('title', 'Detail Produk')
 
 @push('style')
 @endpush
@@ -9,7 +9,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Halaman Produk</h1>
+                <h1>Halaman Detail Produk</h1>
             </div>
             <div class="section-body">
                 <div class="row">
@@ -26,17 +26,31 @@
                                                 <th scope="col" style="width: 10%">
                                                     No. Urut
                                                 </th>
-                                                <th>No. Produk</th>
                                                 <th>Nama Produk</th>
-                                                <th>Tipe Produk</th>
-                                                <th>Pabrikan</th>
-                                                <th>Stok</th>
-                                                <th>Satuan</th>
+                                                <th>Harga Beli</th>
+                                                <th>Harga Jual (Duz)</th>
+                                                <th>Harga Jual (Pack)</th>
+                                                <th>Harga Jual (Pcs)</th>
+                                                <th>Jenis Pajak</th>
+                                                <th>Periode</th>
+                                                <th>Featured</th>
                                                 <th>Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($products as $key => $product)
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            {{-- @foreach ($products as $key => $product)
                                                 <tr>
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
@@ -73,7 +87,7 @@
                                                         @endcan
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @endforeach --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -81,7 +95,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-12">
-                        @include('pages.app.products._create')
+                        {{-- @include('pages.app.products._create') --}}
                     </div>
                 </div>
             </div>

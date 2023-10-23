@@ -5,30 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class DetailProduct extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'product_id',
-        'customer_id',
-        'user_id',
-        'qty',
-        'price',
+        'buy_price',
+        'sell_price_duz',
+        'sell_price_pack',
+        'sell_price_pcs',
+        'tax_type',
+        'periode',
+        'is_top'
     ];
 
-    /**
-     * Belongs to Relationship model with product model
-     *
-     * @return void
-     */
     public function product()
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function profits()
-    {
-        return $this->hasMany(Profit::class);
     }
 }

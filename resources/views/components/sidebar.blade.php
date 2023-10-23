@@ -29,6 +29,10 @@
                     <a class="nav-link" href="{{ route('app.categories.index') }}"><i class="fas fa-tag"></i>
                         <span>Tipe Produk</span></a>
                 </li>
+                <li class="{{ setActive(['app.detail-products.*']) }}">
+                    <a class="nav-link" href="{{ route('app.detail-products.index') }}"><i class="fas fa-money-check"></i>
+                        <span>Detail Produk</span></a>
+                </li>
             @endrole
 
             @role('Admin Gudang')

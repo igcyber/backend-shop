@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('profits', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('klasifikasi', ['Toko', 'Perorangan', 'MT', 'PS. Basah', 'Grosir', 'Toko', 'Retail']);
-            $table->string('no_telp');
-            $table->text('address');
+            $table->unsignedBigInteger('transaction_id');
+            $table->bigInteger('total');
             $table->timestamps();
+
+
+            //relationship transactions
+            $table->foreign('transaction_id')->references('id')->on('transactions');
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('profits');
     }
 };

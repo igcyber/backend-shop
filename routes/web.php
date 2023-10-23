@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Apps\CartController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Permission;
 use App\Http\Controllers\Apps\RoleController;
@@ -8,10 +9,15 @@ use App\Http\Controllers\Apps\VendorController;
 use App\Http\Controllers\Apps\ProductController;
 use App\Http\Controllers\Apps\CategoryController;
 use App\Http\Controllers\Apps\CustomerController;
+use App\Http\Controllers\Apps\DetailProductController;
 use App\Http\Controllers\Apps\HomeController;
 use App\Http\Controllers\Apps\PermissionController;
+use App\Models\DetailProduct;
 
 Route::get('/', [HomeController::class, 'index']);
+
+Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
+Route::get('cart-detail', [CartController::class, 'cartDetail'])->name('cartDetail');
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], function () {
     // Dashboard Route
@@ -43,6 +49,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Products Route
     Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
+
+    //Details Product Route
+    Route::resource('/detail-products', DetailProductController::class);
 
     //Customer's Route
     Route::resource('/customers', CustomerController::class);
