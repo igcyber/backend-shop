@@ -14,12 +14,11 @@
         </div>
         <div class="container-fluid">
             <div class="row px-xl-5">
-                <div class="col-lg-12 table-responsive mb-5">
+                <div class="col-md-12 table-responsive mb-5">
                     <table class="table table-bordered text-center mb-0">
                         <thead class="bg-secondary text-dark">
                             <tr>
-                                <th class="bg-primary text-light pb-3">Produk</th>
-                                <th class="bg-primary text-light pb-3">Harga</th>
+                                <th class="bg-primary text-light pb-3" scope="col" width="40%">Produk</th>
                                 <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Duz/Bal)</th>
                                 <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pack)</th>
                                 <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pcs)</th>
@@ -28,62 +27,56 @@
                             </tr>
                         </thead>
                         <tbody class="align-middle">
-                            <tr id="elemenHapus">
-                                <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;">
-                                    ALTO EGG ROLL</td>
-                                <td class="align-middle">Rp.50.000</td>
-                                <td class="align-middle">
-                                    <div class="input-group quantity mx-auto" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-minus">
+                            @foreach ($cartItems as $item)
+                                <tr id="elemenHapus">
+                                    <td style="text-align: left">
+                                        {{ $item->name }}
+                                    </td>
+
+                                    <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <button class="btn btn-sm btn-primary btn-minus duz-dec">
                                                 <i class="fa fa-minus"></i>
                                             </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center"
-                                            value="1">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-plus">
+                                            <input type="text" class="form-control form-control-sm text-center duz-qty"
+                                                value="{{ $item->qty }}" data-rowid="{{ $item->rowId }}">
+                                            <button class="btn btn-sm btn-primary btn-plus duz-inc">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle">
-                                    <div class="input-group quantity mx-auto" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-minus">
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <button class="btn btn-sm btn-primary btn-minus pack-dec">
                                                 <i class="fa fa-minus"></i>
                                             </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center"
-                                            value="1">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-plus">
+                                            <input type="text" class="form-control form-control-sm text-center pack-qty"
+                                                value="{{ $item->options->pack_qty }}">
+                                            <button class="btn btn-sm btn-primary btn-plus pack-inc">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle">
-                                    <div class="input-group quantity mx-auto" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-minus">
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <button class="btn btn-sm btn-primary btn-minus pcs-dec">
                                                 <i class="fa fa-minus"></i>
                                             </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center"
-                                            value="1">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-plus">
+                                            <input ttype="text" class="form-control form-control-sm text-center pcs-qty"
+                                                value="{{ $item->options->pcs_qty }}">
+                                            <button class="btn btn-sm btn-primary btn-plus pcs-inc">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle">Rp.100.000</td>
-                                <td class="align-middle" id="tombolTutup"><button class="btn btn-sm btn-primary"><i
-                                            class="fa fa-times"></i></button></td>
-                            </tr>
+                                    </td>
+
+                                    <td class="align-middle" id="{{ $item->rowId }}">
+                                        {{ moneyFormat($item->price * $item->qty) }}</td>
+                                    <td class="align-middle" id="tombolTutup"><button class="btn btn-sm btn-primary"><i
+                                                class="fa fa-times"></i></button></td>
+                                </tr>
+                            @endforeach
+
                         </tbody>
                     </table>
                 </div>
@@ -108,4 +101,40 @@
 
 @push('scripts')
     <!-- JS Libraries -->
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.duz-inc').on('click', function() {
+                let input = $(this).siblings('.duz-qty');
+                let qty = parseInt(input.val());
+                let rowId = input.data('rowid');
+                // console.log(qty)
+
+                $.ajax({
+                    url: "{{ route('updateCart') }}",
+                    method: 'POST',
+                    data: {
+                        rowId: rowId,
+                        qty: qty
+                    },
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            let productId = '#' + rowId;
+                            $(productId).text(data.product_total)
+                            toastr.success(data.message);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 'error') {
+                            toastr.success(data.message);
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 @endpush

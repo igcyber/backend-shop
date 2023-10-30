@@ -18,6 +18,7 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
 Route::get('cart-detail', [CartController::class, 'cartDetail'])->name('cartDetail');
+Route::post('cart-update', [CartController::class, 'updateCart'])->name('updateCart');
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], function () {
     // Dashboard Route

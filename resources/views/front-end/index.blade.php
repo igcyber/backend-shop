@@ -87,4 +87,33 @@
     <script>
         AOS.init();
     </script>
+
+    {{-- JQuery Cart --}}
+    <script>
+        $(document).ready(function() {
+            $('.shopping-cart-form').on('submit', function(e) {
+                e.preventDefault();
+                let formData = $(this).serialize();
+                // console.log(formData);
+                $.ajax({
+                    method: 'POST',
+                    data: formData,
+                    url: "{{ route('addToCart') }}",
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            toastr.success(data.message);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 'error') {
+                            toastr.success(data.message);
+                        }
+                    }
+                })
+            });
+        });
+    </script>
 @endpush
+
+{{-- KNOWN BUG --}}
+{{-- JIKA PRODUK SUDAH ADA KERANJANG, MAKA KETIKA USER MENAMBAHKAN PRODUK DARI HALAMAN INI, PRODUK AKAN JADI DUA KALI LIPAT DI KERANJANG --}}

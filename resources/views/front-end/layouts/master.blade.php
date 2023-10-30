@@ -14,6 +14,9 @@
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    {{-- Toastr CSS --}}
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- custom css -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('front-end/css/style.css') }}" />
@@ -50,7 +53,7 @@
         <!-- end of navbar -->
 
         <!-- Start Produk Kami -->
-        <section id="collection" class="py-3">
+        <section id="collection" class="py-0">
             @yield('content')
         </section>
         <!-- end Produk Kami -->
@@ -76,30 +79,44 @@
     <script src="{{ asset('front-end/js/script.js') }}"></script>
     {{-- AOS Library --}}
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
+    {{-- Toastr Js --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     @stack('scripts')
-
-    {{-- JQuery Cart --}}
     <script>
-        $(document).ready(function() {
-            $('.shopping-cart-form').on('submit', function(e) {
-                e.preventDefault();
-                let formData = $(this).serialize();
-                // console.log(formData);
-                $.ajax({
-                    method: 'POST',
-                    data: formData,
-                    url: "{{ route('addToCart') }}",
-                    success: function(data) {
+        @if (Session::has('message'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.success("{{ session('message') }}");
+        @endif
 
-                    },
-                    error: function(data) {
+        @if (Session::has('error'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.error("{{ session('error') }}");
+        @endif
 
-                    }
-                })
-            });
-        });
+        @if (Session::has('info'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.info("{{ session('info') }}");
+        @endif
+
+        @if (Session::has('warning'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.warning("{{ session('warning') }}");
+        @endif
     </script>
+
+
 </body>
 
 </html>
