@@ -19,6 +19,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- custom css -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    {{-- Sweet Alert --}}
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" id="theme-styles">
     <link rel="stylesheet" href="{{ asset('front-end/css/style.css') }}" />
     <style>
         .mapouter {
@@ -81,6 +83,8 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     {{-- Toastr Js --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    {{-- Sweet Alert --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     @stack('scripts')
     <script>
         @if (Session::has('message'))

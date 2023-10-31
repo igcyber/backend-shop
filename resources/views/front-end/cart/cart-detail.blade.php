@@ -23,7 +23,14 @@
                                 <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pack)</th>
                                 <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pcs)</th>
                                 <th class="bg-primary text-light pb-3">Total</th>
-                                <th class="bg-primary text-light pb-3">Hapus</th>
+                                <th class="bg-primary text-light pb-3 ">
+                                    <a href="#" class="clear_cart">
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-trash-alt"></i>
+                                            Clear All
+                                        </span>
+                                    </a>
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="align-middle">
@@ -72,11 +79,23 @@
 
                                     <td class="align-middle" id="{{ $item->rowId }}">
                                         {{ moneyFormat($item->price * $item->qty) }}</td>
-                                    <td class="align-middle" id="tombolTutup"><button class="btn btn-sm btn-primary"><i
-                                                class="fa fa-times"></i></button></td>
+
+                                    <td class="align-middle" id="tombolTutup">
+                                        <a href="{{ route('removeCart', $item->rowId) }}" class="btn btn-sm btn-danger">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
 
+                            {{-- JIKA TIDAK ADA PESANAN --}}
+                            @if (count($cartItems) == 0)
+                                <tr>
+                                    <td colspan="6">
+                                        Keranjang Kosong !
+                                    </td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -108,6 +127,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            //prouduct incerement duz
             $('.duz-inc').on('click', function() {
                 let input = $(this).siblings('.duz-qty');
                 let qty = parseInt(input.val());
@@ -132,6 +152,92 @@
                         if (data.status == 'error') {
                             toastr.success(data.message);
                         }
+                    }
+                })
+            })
+
+            //product decrement duz
+            $('.duz-dec').on('click', function() {
+                let input = $(this).siblings('.duz-qty');
+                let qty = parseInt(input.val());
+                let rowId = input.data('rowid');
+                // console.log(qty)
+                if (qty < 1) {
+                    qty = 1
+                }
+
+                $.ajax({
+                    url: "{{ route('updateCart') }}",
+                    method: 'POST',
+                    data: {
+                        rowId: rowId,
+                        qty: qty
+                    },
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            let productId = '#' + rowId;
+                            $(productId).text(data.product_total)
+                            toastr.success(data.message);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 'error') {
+                            toastr.success(data.message);
+                        }
+                    }
+                })
+            })
+
+            //clear cart
+            $('.clear_cart').on('click', function(e) {
+                e.preventDefault();
+                swal({
+                    title: "HAPUS SEMUA PESANAN ?",
+                    text: "Pesanan yang dihapus harus dipesan kembali",
+                    icon: "warning",
+                    buttons: [
+                        'TIDAK',
+                        'YA'
+                    ],
+                    dangerMode: true,
+                }).then(function(isConfirm) {
+                    if (isConfirm) {
+
+                        //ajax delete
+                        jQuery.ajax({
+                            url: "{{ route('deleteCart') }}",
+                            type: 'GET',
+                            success: function(response) {
+                                if (response.status == "success") {
+                                    swal({
+                                        title: 'BERHASIL!',
+                                        text: 'DATA BERHASIL DIHAPUS!',
+                                        icon: 'success',
+                                        timer: 1000,
+                                        showConfirmButton: false,
+                                        showCancelButton: false,
+                                        buttons: false,
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                } else {
+                                    swal({
+                                        title: 'GAGAL!',
+                                        text: 'DATA GAGAL DIHAPUS!',
+                                        icon: 'error',
+                                        timer: 1000,
+                                        showConfirmButton: false,
+                                        showCancelButton: false,
+                                        buttons: false,
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                }
+                            }
+                        });
+
+                    } else {
+                        return true;
                     }
                 })
             })

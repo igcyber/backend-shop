@@ -37,6 +37,7 @@ class CartController extends Controller
         return response(['status' => 'success', 'message' => 'Added To Cart Successfully']);
     }
 
+    //show detail cart
     public function cartDetail()
     {
         $cartItems = Cart::content();
@@ -44,6 +45,7 @@ class CartController extends Controller
         return view('front-end.cart.cart-detail', compact('cartItems'));
     }
 
+    //update cart qty, and total price
     public function updateCart(Request $request)
     {
         // dd($request->all());
@@ -53,10 +55,25 @@ class CartController extends Controller
         return response(['status' => 'success', 'message' => 'Product Updated Successfully', 'product_total' => $rupiahFormat]);
     }
 
+    //get all product total
     public function getProductTotal($rowId)
     {
         $product = Cart::get($rowId);
-        $total = $product->price * $product->qty;
-        return $total;
+        return $product->price * $product->qty;
+    }
+
+    //delete all item from cart
+    public function deleteCart()
+    {
+        Cart::destroy();
+        return response(['status' => 'success', 'message' => 'Cart Cleared Successfully']);
+    }
+
+    //delete single item from cart
+    public function removeCart($rowId)
+    {
+        // dd($rowId);
+        Cart::remove($rowId);
+        return redirect()->back();
     }
 }
