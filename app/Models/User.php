@@ -58,15 +58,4 @@ class User extends Authenticatable
             return [$pr['name'] => true];
         });
     }
-
-
-    /**
-     * One To Many relationship With Customer Model
-     *
-     * @return void
-     */
-    public function customers()
-    {
-        return $this->hasMany(Customer::class);
-    }
 }

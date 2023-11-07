@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profits', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('transaction_id');
-            $table->bigInteger('total');
+            $table->string('outlet');
+            $table->string('sales');
+            $table->string('transaction_id');
+            $table->double('sub_total');
+            $table->integer('product_qty');
+            $table->text('order_address');
+            $table->string('order_status')->default('pending');
             $table->timestamps();
-
-
-            //relationship transactions
-            $table->foreign('transaction_id')->references('id')->on('transactions');
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profits');
+        Schema::dropIfExists('orders');
     }
 };

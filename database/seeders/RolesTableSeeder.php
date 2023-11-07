@@ -17,5 +17,6 @@ class RolesTableSeeder extends Seeder
         Role::create(['name' => 'Admin Sales']);
         Role::create(['name' => 'Admin Gudang']);
         Role::create(['name' => 'Sales']);
+        Role::create(['name' => 'Outlet']);
     }
 }

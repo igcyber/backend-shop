@@ -14,10 +14,12 @@ class HomeController extends Controller
 
         //tampilkan product dengan stock diatas 0 duz, dan status is_top true
         //urutkan berdasarkan id dari table detail_products dan batasi hanya ambil 8 item
-        $detailProducts = DetailProduct::whereHas('product', function ($query) {
-            $query->where('stock', '>', 0);
-            $query->where('is_top', 1);
-        })->orderBy('id', 'ASC')->limit(8)->get();
+        // $detailProducts = DetailProduct::whereHas('product', function ($query) {
+        //     $query->where('stock', '>', 0);
+        //     $query->where('stock_baal', '>', 0);
+        //     $query->where('stock_pack', '>', 0);
+        //     $query->where('stock_pcs', '>', 0);
+        // })->orderBy('id', 'ASC')->limit(8)->get();
 
         // dd($detailProducts);
         // $detailProducts = DetailProduct::where('is_top', 1)
@@ -25,6 +27,8 @@ class HomeController extends Controller
         //     ->limit(8)
         //     ->get();
 
+        $detailProducts = DetailProduct::all();
+        // dd($detailProducts);
         $categories = Category::where('status', 1)
             ->orderBy('name', 'ASC')
             ->limit(6)

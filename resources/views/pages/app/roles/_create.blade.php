@@ -20,11 +20,17 @@
                 @foreach ($permissions as $permission)
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" value="{{ $permission->name }}"
-                            id="check-{{ $permission->id }}" name="permissions[]">
+                            id="check-{{ $permission->id }}" name="permissions[]"
+                            @error('permission') is-invalid @enderror>
                         <label class="form-check-label"
                             for="check-{{ $permission->id }}">{{ $permission->name }}</label>
                     </div>
                 @endforeach
+                @error('permissions')
+                    <div class="invalid-feedback" style="display: block">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
             <div class="text-right mt-3">
                 <button class="btn btn-sm btn-primary" type="submit">

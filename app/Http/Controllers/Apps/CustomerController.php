@@ -23,29 +23,36 @@ class CustomerController extends Controller
             $query->where('role_id', $salesRole->id);
         })->get();
 
-        return view('pages.app.customers.index', compact('customers', 'users'));
+        $outletRole = Role::where('name', 'Outlet')->first();
+        $outlets = User::whereHas('roles', function ($query) use ($outletRole) {
+            $query->where('role_id', $outletRole->id);
+        })->get();
+
+        return view('pages.app.customers.index', compact('customers', 'users', 'outlets'));
     }
 
 
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
             'klasifikasi' => 'required',
-            'no_telp' => ['nullable', 'regex:/^(0|\+62|\05)[0-9]{9,12}$/'],
+            'no_telp' => 'nullable',
+            'address' => 'required',
+            // 'no_telp' => ['nullable', 'regex:/^(0|\+62|\05)[0-9]{9,12}$/'],
             'nomor' => 'required',
-            'user_id' => 'required',
+            'seller_id' => 'required',
+            'outlet_id' => 'required'
         ]);
 
         // dd($request->all());
 
         $customer = Customer::create([
-            'name' => $request->name,
             'klasifikasi' => $request->klasifikasi,
             'address' => $request->address,
-            'no_telp' => $request->no_telp,
+            'no_telp' => $request->no_telp ?? '-',
             'nomor' => $request->nomor,
-            'user_id' => $request->user_id
+            'seller_id' => $request->seller_id,
+            'outlet_id' => $request->outlet_id
         ]);
 
         if ($customer) {

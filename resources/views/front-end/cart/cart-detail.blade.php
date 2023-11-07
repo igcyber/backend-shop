@@ -18,10 +18,12 @@
                     <table class="table table-bordered text-center mb-0">
                         <thead class="bg-secondary text-dark">
                             <tr>
-                                <th class="bg-primary text-light pb-3" scope="col" width="40%">Produk</th>
-                                <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Duz/Bal)</th>
-                                <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pack)</th>
-                                <th class="bg-primary text-light" scope="col" width="10%">Kuantitas (Pcs)</th>
+                                <th class="bg-primary text-light pb-3" scope="col" width="30%">Produk</th>
+                                <th class="bg-primary text-light pb-3" scope="col" width="10%">Harga Satuan</th>
+                                <th class="bg-primary text-light pb-3" scope="col" width="10%">Satuan</th>
+                                {{-- <th class="bg-primary text-light pb-3" scope="col" width="10%">Baal</th>
+                                <th class="bg-primary text-light pb-3" scope="col" width="10%">Pack</th>
+                                <th class="bg-primary text-light pb-3" scope="col" width="10%">Pcs</th> --}}
                                 <th class="bg-primary text-light pb-3">Total</th>
                                 <th class="bg-primary text-light pb-3 ">
                                     <a href="#" class="clear_cart">
@@ -40,6 +42,10 @@
                                         {{ $item->name }}
                                     </td>
 
+                                    <td>
+                                        {{ moneyFormat($item->price) }}
+                                    </td>
+
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
                                             <button class="btn btn-sm btn-primary btn-minus duz-dec">
@@ -48,6 +54,22 @@
                                             <input type="text" class="form-control form-control-sm text-center duz-qty"
                                                 value="{{ $item->qty }}" data-rowid="{{ $item->rowId }}">
                                             <button class="btn btn-sm btn-primary btn-plus duz-inc">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+
+
+                                    {{-- <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <button class="btn btn-sm btn-primary btn-minus baal-dec">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                            <input type="text" class="form-control form-control-sm text-center baal-qty"
+                                                value="{{ $item->options->baal_qty }}">
+                                            <button
+                                                class="btn
+                                                btn-sm btn-primary btn-plus baal-inc">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -75,10 +97,11 @@
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
-                                    </td>
+                                    </td> --}}
 
                                     <td class="align-middle" id="{{ $item->rowId }}">
-                                        {{ moneyFormat($item->price * $item->qty) }}</td>
+                                        {{ moneyFormat($item->price * $item->qty) }}
+                                    </td>
 
                                     <td class="align-middle" id="tombolTutup">
                                         <a href="{{ route('removeCart', $item->rowId) }}" class="btn btn-sm btn-danger">
@@ -91,7 +114,7 @@
                             {{-- JIKA TIDAK ADA PESANAN --}}
                             @if (count($cartItems) == 0)
                                 <tr>
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         Keranjang Kosong !
                                     </td>
                                 </tr>
@@ -99,15 +122,17 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="row">
+                <div class="row {{ Cart::content()->count() == 0 ? 'd-none' : '' }}">
                     <div class="col-sm-6 mx-auto">
                         <div class="card">
-                            <h5 class="card-header bg-primary text-light">Total Belajaan</h5>
+                            {{-- <h5 class="card-header bg-primary text-light">Total Bayar</h5> --}}
                             <div class="card-body">
-                                <h5 class="card-title">Sub Total :</h5>
-                                <span>Rp.500.000</span>
-                                <p class="card-text"></p>
-                                <a href="verifikasi.html" class="btn btn-primary">Pesan Sekarang</a>
+                                <h5 class="card-title">Total Pembayaran :</h5>
+                                <span id="sub_total">{{ moneyFormat(getCartTotal()) }}</span>
+                                <p>
+                                    <small class="text-muted">Bayar Saat Sales Datang Ke Toko Anda</small>
+                                </p>
+                                <a href="{{ route('app.checkout') }}" class="btn btn-primary">Checkout</a>
                             </div>
                         </div>
                     </div>
@@ -143,8 +168,9 @@
                     },
                     success: function(data) {
                         if (data.status == 'success') {
-                            let productId = '#' + rowId;
+                            let productId = '#' + rowId; //came from rowId
                             $(productId).text(data.product_total)
+                            renderSubTotal()
                             toastr.success(data.message);
                         }
                     },
@@ -155,7 +181,6 @@
                     }
                 })
             })
-
             //product decrement duz
             $('.duz-dec').on('click', function() {
                 let input = $(this).siblings('.duz-qty');
@@ -175,8 +200,9 @@
                     },
                     success: function(data) {
                         if (data.status == 'success') {
-                            let productId = '#' + rowId;
+                            let productId = '#' + rowId; //came from rowId
                             $(productId).text(data.product_total)
+                            renderSubTotal()
                             toastr.success(data.message);
                         }
                     },
@@ -187,6 +213,10 @@
                     }
                 })
             })
+
+
+
+
 
             //clear cart
             $('.clear_cart').on('click', function(e) {
@@ -241,6 +271,20 @@
                     }
                 })
             })
+
+            //tampilkan hasil total
+            function renderSubTotal() {
+                $.ajax({
+                    method: 'GET',
+                    url: "{{ route('subtotalCart') }}",
+                    success: function(data) {
+                        $('#sub_total').text(data)
+                    },
+                    error: function(data) {
+
+                    }
+                })
+            }
         })
     </script>
 @endpush

@@ -27,7 +27,7 @@
 
         <div class="row g-0">
             <div class="d-flex flex-wrap justify-content-center mt-5 filter-button-group">
-                <button type="button" class="btn m-2 text-dark shadow active-filter-btn" data-filter="*">All</button>
+                <button type="button" class="btn m-2 text-dark shadow active-filter-btn" data-filter="*">SEMUA</button>
                 @foreach ($categories as $key => $category)
                     <button type="button" class="btn m-2 text-dark shadow"
                         data-filter=".category-{{ $key }}">{{ $category->name }}</button>
@@ -43,8 +43,9 @@
                             <div class="col mb-5 col-lg-4 col-xl-3 p-2 category-{{ $key }}">
                                 <div class="card h-100 shadow">
                                     <!-- Product image-->
-                                    <img class="card-img-top" src="{{ asset($detail->product->image) }}"
-                                        alt="Product Image" />
+                                    <img class="card-img-top"
+                                        src="{{ Storage::exists($detail->product->image) ? Storage::url($detail->product->image) : asset('img/no-image.png') }}"
+                                        alt="Image"" alt="Product Image" />
                                     <!-- Product details-->
                                     <div class="card-body p-3">
 
@@ -52,8 +53,18 @@
                                         <h5 class="card-title mt-1 mb-2" style="font-size: 1rem">
                                             {{ $detail->product->title }}</h5>
                                         <span class="badge bg-success py-1">Persediaan</span>
-                                        <p class="mt-1 mb-2">{{ $detail->product->stock }}
-                                            {{ $detail->product->unit }}</p>
+                                        <p class="mb-1{{ $detail->product->stock == 0 ? 'd-none' : '' }}">
+                                            {{ $detail->product->stock }}
+                                            duz</p>
+                                        <p class="mb-1 {{ $detail->product->stock_baal == 0 ? 'd-none' : '' }}">
+                                            {{ $detail->product->stock_baal }}
+                                            baal</p>
+                                        <p class="mb-1 {{ $detail->product->stock_pack == 0 ? 'd-none' : '' }}">
+                                            {{ $detail->product->stock_pack }}
+                                            pack</p>
+                                        <p class="{{ $detail->product->stock_pcs == 0 ? 'd-none' : '' }}">
+                                            {{ $detail->product->stock_pcs }}
+                                            pcs</p>
                                         <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
                                             data-bs-target="#detailModal-{{ $detail->id }}">
                                             <i class="fas fa-eye"></i> Detail Produk
@@ -64,11 +75,11 @@
                             </div>
                         @endforeach
 
-                        <!-- Tombol "Lihat Lebih Lengkap" -->
-                        <div class="container text-end">
-                            <a href="#" class="btn btn-primary shadow">Lihat Lebih Lengkap <i
-                                    class="fas fa-arrow-right"></i></a>
-                        </div>
+                    </div>
+                    <!-- Tombol "Lihat Lebih Lengkap" -->
+                    <div class="container text-end">
+                        <a href="#" class="btn btn-primary shadow">Lihat Lebih Lengkap <i
+                                class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </section>
@@ -88,7 +99,7 @@
         AOS.init();
     </script>
 
-    {{-- JQuery Cart --}}
+    {{-- JQuery Add Cart --}}
     <script>
         $(document).ready(function() {
             $('.shopping-cart-form').on('submit', function(e) {
@@ -101,19 +112,47 @@
                     url: "{{ route('addToCart') }}",
                     success: function(data) {
                         if (data.status == 'success') {
+                            getCart()
                             toastr.success(data.message);
-                        }
-                    },
-                    error: function(data) {
-                        if (data.status == 'error') {
-                            toastr.success(data.message);
+                        } else if (data.status == 'error') {
+                            toastr.error(data.message);
                         }
                     }
                 })
             });
+
+            $('.cart-pack').on('submit', function(e) {
+                e.preventDefault();
+                let formData = $(this).serialize();
+                // console.log(formData);
+                $.ajax({
+                    method: 'POST',
+                    data: formData,
+                    url: "{{ route('addToCart') }}",
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            getCart()
+                            toastr.success(data.message);
+                        } else if (data.status == 'error') {
+                            toastr.error(data.message);
+                        }
+                    }
+                })
+            });
+
+            //count how much product is added to cart
+            function getCart() {
+                $.ajax({
+                    method: 'GET',
+                    url: "{{ route('countCart') }}",
+                    success: function(data) {
+                        $('#cart_count').text(data)
+                    },
+                    error: function(data) {
+
+                    }
+                })
+            }
         });
     </script>
 @endpush
-
-{{-- KNOWN BUG --}}
-{{-- JIKA PRODUK SUDAH ADA KERANJANG, MAKA KETIKA USER MENAMBAHKAN PRODUK DARI HALAMAN INI, PRODUK AKAN JADI DUA KALI LIPAT DI KERANJANG --}}

@@ -16,7 +16,7 @@
                     <div class="col-12 col-md-8 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Tipe Produk</h4>
+                                <h4>Data Detail Produk</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -28,66 +28,44 @@
                                                 </th>
                                                 <th>Nama Produk</th>
                                                 <th>Harga Beli</th>
-                                                <th>Harga Jual (Duz)</th>
-                                                <th>Harga Jual (Pack)</th>
-                                                <th>Harga Jual (Pcs)</th>
                                                 <th>Jenis Pajak</th>
                                                 <th>Periode</th>
-                                                <th>Featured</th>
                                                 <th>Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            {{-- @foreach ($products as $key => $product)
+                                            @foreach ($d_products as $key => $detail)
                                                 <tr>
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $product->serial_number }}</td>
+                                                    <td class="align-middle">{{ $detail->product->title }}</td>
                                                     <td class="align-middle">
-                                                        {{ $product->title }}
+                                                        {{ moneyFormat($detail->buy_price) }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $product->category->name }}
+                                                        {{ $detail->tax_type }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $product->vendor->name }}
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{ $product->stock }}
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{ $product->unit }}
+                                                        {{ $detail->periode }}
                                                     </td>
                                                     <td>
                                                         @can('products.edit')
-                                                            <a href="{{ route('app.products.edit', $product->id) }}"
+                                                            <a href="{{ route('app.products.edit', $detail->id) }}"
                                                                 class="btn btn-success btn-sm">
                                                                 <i class="fa fa-pencil-alt me-1" title="Edit Produk">
                                                                 </i>
                                                             </a>
                                                         @endcan
                                                         @can('products.delete')
-                                                            <button onclick="Delete(this.id)" id="{{ $product->id }}"
+                                                            <button onclick="Delete(this.id)" id="{{ $detail->id }}"
                                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
                                                                     title="Hapus Produk"></i>
                                                             </button>
                                                         @endcan
                                                     </td>
                                                 </tr>
-                                            @endforeach --}}
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -95,7 +73,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-12">
-                        {{-- @include('pages.app.products._create') --}}
+                        @include('pages.app.p_detail._create')
                     </div>
                 </div>
             </div>
@@ -104,44 +82,72 @@
 @endsection
 
 @push('scripts')
-    <!-- Page Specific JS File -->
-    <script>
-        function showImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#img').attr('src', e.target.result).width(200).height(180);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-
     <!-- JS Libraies -->
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
                 "sortable": false,
-                "targets": [1, 2, 5, 6, 7]
+                "targets": [1, 2, 5]
             }]
         });
     </script>
 
-
-    <!-- JS Libraies -->
     <script>
-        if (jQuery().summernote) {
-            $(".summernote-simple").summernote({
-                dialogsInBody: true,
-                minHeight: 150,
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough']],
-                    ['para', ['paragraph']]
-                ]
-            });
+        //format rupiah real-time
+        var rupiah = document.getElementById('rupiahInput');
+        rupiah.addEventListener('keyup', function(e) {
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var rupiah1 = document.getElementById('hargaDuz');
+        rupiah1.addEventListener('keyup', function(e) {
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah1.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var rupiah2 = document.getElementById('hargaBaal');
+        rupiah2.addEventListener('keyup', function(e) {
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah2.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var rupiah3 = document.getElementById('hargaPack');
+        rupiah3.addEventListener('keyup', function(e) {
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah3.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var rupiah4 = document.getElementById('hargaPcs');
+        rupiah4.addEventListener('keyup', function(e) {
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah4.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
     </script>
+
 
     <!-- Page Specific JS File -->
     <script>

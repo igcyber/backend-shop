@@ -1,26 +1,34 @@
 <?php
 
-use App\Http\Controllers\Apps\CartController;
+use App\Models\DetailProduct;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Permission;
+use App\Http\Controllers\Apps\AuthController;
+use App\Http\Controllers\Apps\CartController;
+use App\Http\Controllers\Apps\HomeController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
+use App\Http\Controllers\Apps\OrderController;
 use App\Http\Controllers\Apps\VendorController;
 use App\Http\Controllers\Apps\ProductController;
 use App\Http\Controllers\Apps\CategoryController;
+use App\Http\Controllers\Apps\CheckOutController;
 use App\Http\Controllers\Apps\CustomerController;
-use App\Http\Controllers\Apps\DetailProductController;
-use App\Http\Controllers\Apps\HomeController;
 use App\Http\Controllers\Apps\PermissionController;
-use App\Models\DetailProduct;
+use App\Http\Controllers\Apps\CustomerLoginController;
+use App\Http\Controllers\Apps\DetailProductController;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('front.home');
 
+// add cart to dus
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
 Route::get('cart-detail', [CartController::class, 'cartDetail'])->name('cartDetail');
 Route::post('cart-update', [CartController::class, 'updateCart'])->name('updateCart');
 Route::get('cart-delete', [CartController::class, 'deleteCart'])->name('deleteCart');
 Route::get('cart/remove-product/{rowId}', [CartController::class, 'removeCart'])->name('removeCart');
+Route::get('cart-count', [CartController::class, 'countCart'])->name('countCart');
+Route::get('cart-subtotal', [CartController::class, 'subTotalCart'])->name('subtotalCart');
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], function () {
     // Dashboard Route
@@ -54,8 +62,21 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
 
     //Details Product Route
-    Route::resource('/detail-products', DetailProductController::class);
+    Route::resource('/detail-products', DetailProductController::class)->middleware('permission:detail_product.index|detail_product.create|detail_product.edit|detail_product.delete');
 
     //Customer's Route
     Route::resource('/customers', CustomerController::class);
+
+    //Checkout Route
+    Route::get('/checkout', [CheckOutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/submit', [CheckOutController::class, 'checkOut'])->name('submit');
+
+    //Change Status Order
+    Route::get('/order/status-change', [OrderController::class, 'changeStatus'])->name('order.status.change');
+    //Order Cleared For Admin Sales
+    Route::get('/order/admin-sales', [OrderController::class, 'printInvoice'])->name('order.admin.invoice');
+    //Order Print Invoice
+    Route::get('/order/invoice/{id}', [OrderController::class, 'printInvOrder'])->name('order.print-invoice');
+    //Order Route
+    Route::resource('/order', OrderController::class);
 });

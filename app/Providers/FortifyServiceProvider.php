@@ -33,7 +33,6 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('username', $request->username)
                 ->first();
-
             if (
                 $user &&
                 Hash::check($request->password, $user->password)
@@ -56,8 +55,6 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
-
-
 
         //login
         Fortify::loginView(function () {

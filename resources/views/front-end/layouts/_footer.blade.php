@@ -56,6 +56,6 @@
 </div>
 <div class="row" style="background-color: #059305">
     <div class="col-md-12 mt-2 text-white" style="text-align: center">
-        <p>Developed By <a href="" style="color:#fff">Kara Digital Solution</a> | 2023</p>
+        <p>Developed By <a href="#" style="color:#fff">Kara Digital Solution</a> | 2023</p>
     </div>
 </div>

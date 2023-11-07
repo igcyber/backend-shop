@@ -18,7 +18,10 @@ class Product extends Model
         'title',
         'short_description',
         'stock',
-        'unit',
+        'stock_baal',
+        'stock_pack',
+        'stock_pcs',
+        'exp_date',
     ];
 
     /**

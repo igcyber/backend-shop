@@ -8,10 +8,10 @@
 @endpush
 
 @section('main')
-    <div class="card card-primary">
+    <div class="card card-primary" style="border-top: 4px solid #008829; !important">
         <div class="card-header d-block">
-            <h3 class="text-center" style="color: #6777ef;">SIGAP</h3>
-            <h4 class="text-center">Upindo Borneo Raya</h4>
+            <h3 class="text-center" style="color: #008829;">SIGAP</h3>
+            <h4 class="text-center" style="color: #008829;">PT. Upindo Raya Semesta Borneo</h4>
         </div>
         <div class="card-body">
             @if (session('status'))
@@ -23,7 +23,7 @@
                 @csrf
                 <div class="form-group">
                     <div class="d-block">
-                        <label for="password" class="control-label">Username</label>
+                        <label for="password" class="control-label text-default">USERNAME</label>
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-group">
                     <div class="d-block">
-                        <label for="password" class="control-label">Password</label>
+                        <label for="password" class="control-label">PASSWORD</label>
                         <div class="float-right">
                             <a href="{{ route('password.request') }}" class="text-small">
                                 Lupa Password
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                    <button type="submit" class="btn btn-success btn-lg btn-block" tabindex="4">
                         Login
                     </button>
                 </div>

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 
 if (!function_exists('moneyFormat')) {
     /**
@@ -34,5 +36,39 @@ if (!function_exists('setActive')) {
                 }
             }
         }
+    }
+}
+
+// Get Total Amount In Cart
+if (!function_exists('getCartTotal')) {
+    function getCartTotal()
+    {
+        $total = 0;
+        foreach (\Cart::content() as $product) {
+            $total += ($product->price * $product->qty);
+        }
+        return $total;
+    }
+}
+
+if (!function_exists('getInvoiceNumber')) {
+    function getInvoiceNumber()
+    {
+        $month = date('m');
+        $year = date('Y');
+        $totalTransactions = DB::table('orders')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->count() + 10569;
+        $invoiceNumber = $totalTransactions . "-{$month}-{$year}";
+
+        return $invoiceNumber;
+    }
+}
+
+if (!function_exists('clearCart')) {
+    function clearCart()
+    {
+        \Cart::destroy();
     }
 }

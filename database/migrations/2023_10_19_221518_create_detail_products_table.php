@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->bigInteger('buy_price');
-            $table->bigInteger('sell_price_duz');
-            $table->bigInteger('sell_price_pack');
+            $table->bigInteger('sell_price_duz')->nullable();
+            $table->bigInteger('sell_price_baal')->nullable();
+            $table->bigInteger('sell_price_pack')->nullable();
             $table->bigInteger('sell_price_pcs')->nullable();
             $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
-            $table->enum('periode', ['Regular', 'Seasonal'])->default('Regular');
-            $table->boolean('is_top');
+            $table->enum('periode', ['Reguler', 'Seasonal'])->default('Reguler');
             $table->timestamps();
 
             //relationship categories

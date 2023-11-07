@@ -17,35 +17,52 @@
                         </p>
                         <div class="">
                             <span class="badge bg-success py-1">Stok Barang</span>
-                            <span class="badge bg-primary py-1 ">Harga</span>
+                            <span class="badge bg-primary py-1 px-5 ">Harga</span>
                         </div>
                         <div class="mb-3">
-                            <span class="mb-0">{{ $detail->product->stock }}
-                                {{ $detail->product->unit }}</span>
+                            <p class="mb-0 {{ $detail->product->stock == 0 ? 'd-none' : '' }}">
+                                {{ $detail->product->stock }}
+                                duz <span style="margin-left: 15.4%;">{{ moneyFormat($detail->sell_price_duz) }}</span>
+                            </p>
+                            <p class="mb-0 {{ $detail->product->stock_baal == 0 ? 'd-none' : '' }}">
+                                {{ $detail->product->stock_baal }}
+                                baal <span style="margin-left: 8%;">{{ moneyFormat($detail->sell_price_baal) }}</span>
+                            </p>
+                            <p class="mb-0 {{ $detail->product->stock_pack == 0 ? 'd-none' : '' }}">
+                                {{ $detail->product->stock_pack }}
+                                pack <span style="margin-left: 11%;">{{ moneyFormat($detail->sell_price_pack) }}</span>
+                            </p>
+                            <p class="mb-0 {{ $detail->product->stock_pcs == 0 ? 'd-none' : '' }}">
+                                {{ $detail->product->stock_pack }}
+                                pcs <span style="margin-left: 13%;">{{ moneyFormat($detail->sell_price_pcs) }}</span>
+                            </p>
 
-                            <span class="mb-0 px-5">{{ moneyFormat($detail->sell_price_duz) }}
-                            </span>
                         </div>
                         <hr>
 
                         {{-- REQUEST FROM HERE --}}
                         <input type="hidden" name="id" value="{{ $detail->id }}">
-                        <div class="row">
-                            <h5>Masukan Kuantitas Pesanan</h5>
-                            <div class="col-md-4">
-                                <span class="badge bg-success py-1 mb-2">Kuantitas(Duz)</span>
-                                <input type="number" class="form-control-sm col-sm-6 d-block mb-3 number_area mx-0"
-                                    min="0" max="100" value="0" name="qty">
+                        <div class="row" style="padding-right: 20px;">
+                            <h5>Banyak Pesanan</h5>
+                            <div class="col-md-3 {{ $detail->product->stock == 0 ? 'd-none' : '' }}">
+                                <span class="badge bg-success py-1 mb-2">Dus</span>
+                                <input type="number" class="form-control-sm col-sm-12 d-block mb-3 number_area mx-0"
+                                    value="0" name="qty">
                             </div>
-                            <div class="col-md-4">
-                                <span class="badge bg-success py-1 mb-2">Kuantitas(Pack)</span>
-                                <input type="number" class="form-control-sm col-sm-6 d-block mb-3 number_area"
-                                    min="0" max="100" value="0" name="pack_qty">
+                            <div class="col-md-3 {{ $detail->product->stock_baal == 0 ? 'd-none' : '' }}">
+                                <span class="badge bg-success py-1 mb-2">Baal</span>
+                                <input type="number" class="form-control-sm col-sm-12 d-block mb-3 number_area mx-0"
+                                    value="0" name="baal_qty">
                             </div>
-                            <div class="col-md-4">
-                                <span class="badge bg-success py-1 mb-2">Kuantitas(Pcs)</span>
-                                <input type="number" class="form-control-sm col-sm-6 d-block mb-3 number_area"
-                                    min="0" max="100" value="0" name="pcs_qty">
+                            <div class="col-md-3 {{ $detail->product->stock_pack == 0 ? 'd-none' : '' }}">
+                                <span class="badge bg-success py-1 mb-2">Pack</span>
+                                <input type="number" class="form-control-sm col-sm-12 d-block mb-3 number_area"
+                                    value="0" name="pack_qty">
+                            </div>
+                            <div class="col-md-3 {{ $detail->product->stock_pcs == 0 ? 'd-none' : '' }}">
+                                <span class="badge bg-success py-1 mb-2">Pcs</span>
+                                <input type="number" class="form-control-sm col-sm-12 d-block mb-3 number_area"
+                                    value="0" name="pcs_qty">
                             </div>
                         </div>
 
@@ -54,8 +71,8 @@
                         <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Tambah
                             Pesanan</button>
                     </div>
+                </div>
             </form>
         </div>
-    </div>
     </div>
 @endforeach

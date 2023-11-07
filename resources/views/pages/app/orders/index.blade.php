@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Produk')
+@section('title', 'Order')
 
 @push('style')
 @endpush
@@ -9,57 +9,76 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Halaman Produk</h1>
+                <h1>Halaman Order</h1>
             </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-8 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Produk</h4>
+                                <h4>Data Order</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="table-1">
+                                    <table class="table table-stripe" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 10%">
+                                                <th scope="col" style="width: 5%">
                                                     No. Urut
                                                 </th>
-                                                <th>No. Produk</th>
-                                                <th>Nama Produk</th>
-                                                <th>Tipe Produk</th>
-                                                <th>Pabrikan</th>
+                                                <th scope="col" style="width: 10%">No. Transaksi</th>
+                                                <th>Nama Outlet</th>
+                                                <th>Total Pembayaran</th>
+                                                <th>Banyak Pesanan</th>
+                                                <th scope="col" style="width: 20%">Alamat</th>
+                                                <th>Status Order</th>
+                                                <th>Tanggal Order</th>
                                                 <th>Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($products as $key => $product)
+                                            @foreach ($orders as $key => $item)
                                                 <tr>
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $product->serial_number }}</td>
+                                                    <td class="align-middle">{{ $item->transaction_id }}</td>
+                                                    <td class="align-middle">{{ $item->outlet }}</td>
+                                                    <td class="align-middle">{{ moneyFormat($item->sub_total) }}</td>
+                                                    <td class="align-middle">{{ $item->product_qty }} Item</td>
+                                                    <td class="align-middle">{{ $item->order_address }}</td>
                                                     <td class="align-middle">
-                                                        {{ $product->title }}
+                                                        @if ($item->order_status == 'pending')
+                                                            <span
+                                                                class="badge badge-danger">{{ $item->order_status }}</span>
+                                                        @elseif ($item->order_status == 'clear')
+                                                            <span
+                                                                class="badge badge-success">{{ $item->order_status }}</span>
+                                                        @endif
                                                     </td>
+                                                    <td class="align-middle">{{ dateID($item->created_at) }}</td>
                                                     <td class="align-middle">
-                                                        {{ $product->category->name }}
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{ $product->vendor->name }}
-                                                    </td>
-                                                    {{-- <td></td> --}}
-                                                    <td>
-                                                        @can('products.edit')
-                                                            <a href="{{ route('app.products.edit', $product->id) }}"
+                                                        @role('Admin Sales')
+                                                            <a href="{{ route('app.order.print-invoice', $item->id) }}"
+                                                                class="btn btn-info btn-sm">
+                                                                <i class="fas fa-file-invoice" title="Invoice"></i>
+                                                            </a>
+                                                        @endrole
+                                                        @role('Sales')
+                                                            <a href="{{ route('app.order.show', $item->id) }}"
+                                                                class="btn btn-info btn-sm">
+                                                                <i class="fas fa-file-invoice" title="Invoice"></i>
+                                                            </a>
+                                                        @endrole
+                                                        @can('orders.edit')
+                                                            <a href="{{ route('app.order.edit', $item->id) }}"
                                                                 class="btn btn-success btn-sm">
                                                                 <i class="fa fa-pencil-alt me-1" title="Edit Produk">
                                                                 </i>
                                                             </a>
                                                         @endcan
-                                                        @can('products.delete')
-                                                            <button onclick="Delete(this.id)" id="{{ $product->id }}"
+                                                        @can('orders.delete')
+                                                            <button onclick="Delete(this.id)" id="{{ $item->id }}"
                                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
                                                                     title="Hapus Produk"></i>
                                                             </button>
@@ -74,7 +93,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-12">
-                        @include('pages.app.products._create')
+                        {{-- @include('pages.app.products._create') --}}
                     </div>
                 </div>
             </div>
@@ -83,44 +102,15 @@
 @endsection
 
 @push('scripts')
-    <!-- Page Specific JS File -->
-    {{-- <script>
-        function showImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#img').attr('src', e.target.result).width(200).height(180);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script> --}}
-
     <!-- JS Libraies -->
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
                 "sortable": false,
-                "targets": [1, 2, 5]
+                "targets": [2, 3, 4, 5, 8]
             }]
         });
     </script>
-
-
-    <!-- JS Libraies -->
-    {{-- <script>
-        if (jQuery().summernote) {
-            $(".summernote-simple").summernote({
-                dialogsInBody: true,
-                minHeight: 150,
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough']],
-                    ['para', ['paragraph']]
-                ]
-            });
-        }
-    </script> --}}
 
     <!-- Page Specific JS File -->
     <script>

@@ -20,8 +20,11 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('title');
             $table->text('short_description')->nullable();
-            $table->integer('stock');
-            $table->enum('unit', ['Baal', 'Duz', 'Pack', 'Pcs'])->default('Duz');
+            $table->integer('stock')->nullable();
+            $table->integer('stock_baal')->nullable();
+            $table->integer('stock_pack')->nullable();
+            $table->integer('stock_pcs')->nullable();
+            $table->date('exp_date')->nullable();
             $table->timestamps();
 
             //relationship categories

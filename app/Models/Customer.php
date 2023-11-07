@@ -11,10 +11,10 @@ class Customer extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'klasifikasi',
         'nomor',
-        'user_id',
+        'seller_id',
+        'outlet_id',
         'no_telp',
         'address',
     ];
@@ -24,8 +24,18 @@ class Customer extends Authenticatable
      *
      * @return void
      */
-    public function user()
+    public function seller()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    /**
+     * Belongs to Relationship model with User model
+     *
+     * @return void
+     */
+    public function outlet()
+    {
+        return $this->belongsTo(User::class, 'outlet_id');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apps;
 
+use Carbon\Carbon;
 use App\Models\Vendor;
 use App\Models\Product;
 use App\Models\Category;
@@ -29,10 +30,19 @@ class ProductController extends Controller
             'category_id' => 'required',
             'vendor_id' => 'required',
             'title' => 'required',
-            'stock' => 'required',
-            'unit' => 'required',
-
+            'stock' => 'max:999|min:0|nullable|numeric',
+            'stock_baal' => 'max:999|min:0|nullable|numeric',
+            'stock_pack' => 'max:999|min:0|nullable|numeric',
+            'stock_pcs' => 'max:999|min:0|nullable|numeric',
         ]);
+
+        $data = $request->all();
+        $data['stock'] = $request->filled('stock') ? $data['stock'] : 0;
+        $data['stock_baal'] = $request->filled('stock_baal') ? $data['stock_baal'] : 0;
+        $data['stock_pack'] = $request->filled('stock_pack') ? $data['stock_pack'] : 0;
+        $data['stock_pcs'] = $request->filled('stock_pcs') ? $data['stock_pcs'] : 0;
+
+        // dd($request->all());
 
         //check image request
         if ($request->file('image')) {
@@ -47,8 +57,11 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'vendor_id' => $request->vendor_id,
                 'title' => $request->title,
-                'stock' => $request->stock,
-                'unit' => $request->unit,
+                'stock' => $data['stock'],
+                'stock_baal' => $data['stock_baal'],
+                'stock_pack' =>  $data['stock_pack'],
+                'stock_pcs' => $data['stock_pcs'],
+                'exp_date' => Carbon::parse($request->exp_date)->format('Y-m-d'),
                 'short_description' => $request->short_description
             ]);
         } else {
@@ -57,13 +70,16 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'vendor_id' => $request->vendor_id,
                 'title' => $request->title,
-                'stock' => $request->stock,
-                'unit' => $request->unit,
+                'stock' => $data['stock'],
+                'stock_baal' => $data['stock_baal'],
+                'stock_pack' =>  $data['stock_pack'],
+                'stock_pcs' => $data['stock_pcs'],
+                'exp_date' => Carbon::parse($request->exp_date)->format('Y-m-d'),
                 'short_description' => $request->short_description
             ]);
         }
 
-        // dd($request->all());
+
 
         if ($product) {
             //redirect dengan pesan sukses

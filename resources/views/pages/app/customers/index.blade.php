@@ -41,7 +41,7 @@
                                                 <th scope="col">Nama Outlet</th>
                                                 <th scope="col">Klasifikasi</th>
                                                 <th scope="col">Telp. Kantor</th>
-                                                <th scope="col">Alamat Petama</th>
+                                                <th scope="col">Alamat</th>
                                                 <th scope="col">Petugas Sales</th>
                                                 <th scope="col" style="width: 15%">Pilihan</th>
                                             </tr>
@@ -56,7 +56,7 @@
                                                         {{ $customer->nomor }}
                                                     </td>
                                                     <td>
-                                                        {{ $customer->name }}
+                                                        {{ $customer->outlet->name }}
                                                     </td>
                                                     <td>
                                                         {{ $customer->klasifikasi }}
@@ -65,10 +65,10 @@
                                                         {{ $customer->no_telp }}
                                                     </td>
                                                     <td>
-                                                        {{ $customer->address }}
+                                                        {!! $customer->address !!}
                                                     </td>
                                                     <td>
-                                                        {{ $customer->user->name }}
+                                                        {{ $customer->seller->name }}
                                                     </td>
                                                     <td class="text-center">
 
@@ -107,7 +107,7 @@
 
 @push('scripts')
     <!-- JS Libraies -->
-    <script>
+    {{-- <script>
         if (jQuery().summernote) {
             $(".summernote-simple").summernote({
                 dialogsInBody: true,
@@ -119,7 +119,7 @@
                 ]
             });
         }
-    </script>
+    </script> --}}
 
     <script>
         function resetPage() {
@@ -127,7 +127,7 @@
         }
     </script>
 
-    <script>
+    {{-- <script>
         function Delete(id) {
             var id = id;
             var token = $("meta[name='csrf-token']").attr("content");
@@ -186,6 +186,6 @@
                 }
             })
         }
-    </script>
+    </script> --}}
     <!-- Page Specific JS File -->
 @endpush

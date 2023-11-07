@@ -21,6 +21,9 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'dashboard.best_selling_product', 'guard_name' => 'web']);
         Permission::create(['name' => 'dashboard.product_stock', 'guard_name' => 'web']);
 
+        //permission front
+        Permission::create(['name' => 'front.index', 'guard_name' => 'web']);
+
         //permission users
         Permission::create(['name' => 'users.index', 'guard_name' => 'web']);
         Permission::create(['name' => 'users.create', 'guard_name' => 'web']);
@@ -71,5 +74,11 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'orders.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'orders.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'orders.delete', 'guard_name' => 'web']);
+
+        //permission detail products
+        Permission::create(['name' => 'detail_product.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'detail_product.create', 'guard_name' => 'web']);
+        Permission::create(['name' => 'detail_product.edit', 'guard_name' => 'web']);
+        Permission::create(['name' => 'detail_product.delete', 'guard_name' => 'web']);
     }
 }
