@@ -13,43 +13,42 @@ class DetailProductController extends Controller
     {
         $products = Product::all();
         $d_products = DetailProduct::all();
-        // dd($d_products);
         return view('pages.app.p_detail.index', compact('d_products', 'products'));
     }
 
     public function store(Request $request)
     {
-
+        //validate every request from user's input
         $this->validate($request, [
             'product_id' => 'required',
-            'buy_price' => 'required',
+            'sell_price_duz' => 'required',
             'tax_type' => 'required',
             'periode' => 'required',
         ]);
 
-        // dd($request->all());
-
+        //get all the $request
         $data = $request->all();
-        $data['buy_price'] = intval(str_replace(['Rp.', '.', ','], '',  $data['buy_price']));
-        $data['sell_price_duz'] = intval(str_replace(['Rp.', '.', ','], '', $data['sell_price_duz']));
-        $data['sell_price_baal'] = intval(str_replace(['Rp.', '.', ','], '', $data['sell_price_baal']));
-        $data['sell_price_pack'] = intval(str_replace(['Rp.', '.', ','], '', $data['sell_price_pack']));
-        $data['sell_price_pcs'] = intval(str_replace(['Rp.', '.', ','], '', $data['sell_price_pcs']));
+        //take product_id from $request
+        $data['product_id'] = $request->product_id;
+        //take sell_price_duz from $request and make in integer value, remove every String
+        $data['sell_price_duz'] = intval(str_replace(['Rp.', '.', ','], '',  $data['sell_price_duz']));
+        //get data product based one $request->product_id
+        $productContent =  Product::where('id', $data['product_id'])->first();
+        //get price for pak from sell_price_duz / pak_content
+        $getPricePak = $data['sell_price_duz'] / $productContent['pak_content'];
+        //get price for pcs from $getPricePak / pak_pcs
+        $getPricePcs = $getPricePak / $productContent['pak_pcs'];
 
-
-
+        //create data
         $d_product = DetailProduct::create([
             'product_id' => $request->product_id,
-            'buy_price' => $data['buy_price'],
-            'sell_price_duz' => $data['sell_price_duz'] ?? 0,
-            'sell_price_baal' => $data['sell_price_baal'] ?? 0,
-            'sell_price_pack' => $data['sell_price_pack'] ?? 0,
-            'sell_price_pcs' => $data['sell_price_pcs'] ?? 0,
+            'sell_price_duz' => $data['sell_price_duz'],
+            'sell_price_pak' => $getPricePak,
+            'sell_price_pcs' =>  $getPricePcs,
             'tax_type' => $request->tax_type,
             'periode' => $request->periode
         ]);
 
-        // dd($d_product);
         if ($d_product) {
             //redirect dengan pesan sukses
             return redirect()->route('app.detail-products.index')->with(['success' => 'Data Berhasil Disimpan!']);

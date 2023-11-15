@@ -10,19 +10,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'category_id',
-        'vendor_id',
-        'image',
-        'serial_number',
-        'title',
-        'short_description',
-        'stock',
-        'stock_baal',
-        'stock_pack',
-        'stock_pcs',
-        'exp_date',
-    ];
+    protected $guarded = [];
 
     /**
      * Belongs to Relationship model with category model

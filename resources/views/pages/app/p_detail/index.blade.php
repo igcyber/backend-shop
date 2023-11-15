@@ -27,7 +27,9 @@
                                                     No. Urut
                                                 </th>
                                                 <th>Nama Produk</th>
-                                                <th>Harga Beli</th>
+                                                <th>Harga Jual <br>
+                                                    (Duz/Pak/Pcs)
+                                                </th>
                                                 <th>Jenis Pajak</th>
                                                 <th>Periode</th>
                                                 <th>Pilihan</th>
@@ -40,8 +42,12 @@
                                                         {{ $key + 1 }}
                                                     </td>
                                                     <td class="align-middle">{{ $detail->product->title }}</td>
-                                                    <td class="align-middle">
-                                                        {{ moneyFormat($detail->buy_price) }}
+                                                    <td class="px-0 mx-0">
+                                                        <ul>
+                                                            <li>{{ moneyFormat($detail->sell_price_duz) }}</li>
+                                                            <li>{{ moneyFormat($detail->sell_price_pak) }}</li>
+                                                            <li>{{ moneyFormat($detail->sell_price_pcs) }}</li>
+                                                        </ul>
                                                     </td>
                                                     <td class="align-middle">
                                                         {{ $detail->tax_type }}
@@ -49,7 +55,7 @@
                                                     <td class="align-middle">
                                                         {{ $detail->periode }}
                                                     </td>
-                                                    <td>
+                                                    <td class="align-middle">
                                                         @can('products.edit')
                                                             <a href="{{ route('app.products.edit', $detail->id) }}"
                                                                 class="btn btn-success btn-sm">
@@ -99,34 +105,6 @@
             // tambahkan 'Rp.' pada saat form di ketik
             // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
             rupiah.value = formatRupiah(this.value, 'Rp. ');
-        });
-
-        var rupiah1 = document.getElementById('hargaDuz');
-        rupiah1.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah1.value = formatRupiah(this.value, 'Rp. ');
-        });
-
-        var rupiah2 = document.getElementById('hargaBaal');
-        rupiah2.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah2.value = formatRupiah(this.value, 'Rp. ');
-        });
-
-        var rupiah3 = document.getElementById('hargaPack');
-        rupiah3.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah3.value = formatRupiah(this.value, 'Rp. ');
-        });
-
-        var rupiah4 = document.getElementById('hargaPcs');
-        rupiah4.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah4.value = formatRupiah(this.value, 'Rp. ');
         });
 
         /* Fungsi formatRupiah */

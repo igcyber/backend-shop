@@ -128,18 +128,69 @@
                     </div>
                 </div>
             </div>
-            {{-- LABEL STOCK PRODUK --}}
-            <div class="form-row mt-3 mb-2">
-                <div class="col-md-12" style="font-weight:bold">
-                    <label class="breadcrumb bg-secondary text-white justify-content-center">JUMLAH STOK</label>
-                </div>
-                <span class="badge bg-danger text-white">Perhatian : Kosongkan Satuan Yang Tidak Ada Stok</span>
-            </div>
             {{-- INPUT Stok & Unit PRODUK  --}}
             {{-- Stock Dengan Masing-Masing Satuan --}}
             <div class="form-row">
+
+                <div class="col-md-4 mt-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text bg-secondary" style="font-weight: bolder">
+                                Banyak Pak/Dus
+                            </div>
+                        </div>
+                        <input type="text" class="form-control @error('pak_content') is-invalid @enderror"
+                            value="{{ old('pak_content') }}" name="pak_content" placeholder="0">
+                    </div>
+                    @error('pak_content')
+                        <div class="invalid-feedback" style="display: block">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <span class="badge bg-danger text-white mt-2">Contoh: Barang (6 x 20), Isikan Angka 6</span>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text bg-secondary" style="font-weight: bolder">
+                                Banyak Biji/Pak
+                            </div>
+                        </div>
+                        <input type="text" class="form-control @error('pak_pcs') is-invalid @enderror"
+                            value="{{ old('pak_pcs') }}" name="pak_pcs" placeholder="0">
+                    </div>
+                    @error('pak_pcs')
+                        <div class="invalid-feedback" style="display: block">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <span class="badge bg-danger text-white mt-2">Contoh: Barang (6 x 20), Isikan Angka 20</span>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text bg-secondary" style="font-weight: bolder">
+                                Total Stock
+                            </div>
+                        </div>
+                        <input type="text" class="form-control @error('total_stock') is-invalid @enderror"
+                            value="{{ old('total_stock') }}" name="total_stock" placeholder="0">
+                    </div>
+                    @error('total_stock')
+                        <div class="invalid-feedback" style="display: block">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <span class="badge bg-danger text-white mt-2">Jumlah Stok Dari Satuan Terkecil</span>
+                </div>
+
                 {{-- stock dus --}}
-                <div class="col-md-3 mt-2">
+                {{-- <div class="col-md-3 mt-2">
                     <div class="input-group">
                         <input type="text" class="form-control @error('stock') is-invalid @enderror"
                             value="{{ old('stock') }}" name="stock" id="stock" placeholder="0">
@@ -154,28 +205,10 @@
                             {{ $message }}
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
-                {{-- stock baal --}}
-                <div class="col-md-3 mt-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control @error('stock_baal') is-invalid @enderror"
-                            value="{{ old('stock_baal') }}" name="stock_baal" placeholder="0">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text bg-secondary">
-                                Baal
-                            </div>
-                        </div>
-                    </div>
-                    @error('stock_baal')
-                        <div class="invalid-feedback" style="display: block">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- stock pack --}}
-                <div class="col-md-3 mt-2">
+                {{-- stock pak --}}
+                {{-- <div class="col-md-3 mt-2">
                     <div class="input-group">
                         <input type="text" class="form-control @error('stock_pack') is-invalid @enderror"
                             value="{{ old('stock_pack') }}" name="stock_pack" placeholder="0">
@@ -190,10 +223,10 @@
                             {{ $message }}
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
                 {{-- stock pcs --}}
-                <div class="col-md-3 mt-2">
+                {{-- <div class="col-md-3 mt-2">
                     <div class="input-group">
                         <input type="text" class="form-control @error('stock_pcs') is-invalid @enderror"
                             value="{{ old('stock_pcs') }}" name="stock_pcs" placeholder="0">
@@ -208,11 +241,11 @@
                             {{ $message }}
                         </div>
                     @enderror
-                </div>
+                </div> --}}
+
             </div>
-            {{-- INPUT DESKRIPSI SINGKAT --}}
-            <div class="form-row mt-3">
-                <div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md-12 mt-3">
                     <label for="desc" style="font-weight: bold">Deskripsi Singkat</label>
                     <textarea id="desc" class="summernote-simple @error('short_descriptions') is-invalid @enderror"
                         name="short_description">

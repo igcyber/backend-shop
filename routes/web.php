@@ -21,14 +21,6 @@ use App\Http\Controllers\Apps\DetailProductController;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
 
-// add cart to dus
-Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
-Route::get('cart-detail', [CartController::class, 'cartDetail'])->name('cartDetail');
-Route::post('cart-update', [CartController::class, 'updateCart'])->name('updateCart');
-Route::get('cart-delete', [CartController::class, 'deleteCart'])->name('deleteCart');
-Route::get('cart/remove-product/{rowId}', [CartController::class, 'removeCart'])->name('removeCart');
-Route::get('cart-count', [CartController::class, 'countCart'])->name('countCart');
-Route::get('cart-subtotal', [CartController::class, 'subTotalCart'])->name('subtotalCart');
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], function () {
     // Dashboard Route
@@ -79,4 +71,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::get('/order/invoice/{id}', [OrderController::class, 'printInvOrder'])->name('order.print-invoice');
     //Order Route
     Route::resource('/order', OrderController::class);
+
+    // add cart
+    Route::get('/cart/{detail}/{user}', [CartController::class, 'addCart'])->name('cart.add');
+    //get cart
+    Route::get('/carts/{user}', [CartController::class, 'getCart'])->name('cart.get');
+    //update cart
+    Route::post('/carts/update/{user}', [CartController::class, 'updateCart'])->name('cart.update');
+    //delete cart
+    Route::delete('/cart/delete/{id}', [CartController::class, 'deleteCart'])->name('cart.delete');
 });

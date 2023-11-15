@@ -39,18 +39,6 @@ if (!function_exists('setActive')) {
     }
 }
 
-// Get Total Amount In Cart
-if (!function_exists('getCartTotal')) {
-    function getCartTotal()
-    {
-        $total = 0;
-        foreach (\Cart::content() as $product) {
-            $total += ($product->price * $product->qty);
-        }
-        return $total;
-    }
-}
-
 if (!function_exists('getInvoiceNumber')) {
     function getInvoiceNumber()
     {
@@ -60,15 +48,29 @@ if (!function_exists('getInvoiceNumber')) {
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->count() + 10569;
-        $invoiceNumber = $totalTransactions . "-{$month}-{$year}";
-
-        return $invoiceNumber;
+        return $totalTransactions . "-{$month}-{$year}";
     }
 }
 
-if (!function_exists('clearCart')) {
-    function clearCart()
+if (!function_exists('countQty')) {
+    function countQty($totalBiji, $bijiPerDus, $bijiPerPak)
     {
-        \Cart::destroy();
+        // Hitung jumlah dus yang dibutuhkan
+        $jumlahDus = floor($totalBiji / $bijiPerDus);
+
+        // Hitung sisa biji setelah mengambil dus
+        $sisaBiji = $totalBiji - ($jumlahDus * $bijiPerDus);
+
+        // Hitung sisa pak jika ada
+        $sisaPak = floor($sisaBiji / $bijiPerPak);
+
+        //Hitung sisa biji dari pak
+        $sisaBijiAkhir = $sisaBiji - ($sisaPak * $bijiPerPak);
+
+        return [
+            'jumlah_dus' => $jumlahDus,
+            'sisa_pak' => $sisaPak,
+            'sisa_biji' => $sisaBijiAkhir,
+        ];
     }
 }

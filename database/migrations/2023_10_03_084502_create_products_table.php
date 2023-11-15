@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('title');
             $table->text('short_description')->nullable();
-            $table->integer('stock')->nullable();
-            $table->integer('stock_baal')->nullable();
-            $table->integer('stock_pack')->nullable();
+            $table->$table->integer('total_stock');
+            $table->integer('stock_duz')->nullable();
+            $table->integer('stock_pak')->nullable();
             $table->integer('stock_pcs')->nullable();
             $table->date('exp_date')->nullable();
             $table->timestamps();

@@ -22,15 +22,15 @@
                     dari Para Suplayer, kami berkomitmen akan terus mengembangkan dan melebarkan sayap
                     dengan membentuk mitra-mitra distribusi di berbagai area, baik didalam maupun diluar
                     area coverage yang sudah ada. Agar lebih focus,
-                    Sistematis dan Bertanggungjawab, kami membagi kelompok suplayer kedalam Empat Devisi
+                    Sistematis dan Bertanggungjawab, kami membagi kelompok suplayer kedalam Empat Divisi
                     yakni :
                 </p>
 
                 <ol class="text-light">
-                    <li>Devisi Snack, Coklat & Candy</li>
-                    <li>Devisi Jelly & Minuman</li>
-                    <li>Devisi Biscuit, Wafer & Bakry</li>
-                    <li>Devisi Sembako</li>
+                    <li>Divisi Snack, Coklat & Candy</li>
+                    <li>Divisi Jelly & Minuman</li>
+                    <li>Divisi Biscuit, Wafer & Bakry</li>
+                    <li>Divisi Sembako</li>
                 </ol>
             </div>
         </div>

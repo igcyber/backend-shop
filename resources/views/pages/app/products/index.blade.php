@@ -28,6 +28,7 @@
                                                 </th>
                                                 <th>No. Produk</th>
                                                 <th>Nama Produk</th>
+                                                <th>Total Stok</th>
                                                 <th>Tipe Produk</th>
                                                 <th>Pabrikan</th>
                                                 <th>Pilihan</th>
@@ -42,6 +43,9 @@
                                                     <td class="align-middle">{{ $product->serial_number }}</td>
                                                     <td class="align-middle">
                                                         {{ $product->title }}
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        {{ $product->total_stock }}
                                                     </td>
                                                     <td class="align-middle">
                                                         {{ $product->category->name }}

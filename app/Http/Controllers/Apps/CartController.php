@@ -2,97 +2,85 @@
 
 namespace App\Http\Controllers\Apps;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Models\DetailProduct;
 use App\Http\Controllers\Controller;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    //add items to cart
-    public function addToCart(Request $request)
+    //add cart function with two product and user parameters
+    public function addCart($detail, $user)
     {
-        $detail = DetailProduct::findOrFail($request->id);
+        //get data berdasarkan logged in outlet
+        $carts = Cart::where('outlet_id', $user)->where('detail_id', $detail)->first();
 
-
-        if ($detail->product->stock < $request->qty) {
-            return response(['status' => 'error', 'message' => 'Jumlah Pesanan Melebihi Stok']);
+        //check if product is already exists in cart
+        if ($carts) {
+            return back()->with(['warning' => 'Barang Sudah Ada Di Keranjang!']);
+        } else {
+            //else create cart and add it to cart table
+            $saved_cart = Cart::create([
+                'outlet_id' => $user,
+                'detail_id' => $detail,
+                'qty_duz' => 0,
+                'qty_pak' => 0,
+                'qty_pcs' => 0
+            ]);
         }
 
-        $cartData = [];
-        $cartData['id'] = $detail->id;
-        $cartData['name'] = $detail->product->title;
-        $cartData['price'] = $detail->sell_price_duz;
-        $cartData['qty'] = $request->qty;
-        $cartData['weight'] = 0;
-        // $cartData['options']['baal_qty'] = $request->baal_qty;
-        $cartData['options']['pack_qty'] = $request->pack_qty;
-        // $cartData['options']['pcs_qty'] = $request->pcs_qty;
-        // $cartData['options']['price_baal'] = $detail->sell_price_baal;
-        $cartData['options']['price_pack'] = $detail->sell_price_pack;
-        // $cartData['options']['price_pcs'] = $detail->sell_price_pcs;
-
-        // dd($cartData);
-        Cart::add($cartData);
-        return response(['status' => 'success', 'message' => 'Disimpan Dalam Keranjang']);
-    }
-
-    //show detail cart
-    public function cartDetail()
-    {
-        $cartItems = Cart::content();
-        return view('front-end.cart.cart-detail', compact('cartItems'));
-    }
-
-    //update cart qty, and total price
-    public function updateCart(Request $request)
-    {
-        // dd($request->all());
-        Cart::update($request->rowId, $request->qty);
-        // Cart::update($request->rowId, ['options'  => ['baal_qty' => $request->baal_qty]]);
-        $productTotal = $this->getProductTotal($request->rowId);
-        $rupiahFormat = moneyFormat($productTotal);
-        return response(['status' => 'success', 'message' => 'Product Updated Successfully', 'product_total' => $rupiahFormat]);
-    }
-
-    //get all product total
-    //from single units i.e (duz,baal,pack,pcs)
-    public function getProductTotal($rowId)
-    {
-        $product = Cart::get($rowId);
-        // dd($product);
-        //hitung banyak unit * harganya persatuan
-        $total = $product->price * $product->qty;
-        return $total;
-    }
-
-    //sum all total price of each product
-    public function subTotalCart()
-    {
-        $total = 0;
-        foreach (Cart::content() as $product) {
-            $total += $this->getProductTotal($product->rowId);
+        if ($saved_cart) {
+            //redirect back to page with success message
+            return back()->with(['success' => 'Barang Berhasil Ditambahkan Dalam Keranjang']);
+        } else {
+            //redirect back to page with error message
+            return back()->with(['error' => 'Terjadi Kesalahan Saat Penambahan Barang']);
         }
-        return moneyFormat($total);
     }
 
-    //delete all item from cart
-    public function deleteCart()
+    public function getCart($user)
     {
-        Cart::destroy();
-        return response(['status' => 'success', 'message' => 'Cart Cleared Successfully']);
+        /** Memuat seluruh data dari tabel cart, berdasarkan outlet_id dengan parameter user */
+        $carts = Cart::where('outlet_id', $user)->get();
+        // dd($carts);
+        // foreach ($carts as $cart) {
+        //     dd($cart->id);
+        // }
+        // $subtotal = 0;
+        // foreach ($carts as $item) {
+        //     $subtotal += $item->qty_duz * $item->productDetail->sell_price_duz;
+        //     $subtotal += $item->qty_pak * $item->productDetail->sell_price_pak;
+        //     $subtotal += $item->qty_pcs * $item->productDetail->sell_price_pcs;
+        // }
+        return view('front-end.cart.cart-detail', compact('carts'));
     }
 
-    //delete single item from cart
-    public function removeCart($rowId)
+    public function updateCart(Request $request, $user)
     {
-        Cart::remove($rowId);
-        return redirect()->back()->with(['status' => 'success', 'message' => 'Product Deleted Successfully']);
+        $carts = Cart::where('outlet_id', $user)->pluck('detail_id');
+        foreach ($carts as $detail_id) {
+            $updateCart = Cart::where('detail_id', $detail_id)->update([
+                'qty_duz' => $request->input('updates.' . $detail_id . '.qty_duz'),
+                'qty_pak' => $request->input('updates.' . $detail_id . '.qty_pak'),
+                'qty_pcs' => $request->input('updates.' . $detail_id . '.qty_pcs')
+            ]);
+        }
+        if ($updateCart) {
+            return redirect(route('app.cart.get', $user));
+        }
     }
 
-    public function countCart()
+    public function deleteCart($id)
     {
-        return Cart::content()->count();
+        // dd($id);
+        $cart = Cart::findOrFail($id);
+        // Pastikan hanya pemilik item yang dapat menghapusnya
+        if (Auth::id() == $cart->outlet_id) {
+            $cart->delete();
+            return redirect()->back()->with('success', 'Item berhasil dihapus');
+        } else {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menghapus item ini');
+        }
     }
 }

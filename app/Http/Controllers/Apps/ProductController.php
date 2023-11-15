@@ -23,6 +23,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
+
 
         $this->validate($request, [
             'image' => 'image|mimes:jpeg,jpg,png|max:2000',
@@ -37,12 +39,17 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
-        $data['stock'] = $request->filled('stock') ? $data['stock'] : 0;
-        $data['stock_baal'] = $request->filled('stock_baal') ? $data['stock_baal'] : 0;
-        $data['stock_pack'] = $request->filled('stock_pack') ? $data['stock_pack'] : 0;
-        $data['stock_pcs'] = $request->filled('stock_pcs') ? $data['stock_pcs'] : 0;
+        $data['total_stock'] = $request->filled('total_stock') ? $data['total_stock'] : 0; //total stok dalam satuan biji
+        $data['pak_content'] = $request->filled('pak_content') ? $data['pak_content'] : 0; //total pak dalam satu dus
+        $data['pak_pcs'] = $request->filled('pak_pcs') ? $data['pak_pcs'] : 0; //total biji dalam satu pak
 
-        // dd($request->all());
+        //total biji perdus
+        $bijiPerDus = $data['pak_content'] * $data['pak_pcs'];
+
+        //hitung total dus, sisa pak, dan biji
+        $hasil_perhitungan = countQty($data['total_stock'], $bijiPerDus, $data['pak_pcs']);
+
+        // dd($this->hitungProduk($data['total_stock'], $bijiPerDus, $data['pak_pcs']));
 
         //check image request
         if ($request->file('image')) {
@@ -70,15 +77,16 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'vendor_id' => $request->vendor_id,
                 'title' => $request->title,
-                'stock' => $data['stock'],
-                'stock_baal' => $data['stock_baal'],
-                'stock_pack' =>  $data['stock_pack'],
-                'stock_pcs' => $data['stock_pcs'],
+                'total_stock' => $data['total_stock'],
+                'stock_duz' => $hasil_perhitungan['jumlah_dus'],
+                'stock_pak' =>  $hasil_perhitungan['sisa_pak'],
+                'stock_pcs' => $hasil_perhitungan['sisa_biji'],
+                'pak_content' =>  $data['pak_content'],
+                'pak_pcs' =>  $data['pak_pcs'],
                 'exp_date' => Carbon::parse($request->exp_date)->format('Y-m-d'),
                 'short_description' => $request->short_description
             ]);
         }
-
 
 
         if ($product) {

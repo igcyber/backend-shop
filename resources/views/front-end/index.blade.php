@@ -65,16 +65,27 @@
                                         <p class="{{ $detail->product->stock_pcs == 0 ? 'd-none' : '' }}">
                                             {{ $detail->product->stock_pcs }}
                                             pcs</p>
-                                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        <button type="button" class="btn btn-sm btn-info d-inline" data-bs-toggle="modal"
                                             data-bs-target="#detailModal-{{ $detail->id }}">
-                                            <i class="fas fa-eye"></i> Detail Produk
+                                            <i class="fas fa-eye"></i> Detail
                                         </button>
+                                        @guest
+                                            {{-- direct to login page --}}
+                                            <a href="{{ route('login') }}" class="btn btn-sm btn-success" target="_blank">
+                                                <i class="fas fa-cart-plus"></i> Tambah
+                                            </a>
+                                        @else
+                                            <a href="{{ route('app.cart.add', [$detail->id, auth()->user()->id]) }}"
+                                                class="btn btn-sm btn-success">
+                                                <i class="fas fa-cart-plus"></i> Tambah
+                                            </a>
+                                        @endguest
+
 
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
                     <!-- Tombol "Lihat Lebih Lengkap" -->
                     <div class="container text-end">
@@ -97,62 +108,5 @@
     <!-- JS Libraries -->
     <script>
         AOS.init();
-    </script>
-
-    {{-- JQuery Add Cart --}}
-    <script>
-        $(document).ready(function() {
-            $('.shopping-cart-form').on('submit', function(e) {
-                e.preventDefault();
-                let formData = $(this).serialize();
-                // console.log(formData);
-                $.ajax({
-                    method: 'POST',
-                    data: formData,
-                    url: "{{ route('addToCart') }}",
-                    success: function(data) {
-                        if (data.status == 'success') {
-                            getCart()
-                            toastr.success(data.message);
-                        } else if (data.status == 'error') {
-                            toastr.error(data.message);
-                        }
-                    }
-                })
-            });
-
-            $('.cart-pack').on('submit', function(e) {
-                e.preventDefault();
-                let formData = $(this).serialize();
-                // console.log(formData);
-                $.ajax({
-                    method: 'POST',
-                    data: formData,
-                    url: "{{ route('addToCart') }}",
-                    success: function(data) {
-                        if (data.status == 'success') {
-                            getCart()
-                            toastr.success(data.message);
-                        } else if (data.status == 'error') {
-                            toastr.error(data.message);
-                        }
-                    }
-                })
-            });
-
-            //count how much product is added to cart
-            function getCart() {
-                $.ajax({
-                    method: 'GET',
-                    url: "{{ route('countCart') }}",
-                    success: function(data) {
-                        $('#cart_count').text(data)
-                    },
-                    error: function(data) {
-
-                    }
-                })
-            }
-        });
     </script>
 @endpush

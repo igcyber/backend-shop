@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('detail_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->bigInteger('buy_price');
             $table->bigInteger('sell_price_duz')->nullable();
-            $table->bigInteger('sell_price_baal')->nullable();
-            $table->bigInteger('sell_price_pack')->nullable();
+            $table->bigInteger('sell_price_pak')->nullable();
             $table->bigInteger('sell_price_pcs')->nullable();
             $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
             $table->enum('periode', ['Reguler', 'Seasonal'])->default('Reguler');

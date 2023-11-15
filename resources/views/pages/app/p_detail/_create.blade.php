@@ -31,17 +31,18 @@
                 </div>
 
                 <div class="col-md-6 mt-2">
-                    <label for="rupiahInput" style="font-weight: bold">Harga Beli</label>
+                    <label for="rupiahInput" style="font-weight: bold; padding-right:3%;">Harga Jual</label>
+                    <span class="badge bg-danger text-white">Pastikan Harga Jual Sesuai</span>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <i class="fas fa-money-bill"></i>
                             </div>
                         </div>
-                        <input type="text" name="buy_price"
-                            class="form-control @error('buy_price') is-invalid @enderror" placeholder="0"
+                        <input type="text" name="sell_price_duz"
+                            class="form-control @error('sell_price_duz') is-invalid @enderror" placeholder="0"
                             id="rupiahInput">
-                        @error('buy_price')
+                        @error('sell_price_duz')
                             <div class="invalid-feedback" style="display: block">
                                 {{ $message }}
                             </div>
@@ -94,91 +95,6 @@
                             </div>
                         @enderror
                     </div>
-                </div>
-            </div>
-
-            {{-- LABEL STOCK PRODUK --}}
-            <div class="form-row mt-3 mb-2">
-                <div class="col-md-12" style="font-weight:bold">
-                    <label class="breadcrumb bg-secondary text-white justify-content-center">HARGA JUAL</label>
-                </div>
-                <span class="badge bg-danger text-white">Perhatian : Kosongkan Satuan Yang Tidak Ada Harga Jual</span>
-            </div>
-
-            {{-- INPUT Stok & Unit PRODUK  --}}
-            {{-- Harga Dengan Masing-Masing Satuan --}}
-            <div class="form-row">
-                {{-- stock dus --}}
-                <div class="col-md-3 mt-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control @error('sell_price_duz') is-invalid @enderror"
-                            value="{{ old('sell_price_duz') }}" name="sell_price_duz" placeholder="0" id="hargaDuz">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text bg-secondary">
-                                Dus
-                            </div>
-                        </div>
-                    </div>
-                    @error('sell_price_duz')
-                        <div class="invalid-feedback" style="display: block">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- stock baal --}}
-                <div class="col-md-3 mt-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control @error('sell_price_baal') is-invalid @enderror"
-                            value="{{ old('sell_price_baal') }}" name="sell_price_baal" placeholder="0" id="hargaBaal">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text bg-secondary">
-                                Baal
-                            </div>
-                        </div>
-                    </div>
-                    @error('sell_price_baal')
-                        <div class="invalid-feedback" style="display: block">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- stock pack --}}
-                <div class="col-md-3 mt-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control @error('sell_price_pack') is-invalid @enderror"
-                            value="{{ old('sell_price_pack') }}" name="sell_price_pack" placeholder="0" id="hargaPack">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text bg-secondary">
-                                Pack
-                            </div>
-                        </div>
-                    </div>
-                    @error('sell_price_pack')
-                        <div class="invalid-feedback" style="display: block">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- stock pcs --}}
-                <div class="col-md-3 mt-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control @error('sell_price_pcs') is-invalid @enderror"
-                            value="{{ old('sell_price_pcs') }}" name="sell_price_pcs" placeholder="0"
-                            id="hargaPcs">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text bg-secondary">
-                                Pcs
-                            </div>
-                        </div>
-                    </div>
-                    @error('sell_price_pcs')
-                        <div class="invalid-feedback" style="display: block">
-                            {{ $message }}
-                        </div>
-                    @enderror
                 </div>
             </div>
 
