@@ -2,16 +2,45 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Customer extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'klasifikasi',
+        'nomor',
+        'sales_id',
+        'outlet_id',
         'no_telp',
-        'adress',
+        'address',
     ];
+
+    /**
+     * Belongs to Relationship model with User model
+     *
+     * @return void
+     */
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'sales_id');
+    }
+
+    /**
+     * Belongs to Relationship model with User model
+     *
+     * @return void
+     */
+    public function outlet()
+    {
+        return $this->belongsTo(User::class, 'outlet_id');
+    }
+
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

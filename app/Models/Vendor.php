@@ -11,7 +11,8 @@ class Vendor extends Model
 
     protected $fillable = [
         'name',
-        'slug'
+        'slug',
+        'status'
     ];
 
     /**

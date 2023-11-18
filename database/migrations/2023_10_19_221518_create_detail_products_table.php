@@ -11,20 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('detail_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('seller_id');
-            $table->integer('qty');
-            $table->bigInteger('price');
+            $table->bigInteger('sell_price_duz')->nullable();
+            $table->bigInteger('sell_price_pak')->nullable();
+            $table->bigInteger('sell_price_pcs')->nullable();
+            $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
+            $table->enum('periode', ['Reguler', 'Seasonal'])->default('Reguler');
             $table->timestamps();
 
-            //relationship users
-            $table->foreign('seller_id')->references('id')->on('users');
-            //relationship customers
-            $table->foreign('customer_id')->references('id')->on('customers');
-            //relationship products
+            //relationship categories
             $table->foreign('product_id')->references('id')->on('products');
         });
     }
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('detail_products');
     }
 };

@@ -10,19 +10,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'category_id',
-        'vendor_id',
-        'unit_id',
-        'image',
-        'barcode',
-        'title',
-        'buy_price',
-        'sell_price',
-        'stock',
-        'tax_type',
-        'periode',
-    ];
+    protected $guarded = [];
 
     /**
      * Belongs to Relationship model with category model
@@ -34,6 +22,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function detailProduct()
+    {
+        return $this->hasOne(DetailProduct::class, 'product_id');
+    }
+
     /**
      * Belongs to Relationship model with vendor model
      *
@@ -42,16 +35,6 @@ class Product extends Model
     public function vendor()
     {
         return $this->belongsTo(Vendor::class);
-    }
-
-    /**
-     * Belongs to Relationship model with unit model
-     *
-     * @return void
-     */
-    public function unit()
-    {
-        return $this->belongsTo(Unit::class);
     }
 
     /**

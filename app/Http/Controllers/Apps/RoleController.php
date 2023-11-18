@@ -24,12 +24,11 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         //validate request Role Form
         $this->validate($request, [
             'name' => 'required',
             'permissions' => 'required'
-        ], [
-            'name.required' => 'Nama Hak Akses Harus Diisi',
         ]);
 
         //create role

@@ -3,7 +3,11 @@
 @section('title', 'Blank Page')
 
 @push('style')
-    <!-- CSS Libraries -->
+    <style>
+        #permission-table {
+            width: 100% !important
+        }
+    </style>
 @endpush
 
 @section('main')
@@ -30,7 +34,7 @@
                                     </div>
                                 </form>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-m">
+                                    <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%">No</th>

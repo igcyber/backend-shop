@@ -20,7 +20,7 @@
                                 <h4>Data Pengguna</h4>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="GET">
+                                <form action="{{ route('app.users.index') }}" method="GET">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" name="q"
                                             placeholder="cari berdasarkan nama pengguna">

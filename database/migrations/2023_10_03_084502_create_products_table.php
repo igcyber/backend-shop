@@ -16,23 +16,23 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('vendor_id');
-            $table->unsignedBigInteger('unit_id');
-            $table->string('image');
-            $table->string('barcode')->unique();
+            $table->string('serial_number')->unique();
+            $table->string('image')->nullable();
             $table->string('title');
-            $table->bigInteger('buy_price');
-            $table->bigInteger('sell_price');
-            $table->integer('stock');
-            $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
-            $table->enum('periode', ['Regular', 'Seasonal'])->default('Regular');
+            $table->text('short_description')->nullable();
+            $table->integer('dus_pak');
+            $table->integer('pak_pcs');
+            $table->integer('total_stock');
+            $table->integer('stock_duz')->nullable();
+            $table->integer('stock_pak')->nullable();
+            $table->integer('stock_pcs')->nullable();
+            $table->date('exp_date')->nullable();
             $table->timestamps();
 
             //relationship categories
             $table->foreign('category_id')->references('id')->on('categories');
             //relationship vendors
             $table->foreign('vendor_id')->references('id')->on('vendors');
-            //relationship units
-            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 
