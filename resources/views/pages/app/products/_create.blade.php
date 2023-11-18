@@ -5,10 +5,6 @@
     <div class="card-body">
         <form action="{{ route('app.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            {{-- INPUT GAMBAR PRODUK --}}
-            {{-- <div class="col-md-6">
-                <img src="" alt="" id="img">
-            </div> --}}
             <div class="form-row">
                 <div class="col-md-6 mt-2">
                     <label for="img" style="font-weight: bold">Gambar</label>

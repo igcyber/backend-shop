@@ -52,8 +52,10 @@
             @endrole
 
             @role('Sales')
-                <li class="{{ setActive(['app.order.*']) }}">
-                    <a class="nav-link" href="{{ route('app.order.index') }}"><i class="fas fa-cart-arrow-down"></i>
+                {{-- {{ setActive(['app.order.*']) }} --}}
+                {{-- {{ route('app.order.index') }} --}}
+                <li class="">
+                    <a class="nav-link" href="{{ route('app.sales') }}"><i class="fas fa-cart-arrow-down"></i>
                         <span>Order</span></a>
                 </li>
             @endrole

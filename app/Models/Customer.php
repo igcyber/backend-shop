@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Customer extends Authenticatable
+class Customer extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'klasifikasi',
         'nomor',
-        'seller_id',
+        'sales_id',
         'outlet_id',
         'no_telp',
         'address',
@@ -26,7 +25,7 @@ class Customer extends Authenticatable
      */
     public function seller()
     {
-        return $this->belongsTo(User::class, 'seller_id');
+        return $this->belongsTo(User::class, 'sales_id');
     }
 
     /**
@@ -37,5 +36,11 @@ class Customer extends Authenticatable
     public function outlet()
     {
         return $this->belongsTo(User::class, 'outlet_id');
+    }
+
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

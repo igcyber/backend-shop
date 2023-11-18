@@ -40,7 +40,7 @@ class CustomerController extends Controller
             'address' => 'required',
             // 'no_telp' => ['nullable', 'regex:/^(0|\+62|\05)[0-9]{9,12}$/'],
             'nomor' => 'required',
-            'seller_id' => 'required',
+            'sales_id' => 'required',
             'outlet_id' => 'required'
         ]);
 
@@ -51,7 +51,7 @@ class CustomerController extends Controller
             'address' => $request->address,
             'no_telp' => $request->no_telp ?? '-',
             'nomor' => $request->nomor,
-            'seller_id' => $request->seller_id,
+            'sales_id' => $request->sales_id,
             'outlet_id' => $request->outlet_id
         ]);
 

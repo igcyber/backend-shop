@@ -24,8 +24,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-
-
         $this->validate($request, [
             'image' => 'image|mimes:jpeg,jpg,png|max:2000',
             'serial_number' => 'required|unique:products',
@@ -33,7 +31,6 @@ class ProductController extends Controller
             'vendor_id' => 'required',
             'title' => 'required',
             'stock' => 'max:999|min:0|nullable|numeric',
-            'stock_baal' => 'max:999|min:0|nullable|numeric',
             'stock_pack' => 'max:999|min:0|nullable|numeric',
             'stock_pcs' => 'max:999|min:0|nullable|numeric',
         ]);
@@ -81,7 +78,7 @@ class ProductController extends Controller
                 'stock_duz' => $hasil_perhitungan['jumlah_dus'],
                 'stock_pak' =>  $hasil_perhitungan['sisa_pak'],
                 'stock_pcs' => $hasil_perhitungan['sisa_biji'],
-                'pak_content' =>  $data['pak_content'],
+                'dus_pak' =>  $data['pak_content'],
                 'pak_pcs' =>  $data['pak_pcs'],
                 'exp_date' => Carbon::parse($request->exp_date)->format('Y-m-d'),
                 'short_description' => $request->short_description

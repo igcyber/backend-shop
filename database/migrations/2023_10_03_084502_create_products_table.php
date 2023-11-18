@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('title');
             $table->text('short_description')->nullable();
-            $table->$table->integer('total_stock');
+            $table->integer('dus_pak');
+            $table->integer('pak_pcs');
+            $table->integer('total_stock');
             $table->integer('stock_duz')->nullable();
             $table->integer('stock_pak')->nullable();
             $table->integer('stock_pcs')->nullable();

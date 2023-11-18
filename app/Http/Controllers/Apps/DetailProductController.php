@@ -35,7 +35,7 @@ class DetailProductController extends Controller
         //get data product based one $request->product_id
         $productContent =  Product::where('id', $data['product_id'])->first();
         //get price for pak from sell_price_duz / pak_content
-        $getPricePak = $data['sell_price_duz'] / $productContent['pak_content'];
+        $getPricePak = $data['sell_price_duz'] / $productContent['dus_pak'];
         //get price for pcs from $getPricePak / pak_pcs
         $getPricePcs = $getPricePak / $productContent['pak_pcs'];
 

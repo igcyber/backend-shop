@@ -1,7 +1,10 @@
 <div class="container-fluid">
     <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="#">
         <img src="{{ asset('front-end/img/loogoo (3).png') }}" alt="site icon" />
-        <span class="text-uppercase ms-2 text-size-custom" style="font-size: 1rem !important"> PT. Upindo Raya Semesta
+        <span class="text-uppercase ms-2 text-size-custom"
+            style="font-size: 1rem !important; font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto', sans-serif;">
+            PT. Upindo Raya Semesta
             Borneo</span>
     </a>
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">

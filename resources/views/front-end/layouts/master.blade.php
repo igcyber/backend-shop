@@ -18,6 +18,13 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     {{-- Sweet Alert --}}
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" id="theme-styles">
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,400;1,500&family=Roboto:wght@500&display=swap"
+        rel="stylesheet">
+    {{-- Custom Css --}}
     <link rel="stylesheet" href="{{ asset('front-end/css/style.css') }}" />
     <style>
         .mapouter {
@@ -75,7 +82,7 @@
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
     </script>
     <!-- custom js -->
-    {{-- <script src="{{ asset('front-end/js/script.js') }}"></script> --}}
+    <script src="{{ asset('front-end/js/script.js') }}"></script>
     {{-- AOS Library --}}
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     {{-- Sweet Alert --}}
@@ -100,7 +107,7 @@
                 icon: "error",
                 title: "GAGAL!",
                 text: "{{ session('error') }}",
-                timer: 1500,
+                timer: 3500,
                 showConfirmButton: false,
                 showCancelButton: false,
                 buttons: false,

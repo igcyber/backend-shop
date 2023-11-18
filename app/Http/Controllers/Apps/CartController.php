@@ -43,44 +43,80 @@ class CartController extends Controller
     {
         /** Memuat seluruh data dari tabel cart, berdasarkan outlet_id dengan parameter user */
         $carts = Cart::where('outlet_id', $user)->get();
-        // dd($carts);
-        // foreach ($carts as $cart) {
-        //     dd($cart->id);
-        // }
-        // $subtotal = 0;
-        // foreach ($carts as $item) {
-        //     $subtotal += $item->qty_duz * $item->productDetail->sell_price_duz;
-        //     $subtotal += $item->qty_pak * $item->productDetail->sell_price_pak;
-        //     $subtotal += $item->qty_pcs * $item->productDetail->sell_price_pcs;
-        // }
-        return view('front-end.cart.cart-detail', compact('carts'));
+        $user_id = auth()->user()->id;
+        $subtotal = 0;
+        foreach ($carts as $item) {
+            $subtotal += $item->qty_duz * $item->productDetail->sell_price_duz;
+            $subtotal += $item->qty_pak * $item->productDetail->sell_price_pak;
+            $subtotal += $item->qty_pcs * $item->productDetail->sell_price_pcs;
+        }
+        return view('front-end.cart.cart-detail', compact('carts', 'subtotal', 'user_id'));
     }
 
     public function updateCart(Request $request, $user)
     {
-        $carts = Cart::where('outlet_id', $user)->pluck('detail_id');
-        foreach ($carts as $detail_id) {
-            $updateCart = Cart::where('detail_id', $detail_id)->update([
-                'qty_duz' => $request->input('updates.' . $detail_id . '.qty_duz'),
-                'qty_pak' => $request->input('updates.' . $detail_id . '.qty_pak'),
-                'qty_pcs' => $request->input('updates.' . $detail_id . '.qty_pcs')
-            ]);
+        // dd($request->all());
+        // $carts = Cart::where('outlet_id', $user)->pluck('detail_id');
+        $request->validate([
+            'updates.*.qty_duz' => 'numeric|min:0',
+            'updates.*.qty_pak' => 'numeric|min:0',
+            'updates.*.qty_pcs' => 'numeric|min:0',
+        ]);
+
+        $carts = Cart::where('outlet_id', $user)->get();
+        $validationErrors = [];
+        foreach ($carts as $cart) {
+            $item = $cart->productDetail->product;
+            $requestedQtyDuz = $request->input('updates.' . $cart->detail_id . '.qty_duz') ?? 0;
+            $requestedQtyPak = $request->input('updates.' . $cart->detail_id . '.qty_pak') ?? 0;
+            $requestedQtyPcs = $request->input('updates.' . $cart->detail_id . '.qty_pcs') ?? 0;
+
+            // Fetch the available stock quantity for the current item
+            $stockQtyDuz = $item->stock_duz;
+            $stockQtyPak = $item->stock_pak;
+            $stockQtyPcs = $item->stock_pcs;
+
+            // Validate the requested quantities
+            if ($requestedQtyDuz > $stockQtyDuz) {
+                // Quantity of qty_duz is invalid
+                $validationErrors[] = "Pesanan Barang melebihi Stok Dus Gudang.";
+            }
+
+            if ($requestedQtyPak > $stockQtyPak) {
+                // Quantity of qty_pak is invalid
+                $validationErrors[] = "Pesanan Barang Melebihi Stok Pak Gudang.";
+            }
+
+            if ($requestedQtyPcs > $stockQtyPcs) {
+                // Quantity of qty_pcs is invalid
+                $validationErrors[] = "Pesanan Barang Melebihi Stok Pcs Gudang.";
+            }
         }
-        if ($updateCart) {
-            return redirect(route('app.cart.get', $user));
+
+        // Check if there are validation errors
+        if (!empty($validationErrors)) {
+            // Convert the validation errors array to a string
+            $errorString = implode('<br>', $validationErrors);
+            // Redirect back with specific error messages
+            return back()->with(['error' => $errorString]);
+        } else {
+            // Validation is successful, update quantities
+            foreach ($carts as $cart) {
+                Cart::where('detail_id', $cart->detail_id)->update([
+                    'qty_duz' => $request->input('updates.' . $cart->detail_id . '.qty_duz') ?? 0,
+                    'qty_pak' => $request->input('updates.' . $cart->detail_id . '.qty_pak') ?? 0,
+                    'qty_pcs' => $request->input('updates.' . $cart->detail_id . '.qty_pcs') ?? 0
+                ]);
+            }
+
+            // Optionally, you can redirect to a success page or show a success message
+            return redirect()->route('app.cart.get', $user)->with(['success' => 'Quantities updated successfully']);
         }
     }
 
-    public function deleteCart($id)
+    public function deleteCart(Cart $cart, $user)
     {
-        // dd($id);
-        $cart = Cart::findOrFail($id);
-        // Pastikan hanya pemilik item yang dapat menghapusnya
-        if (Auth::id() == $cart->outlet_id) {
-            $cart->delete();
-            return redirect()->back()->with('success', 'Item berhasil dihapus');
-        } else {
-            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menghapus item ini');
-        }
+        $cart->delete();
+        return redirect()->route('app.cart.get', $user)->with('success', 'Cart deleted successfully');
     }
 }

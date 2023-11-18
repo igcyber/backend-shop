@@ -52,23 +52,11 @@
                                         <span class="badge bg-info py-1">Nama Produk</span>
                                         <h5 class="card-title mt-1 mb-2" style="font-size: 1rem">
                                             {{ $detail->product->title }}</h5>
-                                        <span class="badge bg-success py-1">Persediaan</span>
-                                        <p class="mb-1{{ $detail->product->stock == 0 ? 'd-none' : '' }}">
-                                            {{ $detail->product->stock }}
-                                            duz</p>
-                                        <p class="mb-1 {{ $detail->product->stock_baal == 0 ? 'd-none' : '' }}">
-                                            {{ $detail->product->stock_baal }}
-                                            baal</p>
-                                        <p class="mb-1 {{ $detail->product->stock_pack == 0 ? 'd-none' : '' }}">
-                                            {{ $detail->product->stock_pack }}
-                                            pack</p>
-                                        <p class="{{ $detail->product->stock_pcs == 0 ? 'd-none' : '' }}">
-                                            {{ $detail->product->stock_pcs }}
-                                            pcs</p>
-                                        <button type="button" class="btn btn-sm btn-info d-inline" data-bs-toggle="modal"
+
+                                        {{-- <button type="button" class="btn btn-sm btn-info d-inline" data-bs-toggle="modal"
                                             data-bs-target="#detailModal-{{ $detail->id }}">
                                             <i class="fas fa-eye"></i> Detail
-                                        </button>
+                                        </button> --}}
                                         @guest
                                             {{-- direct to login page --}}
                                             <a href="{{ route('login') }}" class="btn btn-sm btn-success" target="_blank">

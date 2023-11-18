@@ -59,7 +59,6 @@
                         <option value="MT">MT</option>
                         <option value="Ps. Basah">Ps. Basah</option>
                         <option value="Grosir">Grosir</option>
-                        <option value="Toko">Toko</option>
                         <option value="Retail">Retail</option>
                     </select>
                     @error('klasifikasi')
@@ -71,15 +70,15 @@
 
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="seller">Sales</label>
-                        <select name="seller_id" id="seller"
-                            class="form-control @error('seller_id') is-invalid @enderror">
+                        <label for="sales">Sales</label>
+                        <select name="sales_id" id="sales"
+                            class="form-control @error('sales_id') is-invalid @enderror">
                             <option disabled selected>PILIH SALES</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                         </select>
-                        @error('seller_id')
+                        @error('sales_id')
                             <div class="invalid-feedback" style="display: block">
                                 {{ $message }}
                             </div>
