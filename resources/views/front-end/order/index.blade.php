@@ -22,30 +22,38 @@
                             <div class="card-body">
                                 {{-- @dd($carts) --}}
                                 <h5 class="card-title">Barang : </h5>
-                                @foreach ($carts as $cart)
-                                    <input type="hidden" name="detail_id[]" value="{{ $cart->detail_id }}">
-                                    <input type="hidden" name="qty_duz[]" value="{{ $cart->qty_duz }}">
-                                    <input type="hidden" name="qty_pak[]" value="{{ $cart->qty_pak }}">
-                                    <input type="hidden" name="qty_pcs[]" value="{{ $cart->qty_pcs }}">
-                                    <input type="hidden" name="price_duz[]"
-                                        value="{{ $cart->productDetail->sell_price_duz }}">
-                                    <input type="hidden" name="price_pak[]"
-                                        value="{{ $cart->productDetail->sell_price_pak }}">
-                                    <input type="hidden" name="price_pcs[]"
-                                        value="{{ $cart->productDetail->sell_price_pcs }}">
+                                @if ($nonZeroQuantityCarts->count() > 0)
+                                    @foreach ($nonZeroQuantityCarts as $cart)
+                                        <input type="hidden" name="detail_id[]" value="{{ $cart->detail_id }}">
+                                        <input type="hidden" name="qty_duz[]" value="{{ $cart->qty_duz }}">
+                                        <input type="hidden" name="qty_pak[]" value="{{ $cart->qty_pak }}">
+                                        <input type="hidden" name="qty_pcs[]" value="{{ $cart->qty_pcs }}">
+                                        <input type="hidden" name="price_duz[]"
+                                            value="{{ $cart->productDetail->sell_price_duz }}">
+                                        <input type="hidden" name="price_pak[]"
+                                            value="{{ $cart->productDetail->sell_price_pak }}">
+                                        <input type="hidden" name="price_pcs[]"
+                                            value="{{ $cart->productDetail->sell_price_pcs }}">
 
-                                    <ul style="margin-bottom: 0rem">
-                                        @if ($cart->qty_duz > 0)
-                                            <li>{{ $cart->qty_duz . ' dus ' . $cart->productDetail->product->title }}</li>
-                                        @endif
-                                        @if ($cart->qty_pak > 0)
-                                            <li>{{ $cart->qty_pak . ' pak ' . $cart->productDetail->product->title }}</li>
-                                        @endif
-                                    </ul>
-                                @endforeach
-
+                                        <ul style="margin-bottom: 0rem">
+                                            @foreach (['duz', 'pak', 'pcs'] as $unit)
+                                                @php
+                                                    $quantity = $cart->{"qty_$unit"};
+                                                @endphp
+                                                @if ($quantity > 0)
+                                                    <li>{{ $quantity . " $unit " . $cart->productDetail->product->title }}
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    @endforeach
+                                @else
+                                    <p>No items with non-zero quantities in the cart.</p>
+                                @endif
                                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                                 <h5 class="card-title mt-2">Total Pembayaran : {{ moneyFormat($subtotal) }}</h5>
+                                <input type="hidden" name="subtotal" value="{{ $subtotal }}">
+                                <h5 class="card-title mt-2">Petugas Sales : {{ $nonZeroQuantityCarts }}</h5>
 
                                 <p>
                                     <small class="text-muted">*Bayar Saat Sales Datang Ke Toko Anda</small>
