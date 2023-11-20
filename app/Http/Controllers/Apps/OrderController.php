@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Customer;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
@@ -14,72 +15,87 @@ class OrderController extends Controller
     public function checkout($user)
     {
         $carts = Cart::where('outlet_id', $user)->get();
+
+        // Filter carts with non-zero quantities
+        $nonZeroQuantityCarts = $carts->filter(function ($cart) {
+            return $cart->qty_duz > 0 || $cart->qty_pak > 0 || $cart->qty_pcs > 0;
+        });
+
         $subtotal = 0;
-        foreach ($carts as $item) {
+        foreach ($nonZeroQuantityCarts as $item) {
             $subtotal += $item->qty_duz * $item->productDetail->sell_price_duz;
             $subtotal += $item->qty_pak * $item->productDetail->sell_price_pak;
             $subtotal += $item->qty_pcs * $item->productDetail->sell_price_pcs;
         }
-        return view('front-end.order.index', compact('carts', 'subtotal'));
+
+        return view('front-end.order.index', compact('nonZeroQuantityCarts', 'subtotal'));
     }
     public function order(Request $request, $user)
     {
-        // Get all requests sent from page
-        $req_data = $request->all();
-        // Fetch customers based on the given outlet ID.
-        $customers = Customer::where('outlet_id', $user)->get();
-        // Iterate over the customers and retrieve relevant information.
-        foreach ($customers as $customer) {
-            //nangkap sales_id dari customer yang pesan
-            $sales_id = $customer->sales_id;
-            $customer_name = $customer->outlet->name;
-            $customer_sales = $customer->seller->name;
-            $customer_address = $customer->address;
+        try {
+            // Fetch customers based on the given outlet ID along with related data.
+            $customers = Customer::with(['outlet', 'seller'])->where('outlet_id', $user)->get();
+            // Use a transaction to ensure data integrity
+            DB::transaction(function () use ($customers, $request) {
+                foreach ($customers as $customer) {
+                    $order = Order::create([
+                        'sales_id' => $customer->sales_id,
+                        'customer_name' => $customer->outlet->name,
+                        'customer_sales' => $customer->seller->name,
+                        'customer_address' => $customer->address,
+                        'transaction_id' => getInvoiceNumber(),
+                        'total' => $request['subtotal'],
+                        'payment_status' => 0,
+                        'order_status' => 0,
+                    ]);
+
+                    // Iterate over the order details and create corresponding order detail records.
+                    for ($i = 0; $i < count($request['detail_id']); $i++) {
+                        OrderDetail::create([
+                            'order_id' => $order->id,
+                            'detail_id' => $request['detail_id'][$i],
+                            'qty_duz' => $request['qty_duz'][$i],
+                            'qty_pak' => $request['qty_pak'][$i],
+                            'qty_pcs' => $request['qty_pcs'][$i],
+                            'price_duz' => $request['price_duz'][$i],
+                            'price_pak' => $request['price_pak'][$i],
+                            'price_pcs' => $request['price_pcs'][$i],
+                        ]);
+                    }
+
+                    // Retrieve the created order with order details and product details
+                    $orderList = Order::with('orderDetails.productDetail')->find($order->id);
+
+                    if ($orderList) {
+                        // Loop through order details and update product stock
+                        foreach ($orderList->orderDetails as $orderDetail) {
+                            $productDetail = $orderDetail->productDetail;
+
+                            // Retrieve conversion factors from the product
+                            $duzToPakFactor = $productDetail->product->dus_pak;
+                            $pakToPcsFactor = $productDetail->product->pak_pcs;
+
+                            // Convert quantities to pcs
+                            $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
+                            $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; //4*20
+                            $pcs = $orderDetail->qty_pcs;
+
+                            // Update stock based on quantities in pcs
+                            $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
+                        }
+                    }
+                }
+            });
+
+            // Delete items from the cart for the given outlet.
+            Cart::where('outlet_id', $user)->delete();
+
+            // Redirect the user to the front home page with a success message.
+            return redirect(route('front.home'))->with('success', 'Pesanan Berhasil Dikirim');
+        } catch (\Exception $e) {
+            // Handle exceptions, you might want to log the error for debugging
+            // dd($e->getMessage()); // Debug statement to check the exception message
+            return redirect()->back()->with('error', 'Terjadi kesalahan. Mohon coba lagi.');
         }
-        // Create a new order using the obtained customer information, along with other details like transaction ID, total, payment status, and order status.
-        $order = Order::create([
-            'sales_id' => $sales_id,
-            'customer_name' => $customer_name,
-            'customer_sales' => $customer_sales,
-            'customer_address' => $customer_address,
-            'transaction_id' => getInvoiceNumber(),
-            'total' => $req_data['subtotal'],
-            'payment_status' => 0,
-            'order_status' => 0,
-        ]);
-        // Iterate over the order details and create corresponding order detail records.
-        for ($i = 0; $i < count($req_data['detail_id']); $i++) {
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'detail_id' => $req_data['detail_id'][$i],
-                'qty_duz' => $req_data['qty_duz'][$i],
-                'qty_pak' => $req_data['qty_pak'][$i],
-                'qty_pcs' => $req_data['qty_pcs'][$i],
-                'price_duz' => $req_data['price_duz'][$i],
-                'price_pak' => $req_data['price_pak'][$i],
-                'price_pcs' => $req_data['price_pcs'][$i]
-            ]);
-            //Retrieve the order details for the created order
-            // $orderDetails = OrderDetail::where('detail_id', $req_data['detail_id'][$i])->get();
-            // Decrease the total_stock for each product in the order
-            // $this->decreaseProduct($orderDetails);
-        }
-        // Delete items from the cart for the given outlet.
-        Cart::where('outlet_id', $user)->delete();
-        // Redirect the user to the front home page with a success message.
-        return redirect(route('front.home'))->with('success', 'Pesanan Berhasil Dikirim');
     }
-
-    // public function decreaseProduct($orderDetails)
-    // {
-    //     foreach ($orderDetails as $orderDetail) {
-    //         $product = $orderDetail->productDetail->product;
-
-    //         // Calculate the total quantity ordered
-    //         $totalQuantityOrdered = $orderDetail->qty_duz + $orderDetail->qty_pak + $orderDetail->qty_pcs;
-
-    //         // Decrease the total_stock in the products table
-    //         $product->decrement('total_stock', $totalQuantityOrdered);
-    //     }
-    // }
 }
