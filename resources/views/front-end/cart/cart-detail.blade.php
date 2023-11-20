@@ -57,20 +57,17 @@
 
                                         <td class="align-middle">
                                             <div class="input-group quantity mx-auto" style="width: 100px;">
-                                                <input type="text"
-                                                    class="form-control form-control-sm text-center @error('updates.*.qty_duz') is-invalid @enderror"
+                                                <input type="text" class="form-control form-control-sm text-center"
                                                     value="{{ $item->qty_duz }}"
                                                     name="updates[{{ $item->detail_id }}][qty_duz]">
                                             </div>
                                             <div class="input-group quantity mx-auto mt-1" style="width: 100px;">
-                                                <input type="text"
-                                                    class="form-control form-control-sm text-center @error('updates.*.qty_pak') is-invalid @enderror"
+                                                <input type="text" class="form-control form-control-sm text-center"
                                                     value="{{ $item->qty_pak }}" placeholder="pak"
                                                     name="updates[{{ $item->detail_id }}][qty_pak]">
                                             </div>
                                             <div class="input-group quantity mx-auto mt-1" style="width: 100px;">
-                                                <input type="text"
-                                                    class="form-control form-control-sm text-center @error('updates.*.qty_pcs') is-invalid @enderror"
+                                                <input type="text" class="form-control form-control-sm text-center "
                                                     value="{{ $item->qty_pcs }}" placeholder="pcs"
                                                     name="updates[{{ $item->detail_id }}][qty_pcs]">
                                             </div>

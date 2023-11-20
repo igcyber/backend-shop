@@ -50,17 +50,15 @@
                                                         <ul>
                                                             @foreach ($order->orderDetails as $orderDetail)
                                                                 @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
-                                                                    <li>
-                                                                        @if ($orderDetail->qty_duz > 0)
-                                                                            Qty Duz: {{ $orderDetail->qty_duz }},
-                                                                        @endif
-                                                                        @if ($orderDetail->qty_pak > 0)
-                                                                            Qty Pak: {{ $orderDetail->qty_pak }},
-                                                                        @endif
-                                                                        @if ($orderDetail->qty_pcs > 0)
-                                                                            Qty Pcs: {{ $orderDetail->qty_pcs }}
-                                                                        @endif
-                                                                    </li>
+                                                                    @if ($orderDetail->qty_duz > 0)
+                                                                        Qty Duz: {{ $orderDetail->qty_duz }},
+                                                                    @endif
+                                                                    @if ($orderDetail->qty_pak > 0)
+                                                                        Qty Pak: {{ $orderDetail->qty_pak }},
+                                                                    @endif
+                                                                    @if ($orderDetail->qty_pcs > 0)
+                                                                        Qty Pcs: {{ $orderDetail->qty_pcs }}
+                                                                    @endif
                                                                 @endif
                                                             @endforeach
                                                         </ul>

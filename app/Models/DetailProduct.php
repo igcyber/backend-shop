@@ -16,11 +16,4 @@ class DetailProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
-
-    // public function sell_price_duz(): Attribute
-    // {
-    //     return Attribute::make(
-    //         set: fn ($value) => intval(str_replace(['Rp.', '.', ','], '', $value))
-    //     );
-    // }
 }
