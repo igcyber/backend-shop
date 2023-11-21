@@ -12,22 +12,26 @@ class SalesController extends Controller
     //get all order for spesisific sales
     public function index()
     {
-        $user = auth()->user()->id;
-        $orders = Order::with('orderDetails')->where('sales_id', $user)->get();
-        $customers = Customer::where('sales_id', $user)->get();
+        $userId = auth()->id();
+        $orders = Order::with('orderDetails')->where('sales_id', $userId)->get();
+        $customers = Customer::where('sales_id', $userId)->get();
         return view('pages.app.sales.index', compact('orders', 'customers'));
     }
     public function confirmation($type, Order $order)
     {
+        $statusMessage = '';
+
         if ($type == 'accept') {
             $order->order_status = 1;
-            $order->update();
-            return back()->with(['success' => 'Order Telah Dikonfirmasi']);
+            $statusMessage = 'Order Telah Dikonfirmasi';
+        } else {
+            $order->order_status = 2;
+            $statusMessage = 'Order Telah Dibatalkan';
         }
 
-        $order->order_status = 2;
         $order->update();
-        return back()->with(['success' => 'Order Telah Dibatalkan']);
+
+        return back()->with(['success' => $statusMessage]);
     }
     public function delete(Order $order)
     {
