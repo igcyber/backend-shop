@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Produk')
+@section('title', 'Order')
 
 @push('style')
 @endpush
@@ -9,28 +9,33 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Halaman Produk</h1>
+                <h1>Halaman Order</h1>
             </div>
             <div class="section-body">
                 <div class="row">
-                    <div class="col-12 col-md-8 col-lg-12">
+                    <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Produk</h4>
+                                <h4>Data Order</h4>
+                                <button type="button" class="btn btn-primary ml-auto" data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                    Launch demo modal
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 10%">
+                                                <th scope="col" style="width: 5%">
                                                     No. Urut
                                                 </th>
-                                                <th>Nomor Transaksi</th>
-                                                <th>Outlet</th>
-                                                <th>Alamat</th>
+                                                <th scope="col" style="width: 10%">Nomor Transaksi</th>
+                                                <th scope="col" style="width: 15%">Outlet</th>
+                                                <th scope="col" style="width: 35%">Alamat</th>
                                                 <th>Detail Pesanan</th>
-                                                <th>Pilihan</th>
+                                                <th>Status Pesanan</th>
+                                                <th scope="col" style="width: 10%">Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -44,28 +49,45 @@
                                                         {{ $order->customer_name }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $order->customer_address }}
+                                                        {!! $order->customer_address !!}
                                                     </td>
-                                                    <td class="align-middle">
-                                                        <ul>
+                                                    <td class="align-left">
+                                                        <ul style="padding: 0;">
                                                             @foreach ($order->orderDetails as $orderDetail)
-                                                                @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
-                                                                    @if ($orderDetail->qty_duz > 0)
-                                                                        Qty Duz: {{ $orderDetail->qty_duz }},
+                                                                <li style="line-height: 16px;">
+                                                                    @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
+                                                                        @if ($orderDetail->qty_duz > 0)
+                                                                            {{ $orderDetail->qty_duz }} Dus
+                                                                        @endif
+                                                                        @if ($orderDetail->qty_pak > 0)
+                                                                            {{ $orderDetail->qty_pak }} Pak
+                                                                        @endif
+                                                                        @if ($orderDetail->qty_pcs > 0)
+                                                                            {{ $orderDetail->qty_pcs }} Pcs
+                                                                        @endif
                                                                     @endif
-                                                                    @if ($orderDetail->qty_pak > 0)
-                                                                        Qty Pak: {{ $orderDetail->qty_pak }},
-                                                                    @endif
-                                                                    @if ($orderDetail->qty_pcs > 0)
-                                                                        Qty Pcs: {{ $orderDetail->qty_pcs }}
-                                                                    @endif
-                                                                @endif
+                                                                    {{ $orderDetail->productDetail->product->title }}
+                                                                </li>
                                                             @endforeach
                                                         </ul>
                                                     </td>
-                                                    {{-- <td></td> --}}
                                                     <td>
-                                                        <a href="#">Edit</a> | <a href="#">Delete</a>
+                                                        <span
+                                                            class="badge {{ $order->order_status === 0 ? 'badge-warning' : ($order->order_status === 1 ? 'badge-success' : 'badge-danger') }}">
+                                                            {{ $order->order_status === 0 ? 'Pending' : ($order->order_status === 1 ? 'Compeleted' : 'Canceled') }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+
+                                                        <button type="button" class="btn btn-sm btn-info d-inline"
+                                                            data-toggle="modal" title="Detail Order"
+                                                            data-target="#detailModal-{{ $order->id }}">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>
+                                                        <a href="#" class="btn btn-sm btn-warning"
+                                                            title="Hapus Order">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -79,6 +101,11 @@
             </div>
         </section>
     </div>
+
+    <!-- Modal Update -->
+    @include('pages.app.sales._modal')
+    <!-- Modal Create -->
+    @include('pages.app.sales._modal_create')
 @endsection
 
 @push('scripts')

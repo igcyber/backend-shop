@@ -29,6 +29,7 @@
                                                 <th>No. Produk</th>
                                                 <th>Nama Produk</th>
                                                 <th>Total Stok</th>
+                                                <th>Detail Stok</th>
                                                 <th>Tipe Produk</th>
                                                 <th>Pabrikan</th>
                                                 <th>Pilihan</th>
@@ -45,7 +46,14 @@
                                                         {{ $product->title }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $product->total_stock }}
+                                                        {{ $product->total_stock }} pcs
+                                                    </td>
+                                                    <td>
+                                                        <ul style="padding: 0; list-style-type: none;">
+                                                            <li>{{ $product->stock_duz }} dus</li>
+                                                            <li>{{ $product->stock_pak }} pak</li>
+                                                            <li>{{ $product->stock_pcs }} pcs</li>
+                                                        </ul>
                                                     </td>
                                                     <td class="align-middle">
                                                         {{ $product->category->name }}

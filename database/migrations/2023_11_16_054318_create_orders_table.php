@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sales_id');
-            $table->string('transaction_id');
-            $table->string('customer_name');
-            $table->string('customer_sales');
-            $table->string('customer_address');
+            $table->string('transaction_id', 150);
+            $table->string('customer_name', 150);
+            $table->string('customer_sales', 150);
+            $table->text('customer_address');
             $table->integer('total');
             $table->integer('payment_status')->comment('0 => due, 1 => paid');
             $table->integer('order_status')->comment('0 => pending, 1 => completed, 2 => canceled');

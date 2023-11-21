@@ -53,10 +53,6 @@
                                         <h5 class="card-title mt-1 mb-2" style="font-size: 1rem">
                                             {{ $detail->product->title }}</h5>
 
-                                        {{-- <button type="button" class="btn btn-sm btn-info d-inline" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal-{{ $detail->id }}">
-                                            <i class="fas fa-eye"></i> Detail
-                                        </button> --}}
                                         @guest
                                             {{-- direct to login page --}}
                                             <a href="{{ route('login') }}" class="btn btn-sm btn-success" target="_blank">
@@ -86,9 +82,6 @@
 
         </div>
     </div>
-
-    <!-- Modal -->
-    @include('front-end.layouts._modal')
 
 @endsection
 

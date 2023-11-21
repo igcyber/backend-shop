@@ -74,18 +74,3 @@ if (!function_exists('countQty')) {
         ];
     }
 }
-
-if (!function_exists('getInvoiceNumber')) {
-    function getInvoiceNumber()
-    {
-        $month = date('m');
-        $year = date('Y');
-        $totalTransactions = DB::table('orders')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
-            ->count() + 10569;
-        $invoiceNumber = $totalTransactions . "-{$month}-{$year}";
-
-        return $invoiceNumber;
-    }
-}

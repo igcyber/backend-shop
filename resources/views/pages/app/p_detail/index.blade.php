@@ -23,30 +23,30 @@
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 10%">
+                                                <th scope="col" style="width: 5%">
                                                     No. Urut
                                                 </th>
-                                                <th>Nama Produk</th>
-                                                <th>Harga Jual <br>
-                                                    (Duz/Pak/Pcs)
-                                                </th>
-                                                <th>Jenis Pajak</th>
-                                                <th>Periode</th>
+                                                <th scope="col" style="width: 30%">Nama Produk</th>
+                                                <th scope="col" style="width: 15%">Harga Jual</th>
+                                                <th scope="col" style="width: 15%">Jenis Pajak</th>
+                                                <th scope="col" style="width: 15%">Periode</th>
                                                 <th>Pilihan</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($d_products as $key => $detail)
+                                        <tbody style="padding:0;">
+                                            @foreach ($detailProducts as $key => $detail)
                                                 <tr>
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $detail->product->title }}</td>
-                                                    <td class="px-0 mx-0">
-                                                        <ul>
-                                                            <li>{{ moneyFormat($detail->sell_price_duz) }}</li>
-                                                            <li>{{ moneyFormat($detail->sell_price_pak) }}</li>
-                                                            <li>{{ moneyFormat($detail->sell_price_pcs) }}</li>
+                                                    <td class="align-middle">
+                                                        {{ $detail->product->title }}
+                                                    </td>
+                                                    <td>
+                                                        <ul style="padding: 0; list-style-type: none;">
+                                                            <li>{{ moneyFormat($detail->sell_price_duz) }}/dus</li>
+                                                            <li>{{ moneyFormat($detail->sell_price_pak) }}/pak</li>
+                                                            <li>{{ moneyFormat($detail->sell_price_pcs) }}/pcs</li>
                                                         </ul>
                                                     </td>
                                                     <td class="align-middle">

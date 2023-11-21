@@ -70,10 +70,16 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     //delete cart
     Route::delete('/cart/delete/{cart}/{user}', [CartController::class, 'deleteCart'])->name('cart.delete');
 
-    //checkout
+    //checkout & order
     Route::get('/checkout/order/{user}', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('/order/{user}', [OrderController::class, 'order'])->name('order');
 
-    //sales
+    //get order for sales
     Route::get('/sales/order', [SalesController::class, 'index'])->name('sales');
+    //confirmation order
+    Route::get('/sales/order/{type}/{order}', [SalesController::class, 'confirmation'])->name('order.confirmation');
+    //update order
+    Route::post('/sales/update/{order}', [SalesController::class, 'updateOrder'])->name('order.update');
+    //delete order
+    Route::delete('/sales/delete/{order}', [SalesController::class, 'delete'])->name('order.delete');
 });

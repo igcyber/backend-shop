@@ -13,7 +13,9 @@
                             class="form-control @error('outlet_id') is-invalid @enderror">
                             <option disabled selected>PILIH OUTLET</option>
                             @foreach ($outlets as $outlet)
-                                <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                                @if (!in_array($outlet->id, $existingOutletIds))
+                                    <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                                @endif
                             @endforeach
                         </select>
                         @error('outlet_id')
