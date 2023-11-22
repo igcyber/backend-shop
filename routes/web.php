@@ -20,6 +20,7 @@ use App\Http\Controllers\Apps\CustomerController;
 use App\Http\Controllers\Apps\PermissionController;
 use App\Http\Controllers\Apps\CustomerLoginController;
 use App\Http\Controllers\Apps\DetailProductController;
+use App\Models\Product;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
 

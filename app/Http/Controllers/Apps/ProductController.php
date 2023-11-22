@@ -7,8 +7,10 @@ use App\Models\Vendor;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\DataTables\ProductDataTable;
+use Picqer\Barcode\BarcodeGeneratorHTML;
 use App\Http\Controllers\Controller;
+use Faker\Core\Barcode;
+use Picqer\Barcode\BarcodeGeneratorSVG;
 
 class ProductController extends Controller
 {
@@ -19,7 +21,29 @@ class ProductController extends Controller
         $vendors = Vendor::where('status', 1)->get(['id', 'name']);
         $products = Product::with('category', 'vendor')->latest()->get(['id', 'serial_number', 'title', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'category_id', 'vendor_id', 'created_at']);
 
-        return view('pages.app.products.index', compact('categories', 'vendors', 'products'));
+        $svgBarcodes = [];
+
+        foreach ($products as $product) {
+            $serialNumber = $product->serial_number;
+
+            // Create an instance of BarcodeGeneratorSVG
+            $generator = new BarcodeGeneratorSVG();
+
+            // Generate SVG barcode for the current product
+            $svgBarcode = $generator->getBarcode($serialNumber, $generator::TYPE_CODE_128);
+
+            // Store the SVG barcode in the array along with product information if needed
+            $svgBarcodes[] = [
+                'serial_number' => $serialNumber,
+                'svg_barcode'   => $svgBarcode,
+                // Add other product information as needed
+            ];
+        }
+
+
+
+
+        return view('pages.app.products.index', compact('categories', 'vendors', 'products', 'svgBarcodes'));
     }
 
     public function store(Request $request)

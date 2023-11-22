@@ -20,6 +20,7 @@
                             @endforeach
                         @endisset
                     </select>
+                    <label for="order">Barang Pesanan</label>
                 </div>
                 <div class="form-group">
                     <label for=""></label>

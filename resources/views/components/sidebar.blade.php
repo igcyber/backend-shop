@@ -44,9 +44,9 @@
             @endrole
 
             @role('Admin Sales')
-                <li class="{{ setActive(['app.order.*']) }}">
-                    <a class="nav-link" href="{{ route('app.order.admin.invoice') }}"><i
-                            class="fas fa-cart-arrow-down"></i>
+                {{-- {{ setActive(['app.order.*']) }} --}}
+                <li class="">
+                    <a class="nav-link" href="#"><i class="fas fa-cart-arrow-down"></i>
                         <span>Faktur Order</span></a>
                 </li>
             @endrole

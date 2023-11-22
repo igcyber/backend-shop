@@ -98,12 +98,17 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+
         $user = User::findOrFail($id);
 
+        // Check if there are related records in the 'customers' table
+        if ($user->sales()->exists() || $user->outlet()->exists()) {
+            return response()->json(['status' => 'error']);
+        }
+
+        // Perform the delete
         if ($user->delete()) {
             return response()->json(['status' => 'success']);
         }
-
-        return response()->json(['status' => 'error']);
     }
 }

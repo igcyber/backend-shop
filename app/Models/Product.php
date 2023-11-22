@@ -61,6 +61,10 @@ class Product extends Model
             $this->decrement('total_stock', $duz);
         }
 
+        // If $pcs has a value, decrement total_stock using $pcs value
+        $this->decrement('total_stock', $pcs);
+
+
         //How much pcs/Duz
         $pcsPerDuz = $this->dus_pak * $this->pak_pcs;
 

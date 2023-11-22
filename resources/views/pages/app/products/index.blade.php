@@ -23,11 +23,11 @@
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 10%">
+                                                <th scope="col" style="width: 5%">
                                                     No. Urut
                                                 </th>
-                                                <th>No. Produk</th>
-                                                <th>Nama Produk</th>
+                                                <th scope="col">No. Produk</th>
+                                                <th scope="col" style="width: 15%">Nama Produk</th>
                                                 <th>Total Stok</th>
                                                 <th>Detail Stok</th>
                                                 <th>Tipe Produk</th>
@@ -41,7 +41,17 @@
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $product->serial_number }}</td>
+                                                    <td class="align-middle">
+                                                        <!-- Display SVG barcode for the current product -->
+                                                        @if (isset($svgBarcodes[$key]))
+                                                            <p style="margin:0; !important">
+                                                                {!! $svgBarcodes[$key]['svg_barcode'] !!}
+                                                            </p>
+                                                            <span
+                                                                style="font-weight: bolder">{{ $svgBarcodes[$key]['serial_number'] }}
+                                                            </span>
+                                                        @endif
+                                                    </td>
                                                     <td class="align-middle">
                                                         {{ $product->title }}
                                                     </td>
@@ -49,7 +59,7 @@
                                                         {{ $product->total_stock }} pcs
                                                     </td>
                                                     <td>
-                                                        <ul style="padding: 0; list-style-type: none;">
+                                                        <ul style="padding: 0; list-style-type: none; line-height:18px;">
                                                             <li>{{ $product->stock_duz }} dus</li>
                                                             <li>{{ $product->stock_pak }} pak</li>
                                                             <li>{{ $product->stock_pcs }} pcs</li>
@@ -62,7 +72,7 @@
                                                         {{ $product->vendor->name }}
                                                     </td>
                                                     {{-- <td></td> --}}
-                                                    <td>
+                                                    <td class="align-middle">
                                                         @can('products.edit')
                                                             <a href="{{ route('app.products.edit', $product->id) }}"
                                                                 class="btn btn-success btn-sm">
@@ -70,6 +80,7 @@
                                                                 </i>
                                                             </a>
                                                         @endcan
+
                                                         @can('products.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $product->id }}"
                                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"

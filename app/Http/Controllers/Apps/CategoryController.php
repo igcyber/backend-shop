@@ -18,29 +18,25 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validatedData = $request->validate([
             'name' => 'required|max:100|unique:categories,name',
-            'status' => 'required'
+            'status' => 'required',
         ], [
             'name.required' => 'Data Wajib Diisi',
             'name.max' => 'Data Terlalu Panjang',
             'name.unique' => 'Data Sudah Terdaftar',
-            'status.required' => 'Data Wajib Diisi'
+            'status.required' => 'Data Wajib Diisi',
         ]);
 
         $category = Category::create([
-            'name' => $request->name,
-            'status' => $request->status,
-            'slug' => Str::slug($request->name)
+            'name' => $validatedData['name'],
+            'status' => $validatedData['status'],
+            'slug' => Str::slug($validatedData['name']),
         ]);
 
-        if ($category) {
-            //redirect dengan pesan sukses
-            return redirect()->route('app.categories.index')->with(['success' => 'Data Berhasil Disimpan!']);
-        } else {
-            //redirect dengan pesan error
-            return redirect()->route('app.categories.index')->with(['error' => 'Data Gagal Disimpan!']);
-        }
+        $message = $category ? 'Data Berhasil Disimpan!' : 'Data Gagal Disimpan!';
+
+        return redirect()->route('app.categories.index')->with([$category ? 'success' : 'error' => $message]);
     }
 
     public function edit($id)
@@ -51,48 +47,31 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $this->validate($request, [
+        $validatedData = $request->validate([
             'name' => 'required|max:100|unique:categories,name,' . $category->id,
-            'status' => 'required'
+            'status' => 'required',
         ], [
             'name.required' => 'Data Wajib Diisi',
             'name.max' => 'Data Terlalu Panjang',
             'name.unique' => 'Data Sudah Terdaftar',
-            'status.required' => 'Data Wajib Diisi'
+            'status.required' => 'Data Wajib Diisi',
         ]);
 
         $category->update([
-            'name' => $request->name,
-            'status' => $request->status,
+            'name' => $validatedData['name'],
+            'status' => $validatedData['status'],
         ]);
 
-        if ($category) {
-            //redirect dengan pesan sukses
-            return redirect()->route('app.categories.index')->with(['success' => 'Data Berhasil Diperbarui!']);
-        } else {
-            //redirect dengan pesan error
-            return redirect()->route('app.categories.index')->with(['error' => 'Data Gagal Diperbarui!']);
-        }
+        $message = $category ? 'Data Berhasil Diperbarui!' : 'Data Gagal Diperbarui!';
+
+        return redirect()->route('app.categories.index')->with([$category ? 'success' : 'error' => $message]);
     }
 
     public function destroy($id)
     {
-        //find user
         $category = Category::findOrFail($id);
-
-        //delete user
-        $category->delete();
-
-        //check for status destroy
-        if ($category) {
-            return response()->json([
-                'status' => 'success'
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error'
-            ]);
-        }
+        $status = $category->delete() ? 'success' : 'error';
+        return response()->json(['status' => $status]);
     }
 
     public function changeStatus(Request $request)

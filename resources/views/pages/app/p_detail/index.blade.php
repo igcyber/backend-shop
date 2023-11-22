@@ -23,7 +23,7 @@
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 5%">
+                                                <th scope="col" style="width: 5%" class="align-middle">
                                                     No. Urut
                                                 </th>
                                                 <th scope="col" style="width: 30%">Nama Produk</th>
@@ -33,29 +33,29 @@
                                                 <th>Pilihan</th>
                                             </tr>
                                         </thead>
-                                        <tbody style="padding:0;">
+                                        <tbody>
                                             @foreach ($detailProducts as $key => $detail)
                                                 <tr>
-                                                    <td class="text-center align-middle">
+                                                    <td class="text-center align-middle" style="padding: 0px 0px;">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ $detail->product->title }}
                                                     </td>
-                                                    <td>
-                                                        <ul style="padding: 0; list-style-type: none;">
+                                                    <td style="padding: 0px 0px;">
+                                                        <ul style="padding: 0; list-style-type: none; line-height: 19px;">
                                                             <li>{{ moneyFormat($detail->sell_price_duz) }}/dus</li>
                                                             <li>{{ moneyFormat($detail->sell_price_pak) }}/pak</li>
                                                             <li>{{ moneyFormat($detail->sell_price_pcs) }}/pcs</li>
                                                         </ul>
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ $detail->tax_type }}
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ $detail->periode }}
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         @can('products.edit')
                                                             <a href="{{ route('app.products.edit', $detail->id) }}"
                                                                 class="btn btn-success btn-sm">
