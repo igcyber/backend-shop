@@ -11,11 +11,18 @@ class DetailProductController extends Controller
 {
     public function index()
     {
-        $products = Product::select('id', 'title')->get();
+
         $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode')->get();
+
+        return view('pages.app.p_detail.index', compact('detailProducts'));
+    }
+
+    public function create()
+    {
+        $products = Product::select('id', 'title')->get();
         $existProduct = DetailProduct::pluck('product_id')->toArray();
         $existProducIds = array_unique($existProduct);
-        return view('pages.app.p_detail.index', compact('detailProducts', 'products', 'existProducIds'));
+        return view('pages.app.p_detail._create', compact('products', 'existProducIds'));
     }
 
     public function store(Request $request)

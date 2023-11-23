@@ -2,29 +2,6 @@
 
 @section('title', 'Detail Produk')
 
-@push('style')
-    <style>
-        @keyframes blink {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        #blink {
-            animation: blink 3s infinite;
-            /* 1s adalah durasi animasi, infinite agar animasi berulang terus-menerus */
-        }
-    </style>
-@endpush
-
 @section('main')
     <div class="main-content">
         <section class="section">
@@ -37,6 +14,9 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Detail Produk</h4>
+                                <a href="{{ route('app.detail-products.create') }}" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-plus"></i> Tambah Detail Produk
+                                </a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -52,6 +32,7 @@
                                                 <th scope="col" style="width: 10%">Harga Jual</th>
                                                 <th scope="col" style="width: 10%">Jenis Pajak</th>
                                                 <th scope="col" style="width: 10%">Periode</th>
+                                                <th scope="col" style="width: 10%">Tanggal Kadaluarsa</th>
                                                 <th scope="col" style="width: 10%">Pilihan</th>
                                             </tr>
                                         </thead>
@@ -68,15 +49,11 @@
                                                         {{ $detail->product->title }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        @if ($detail->product->total_stock < $min_stok)
-                                                            <span class="badge badge-danger">
-                                                                {{ $detail->product->total_stock }}
-                                                            </span>
-                                                        @else
-                                                            <span class="badge badge-success">
-                                                                {{ $detail->product->total_stock }}
-                                                            </span>
-                                                        @endif
+                                                        <span
+                                                            class="badge badge-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}">
+                                                            {{ $detail->product->total_stock }}
+                                                            {{ $detail->product->withoutPcs == 0 ? 'pcs' : 'pak' }}
+                                                        </span>
                                                     </td>
                                                     <td class="align-middle">
                                                         <ul style="padding: 0; list-style-type: none; line-height:18px;">
@@ -110,6 +87,9 @@
                                                         {{ $detail->periode }}
                                                     </td>
                                                     <td class="align-middle" style="padding: 0px 0px;">
+                                                        {{ dateID($detail->product->exp_date) }}
+                                                    </td>
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         @can('products.edit')
                                                             <a href="{{ route('app.products.edit', $detail->id) }}"
                                                                 class="btn btn-success btn-sm">
@@ -132,9 +112,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-12">
-                        @include('pages.app.p_detail._create')
-                    </div>
                 </div>
             </div>
         </section>
@@ -152,35 +129,6 @@
             "iDisplayLength": 25
         });
     </script>
-
-    <script>
-        //format rupiah real-time
-        var rupiah = document.getElementById('rupiahInput');
-        rupiah.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah.value = formatRupiah(this.value, 'Rp. ');
-        });
-
-        /* Fungsi formatRupiah */
-        function formatRupiah(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            // tambahkan titik jika yang di input sudah menjadi angka ribuan
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-        }
-    </script>
-
 
     <!-- Page Specific JS File -->
     <script>
