@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Produk')
-
-@push('style')
-@endpush
+@section('title', 'Data Produk')
 
 @section('main')
     <div class="main-content">
@@ -17,18 +14,22 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Produk</h4>
+                                <a href="{{ route('app.products.create') }}" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-plus"></i> Tambah Produk
+                                </a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 10%">
+                                                <th scope="col" style="width: 5%">
                                                     No. Urut
                                                 </th>
-                                                <th>No. Produk</th>
-                                                <th>Nama Produk</th>
+                                                <th scope="col">No. Produk</th>
+                                                <th scope="col" style="width: 15%">Nama Produk</th>
                                                 <th>Total Stok</th>
+                                                <th>Detail Stok</th>
                                                 <th>Tipe Produk</th>
                                                 <th>Pabrikan</th>
                                                 <th>Pilihan</th>
@@ -40,12 +41,35 @@
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $product->serial_number }}</td>
+                                                    <td class="align-middle">
+                                                        <!-- Display SVG barcode for the current product -->
+                                                        @if (isset($svgBarcodes[$key]))
+                                                            <p style="margin:0; !important">
+                                                                {!! $svgBarcodes[$key]['svg_barcode'] !!}
+                                                            </p>
+                                                            <span
+                                                                style="font-weight: bolder">{{ $svgBarcodes[$key]['serial_number'] }}
+                                                            </span>
+                                                        @endif
+                                                    </td>
                                                     <td class="align-middle">
                                                         {{ $product->title }}
                                                     </td>
                                                     <td class="align-middle">
                                                         {{ $product->total_stock }}
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <ul style="padding: 0; list-style-type: none; line-height:18px;">
+                                                            @if ($product->stock_duz > 0)
+                                                                <li>{{ $product->stock_duz }} dus</li>
+                                                            @endif
+                                                            @if ($product->stock_pak > 0)
+                                                                <li>{{ $product->stock_pak }} pak</li>
+                                                            @endif
+                                                            @if ($product->stock_pcs > 0)
+                                                                <li>{{ $product->stock_pcs }} pcs</li>
+                                                            @endif
+                                                        </ul>
                                                     </td>
                                                     <td class="align-middle">
                                                         {{ $product->category->name }}
@@ -54,7 +78,7 @@
                                                         {{ $product->vendor->name }}
                                                     </td>
                                                     {{-- <td></td> --}}
-                                                    <td>
+                                                    <td class="align-middle">
                                                         @can('products.edit')
                                                             <a href="{{ route('app.products.edit', $product->id) }}"
                                                                 class="btn btn-success btn-sm">
@@ -62,6 +86,7 @@
                                                                 </i>
                                                             </a>
                                                         @endcan
+
                                                         @can('products.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $product->id }}"
                                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
@@ -77,9 +102,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-12">
-                        @include('pages.app.products._create')
-                    </div>
                 </div>
             </div>
         </section>
@@ -87,44 +109,16 @@
 @endsection
 
 @push('scripts')
-    <!-- Page Specific JS File -->
-    {{-- <script>
-        function showImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#img').attr('src', e.target.result).width(200).height(180);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script> --}}
-
     <!-- JS Libraies -->
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
                 "sortable": false,
                 "targets": [1, 2, 5]
-            }]
+            }],
+            "iDisplayLength": 25
         });
     </script>
-
-
-    <!-- JS Libraies -->
-    {{-- <script>
-        if (jQuery().summernote) {
-            $(".summernote-simple").summernote({
-                dialogsInBody: true,
-                minHeight: 150,
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough']],
-                    ['para', ['paragraph']]
-                ]
-            });
-        }
-    </script> --}}
 
     <!-- Page Specific JS File -->
     <script>

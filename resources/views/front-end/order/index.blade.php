@@ -52,9 +52,6 @@
                                 @endif
                                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                                 <h5 class="card-title mt-2">Total Pembayaran : {{ moneyFormat($subtotal) }}</h5>
-                                <input type="hidden" name="subtotal" value="{{ $subtotal }}">
-                                <h5 class="card-title mt-2">Petugas Sales : {{ $nonZeroQuantityCarts }}</h5>
-
                                 <p>
                                     <small class="text-muted">*Bayar Saat Sales Datang Ke Toko Anda</small>
                                     <br>

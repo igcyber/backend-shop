@@ -16,12 +16,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('vendor_id');
-            $table->string('serial_number')->unique();
+            $table->string('serial_number', 50)->unique();
             $table->string('image')->nullable();
-            $table->string('title');
+            $table->string('title', 150);
             $table->text('short_description')->nullable();
             $table->integer('dus_pak');
             $table->integer('pak_pcs');
+            $table->smallInteger('withoutPcs')->default(0);
             $table->integer('total_stock');
             $table->integer('stock_duz')->nullable();
             $table->integer('stock_pak')->nullable();

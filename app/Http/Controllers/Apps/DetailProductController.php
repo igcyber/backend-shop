@@ -11,14 +11,15 @@ class DetailProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        $d_products = DetailProduct::all();
-        return view('pages.app.p_detail.index', compact('d_products', 'products'));
+        $products = Product::select('id', 'title')->get();
+        $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode')->get();
+        $existProduct = DetailProduct::pluck('product_id')->toArray();
+        $existProducIds = array_unique($existProduct);
+        return view('pages.app.p_detail.index', compact('detailProducts', 'products', 'existProducIds'));
     }
 
     public function store(Request $request)
     {
-        //validate every request from user's input
         $this->validate($request, [
             'product_id' => 'required',
             'sell_price_duz' => 'required',
@@ -26,35 +27,31 @@ class DetailProductController extends Controller
             'periode' => 'required',
         ]);
 
-        //get all the $request
-        $data = $request->all();
-        //take product_id from $request
-        $data['product_id'] = $request->product_id;
-        //take sell_price_duz from $request and make in integer value, remove every String
-        $data['sell_price_duz'] = intval(str_replace(['Rp.', '.', ','], '',  $data['sell_price_duz']));
-        //get data product based one $request->product_id
-        $productContent =  Product::where('id', $data['product_id'])->first();
-        //get price for pak from sell_price_duz / pak_content
-        $getPricePak = $data['sell_price_duz'] / $productContent['dus_pak'];
-        //get price for pcs from $getPricePak / pak_pcs
-        $getPricePcs = $getPricePak / $productContent['pak_pcs'];
+        $productContent = Product::findOrFail($request->product_id);
 
-        //create data
-        $d_product = DetailProduct::create([
+        $sell_price_duz = intval(str_replace(['Rp.', '.', ','], '', $request->sell_price_duz));
+
+        if ($productContent->withoutPcs == 0) {
+            // If withoutPcs is equal to 0
+            $getPricePak = $sell_price_duz / $productContent->dus_pak;
+            $getPricePcs = $getPricePak / $productContent->pak_pcs;
+        } elseif ($productContent->withoutPcs == 1) {
+            // If withoutPcs is equal to 1
+            $getPricePak = $sell_price_duz / $productContent->pak_pcs;
+            // Adjust $getPricePcs accordingly if needed
+        }
+
+        $detail = DetailProduct::create([
             'product_id' => $request->product_id,
-            'sell_price_duz' => $data['sell_price_duz'],
+            'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,
-            'sell_price_pcs' =>  $getPricePcs,
+            'sell_price_pcs' => $getPricePcs ?? 0,
             'tax_type' => $request->tax_type,
-            'periode' => $request->periode
+            'periode' => $request->periode,
         ]);
 
-        if ($d_product) {
-            //redirect dengan pesan sukses
-            return redirect()->route('app.detail-products.index')->with(['success' => 'Data Berhasil Disimpan!']);
-        } else {
-            //redirect dengan pesan error
-            return redirect()->route('app.detail-products.index')->with(['error' => 'Data Gagal Disimpan!']);
-        }
+        $message = $detail ? 'Data Berhasil Disimpan!' : 'Data Gagal Disimpan!';
+
+        return redirect()->route('app.detail-products.index')->with(['success' => $message]);
     }
 }

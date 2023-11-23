@@ -12,6 +12,12 @@ class Product extends Model
 
     protected $guarded = [];
 
+
+    protected $casts = [
+        'is_checked' => 'boolean',
+    ];
+
+
     /**
      * Belongs to Relationship model with category model
      *
@@ -60,6 +66,10 @@ class Product extends Model
             // If $duz has a value, decrement total_stock using $duz value
             $this->decrement('total_stock', $duz);
         }
+
+        // If $pcs has a value, decrement total_stock using $pcs value
+        $this->decrement('total_stock', $pcs);
+
 
         //How much pcs/Duz
         $pcsPerDuz = $this->dus_pak * $this->pak_pcs;

@@ -18,8 +18,10 @@
                         <select name="product_id" id="product"
                             class="form-control @error('product_id') is-invalid @enderror">
                             <option disabled selected>PILIH PRODUCT</option>
-                            @foreach ($products as $p)
-                                <option value="{{ $p->id }}">{{ $p->title }}</option>
+                            @foreach ($products as $item)
+                                @if (!in_array($item->id, $existProducIds))
+                                    <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                @endif
                             @endforeach
                         </select>
                         @error('product_id')
@@ -32,7 +34,9 @@
 
                 <div class="col-md-6 mt-2">
                     <label for="rupiahInput" style="font-weight: bold; padding-right:3%;">Harga Jual</label>
-                    <span class="badge bg-danger text-white">Pastikan Harga Jual Sesuai</span>
+                    <span id="blink" class="badge bg-info text-white">
+                        <i class="fas fa-exclamation-triangle"></i> Pastikan Harga Jual Sesuai
+                    </span>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">

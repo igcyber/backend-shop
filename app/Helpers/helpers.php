@@ -75,17 +75,18 @@ if (!function_exists('countQty')) {
     }
 }
 
-if (!function_exists('getInvoiceNumber')) {
-    function getInvoiceNumber()
+if (!function_exists('countQtyWithoutPcs')) {
+    function countQtyWithoutPcs($totalBiji, $pakPerDus)
     {
-        $month = date('m');
-        $year = date('Y');
-        $totalTransactions = DB::table('orders')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
-            ->count() + 10569;
-        $invoiceNumber = $totalTransactions . "-{$month}-{$year}";
+        // Hitung jumlah dus yang dibutuhkan
+        $jumlahDus = floor($totalBiji / $pakPerDus);
 
-        return $invoiceNumber;
+        // Hitung sisa pak jika ada
+        $sisaPak = $totalBiji % $pakPerDus;
+
+        return [
+            'jumlah_dus' => $jumlahDus,
+            'sisa_pak' => $sisaPak,
+        ];
     }
 }
