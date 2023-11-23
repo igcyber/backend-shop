@@ -17,10 +17,9 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Order</h4>
-                                <button type="button" class="btn btn-primary ml-auto" data-toggle="modal"
-                                    data-target="#exampleModalCenter">
-                                    Launch demo modal
-                                </button>
+                                <a href="{{ route('app.take.order') }}" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-cart-plus"></i> Tambah Keranjang
+                                </a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">

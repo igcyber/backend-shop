@@ -42,7 +42,7 @@
 </head>
 </head>
 
-<body>
+<body class="sidebar-mini">
     <div id="app">
         <div class="main-wrapper">
             <!-- Header -->

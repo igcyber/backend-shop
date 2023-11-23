@@ -20,6 +20,10 @@ class SalesController extends Controller
         $customers = Customer::where('sales_id', $userId)->get();
         return view('pages.app.sales.index', compact('orders', 'customers'));
     }
+    public function takeOrder()
+    {
+        return view('pages.app.sales.takeOrder');
+    }
     public function confirmation($type, Order $order)
     {
         $statusMessage = '';

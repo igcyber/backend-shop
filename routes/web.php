@@ -77,6 +77,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //get order for sales
     Route::get('/sales/order', [SalesController::class, 'index'])->name('sales');
+    //POS sales
+    Route::get('/sales/pos/', [SalesController::class, 'takeOrder'])->name('take.order');
     //confirmation order
     Route::get('/sales/order/{type}/{order}', [SalesController::class, 'confirmation'])->name('order.confirmation');
     //update order
