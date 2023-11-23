@@ -3,6 +3,26 @@
 @section('title', 'Detail Produk')
 
 @push('style')
+    <style>
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        #blink {
+            animation: blink 3s infinite;
+            /* 1s adalah durasi animasi, infinite agar animasi berulang terus-menerus */
+        }
+    </style>
 @endpush
 
 @section('main')
@@ -26,27 +46,61 @@
                                                 <th scope="col" style="width: 5%" class="align-middle">
                                                     No. Urut
                                                 </th>
-                                                <th scope="col" style="width: 30%">Nama Produk</th>
-                                                <th scope="col" style="width: 15%">Harga Jual</th>
-                                                <th scope="col" style="width: 15%">Jenis Pajak</th>
-                                                <th scope="col" style="width: 15%">Periode</th>
-                                                <th>Pilihan</th>
+                                                <th scope="col" style="width: 20%">Nama Produk</th>
+                                                <th scope="col" style="width: 10%">Total Stok</th>
+                                                <th scope="col" style="width: 10%">Detail Stok</th>
+                                                <th scope="col" style="width: 10%">Harga Jual</th>
+                                                <th scope="col" style="width: 10%">Jenis Pajak</th>
+                                                <th scope="col" style="width: 10%">Periode</th>
+                                                <th scope="col" style="width: 10%">Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($detailProducts as $key => $detail)
                                                 <tr>
+                                                    @php
+                                                        $min_stok = $detail->product->dus_pak * $detail->product->pak_pcs;
+                                                    @endphp
                                                     <td class="text-center align-middle" style="padding: 0px 0px;">
                                                         {{ $key + 1 }}
                                                     </td>
                                                     <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ $detail->product->title }}
                                                     </td>
+                                                    <td class="align-middle">
+                                                        @if ($detail->product->total_stock < $min_stok)
+                                                            <span class="badge badge-danger">
+                                                                {{ $detail->product->total_stock }}
+                                                            </span>
+                                                        @else
+                                                            <span class="badge badge-success">
+                                                                {{ $detail->product->total_stock }}
+                                                            </span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <ul style="padding: 0; list-style-type: none; line-height:18px;">
+                                                            @if ($detail->product->stock_duz > 0)
+                                                                <li>{{ $detail->product->stock_duz }} dus</li>
+                                                            @endif
+                                                            @if ($detail->product->stock_pak > 0)
+                                                                <li>{{ $detail->product->stock_pak }} pak</li>
+                                                            @endif
+                                                            @if ($detail->product->stock_pcs > 0)
+                                                                <li>{{ $detail->product->stock_pcs }} pcs</li>
+                                                            @endif
+                                                        </ul>
+                                                    </td>
                                                     <td style="padding: 0px 0px;">
-                                                        <ul style="padding: 0; list-style-type: none; line-height: 19px;">
+                                                        <ul
+                                                            style="padding: 0; list-style-type: none; line-height: 19px;margin-top:5%;">
                                                             <li>{{ moneyFormat($detail->sell_price_duz) }}/dus</li>
-                                                            <li>{{ moneyFormat($detail->sell_price_pak) }}/pak</li>
-                                                            <li>{{ moneyFormat($detail->sell_price_pcs) }}/pcs</li>
+                                                            @if ($detail->sell_price_duz !== $detail->sell_price_pak)
+                                                                <li>{{ moneyFormat($detail->sell_price_pak) }}/pak</li>
+                                                            @endif
+                                                            @if ($detail->sell_price_pcs != 0)
+                                                                <li>{{ moneyFormat($detail->sell_price_pcs) }}/pcs</li>
+                                                            @endif
                                                         </ul>
                                                     </td>
                                                     <td class="align-middle" style="padding: 0px 0px;">
@@ -94,7 +148,8 @@
             "columnDefs": [{
                 "sortable": false,
                 "targets": [1, 2, 5]
-            }]
+            }],
+            "iDisplayLength": 25
         });
     </script>
 

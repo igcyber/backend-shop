@@ -31,14 +31,21 @@ class DetailProductController extends Controller
 
         $sell_price_duz = intval(str_replace(['Rp.', '.', ','], '', $request->sell_price_duz));
 
-        $getPricePak = $sell_price_duz / $productContent->dus_pak;
-        $getPricePcs = $getPricePak / $productContent->pak_pcs;
+        if ($productContent->withoutPcs == 0) {
+            // If withoutPcs is equal to 0
+            $getPricePak = $sell_price_duz / $productContent->dus_pak;
+            $getPricePcs = $getPricePak / $productContent->pak_pcs;
+        } elseif ($productContent->withoutPcs == 1) {
+            // If withoutPcs is equal to 1
+            $getPricePak = $sell_price_duz / $productContent->pak_pcs;
+            // Adjust $getPricePcs accordingly if needed
+        }
 
         $detail = DetailProduct::create([
             'product_id' => $request->product_id,
             'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,
-            'sell_price_pcs' => $getPricePcs,
+            'sell_price_pcs' => $getPricePcs ?? 0,
             'tax_type' => $request->tax_type,
             'periode' => $request->periode,
         ]);

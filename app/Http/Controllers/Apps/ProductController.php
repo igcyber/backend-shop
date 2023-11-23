@@ -14,11 +14,9 @@ use Picqer\Barcode\BarcodeGeneratorSVG;
 
 class ProductController extends Controller
 {
-    //
     public function index()
     {
-        $categories = Category::where('status', 1)->get(['id', 'name']);
-        $vendors = Vendor::where('status', 1)->get(['id', 'name']);
+
         $products = Product::with('category', 'vendor')->latest()->get(['id', 'serial_number', 'title', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'category_id', 'vendor_id', 'created_at']);
 
         $svgBarcodes = [];
@@ -40,23 +38,38 @@ class ProductController extends Controller
             ];
         }
 
+        return view('pages.app.products.index', compact('products', 'svgBarcodes'));
+    }
 
+    public function create()
+    {
+        $categories = Category::where('status', 1)->get(['id', 'name']);
+        $vendors = Vendor::where('status', 1)->get(['id', 'name']);
 
-
-        return view('pages.app.products.index', compact('categories', 'vendors', 'products', 'svgBarcodes'));
+        return view('pages.app.products._create', compact('categories', 'vendors'));
     }
 
     public function store(Request $request)
     {
+
+        // dd($request->all());
         $this->validateRequest($request);
 
         $data = $this->prepareData($request);
 
-        // total biji perdus
-        $bijiPerDus = $data['pak_content'] * $data['pak_pcs'];
+        // Assuming $data is the input data from the form
+        $withoutPcsChecked = isset($data['without_pcs']) && $data['without_pcs'] == '1';
 
-        // hitung total dus, sisa pak, dan biji
-        $hasil_perhitungan = countQty($data['total_stock'], $bijiPerDus, $data['pak_pcs']);
+        if ($withoutPcsChecked) {
+            // Checkbox is checked
+            $pakPerDus = $data['pak_content'] * $data['pak_pcs'];
+            $hasil_perhitungan = countQtyWithoutPcs($data['total_stock'], $pakPerDus);
+        } else {
+            // Checkbox is not checked
+            // Perform the calculation without considering without_pcs
+            $pakPerDus = $data['pak_content'] * $data['pak_pcs'];
+            $hasil_perhitungan = countQty($data['total_stock'], $pakPerDus, $data['pak_pcs']);
+        }
 
         // check image request
         $imagePath = $this->uploadImage($request);
@@ -69,9 +82,10 @@ class ProductController extends Controller
             'vendor_id' => $data['vendor_id'],
             'title' => $data['title'],
             'total_stock' => $data['total_stock'],
+            'withoutPcs' => $data['without_pcs'] ?? 0,
             'stock_duz' => $hasil_perhitungan['jumlah_dus'],
             'stock_pak' => $hasil_perhitungan['sisa_pak'],
-            'stock_pcs' => $hasil_perhitungan['sisa_biji'],
+            'stock_pcs' => $hasil_perhitungan['sisa_biji'] ?? 0,
             'dus_pak' => $data['pak_content'],
             'pak_pcs' => $data['pak_pcs'],
             'exp_date' => $data['exp_date'],
@@ -109,6 +123,7 @@ class ProductController extends Controller
             'stock' => 'nullable|numeric|max:999|min:0',
             'stock_pack' => 'nullable|numeric|max:999|min:0',
             'stock_pcs' => 'nullable|numeric|max:999|min:0',
+            'without_pcs' => 'boolean'
         ]);
     }
 

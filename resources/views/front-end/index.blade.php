@@ -73,7 +73,7 @@
                     </div>
                     <!-- Tombol "Lihat Lebih Lengkap" -->
                     <div class="container text-end">
-                        <a href="#" class="btn btn-primary shadow">Lihat Lebih Lengkap <i
+                        <a href="#" class="btn btn-primary shadow">Lihat Semua Produk <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>

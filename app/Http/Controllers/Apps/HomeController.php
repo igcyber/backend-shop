@@ -14,7 +14,7 @@ class HomeController extends Controller
         // Query detail_products where total_stock in products is not equal to zero
         $detailProducts = DetailProduct::whereHas('product', function ($query) {
             $query->where('total_stock', '>', 0);
-        })->get();
+        })->limit(8)->get();
 
         $categories = Category::where('status', 1)
             ->orderBy('name', 'ASC')

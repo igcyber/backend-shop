@@ -12,6 +12,12 @@ class Product extends Model
 
     protected $guarded = [];
 
+
+    protected $casts = [
+        'is_checked' => 'boolean',
+    ];
+
+
     /**
      * Belongs to Relationship model with category model
      *

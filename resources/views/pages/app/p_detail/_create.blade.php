@@ -34,7 +34,9 @@
 
                 <div class="col-md-6 mt-2">
                     <label for="rupiahInput" style="font-weight: bold; padding-right:3%;">Harga Jual</label>
-                    <span class="badge bg-danger text-white">Pastikan Harga Jual Sesuai</span>
+                    <span id="blink" class="badge bg-info text-white">
+                        <i class="fas fa-exclamation-triangle"></i> Pastikan Harga Jual Sesuai
+                    </span>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">

@@ -74,3 +74,19 @@ if (!function_exists('countQty')) {
         ];
     }
 }
+
+if (!function_exists('countQtyWithoutPcs')) {
+    function countQtyWithoutPcs($totalBiji, $pakPerDus)
+    {
+        // Hitung jumlah dus yang dibutuhkan
+        $jumlahDus = floor($totalBiji / $pakPerDus);
+
+        // Hitung sisa pak jika ada
+        $sisaPak = $totalBiji % $pakPerDus;
+
+        return [
+            'jumlah_dus' => $jumlahDus,
+            'sisa_pak' => $sisaPak,
+        ];
+    }
+}
