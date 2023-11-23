@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = Product::with('category', 'vendor')->latest()->get(['id', 'serial_number', 'title', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'category_id', 'vendor_id', 'created_at']);
+        $products = Product::with('category', 'vendor')->latest()->get(['id', 'serial_number', 'title', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'category_id', 'vendor_id', 'exp_date', 'created_at', 'withoutPcs', 'dus_pak', 'pak_pcs']);
 
         $svgBarcodes = [];
 

@@ -38,6 +38,10 @@
                                         <tbody>
                                             @foreach ($products as $key => $product)
                                                 <tr>
+                                                    @php
+                                                        //hitung minimal produk kuantitas berdasarkan satuan terkecil
+                                                        $min_stok = $product->dus_pak * $product->pak_pcs;
+                                                    @endphp
                                                     <td class="text-center align-middle">
                                                         {{ $key + 1 }}
                                                     </td>
@@ -56,7 +60,11 @@
                                                         {{ $product->title }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $product->total_stock }}
+                                                        <span
+                                                            class="badge badge-{{ $product->total_stock < $min_stok ? 'danger' : 'success' }}">
+                                                            {{ $product->total_stock }}
+                                                            {{ $product->withoutPcs == 0 ? 'pcs' : 'pak' }}
+                                                        </span>
                                                     </td>
                                                     <td class="align-middle">
                                                         <ul style="padding: 0; list-style-type: none; line-height:18px;">
