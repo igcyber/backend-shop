@@ -32,14 +32,7 @@
                         @endforeach
                     </div>
                     <div class="modal-footer">
-                        <a href="{{ route('app.order.confirmation', ['accept', $order->id]) }}"
-                            class="btn btn-sm btn-success" title="Konfirmasi Pesanan">
-                            <i class="fas fa-check-square"></i>
-                        </a>
-                        <a href="{{ route('app.order.confirmation', ['decline', $order->id]) }}"
-                            class="btn btn-sm btn-danger" title="Batalkan Pesanan">
-                            <i class="fas fa-window-close"></i>
-                        </a>
+
                         <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Perbarui
                             Pesanan</button>
                     </div>

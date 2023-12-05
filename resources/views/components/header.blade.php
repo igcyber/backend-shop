@@ -1,9 +1,17 @@
 <div class="navbar-bg" style="background-color: #2bb75b; !important"></div>
 <nav class="navbar navbar-expand-lg main-navbar">
     <div class="d-inline mr-auto">
-        <ul class="navbar-nav mr-3">
-            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-        </ul>
+        @auth
+            @if (auth()->user()->hasRole(['Sales', 'Outlet', 'Admin Gudang']))
+                <!-- The user has one of the specified roles, hide the sidebar -->
+            @else
+                <!-- The user doesn't have the specified roles, show the sidebar -->
+                <ul class="navbar-nav mr-3">
+                    <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a>
+                    </li>
+                </ul>
+            @endif
+        @endauth
     </div>
     <ul class="navbar-nav navbar-right">
         <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"

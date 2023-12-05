@@ -16,6 +16,13 @@
                     </ul>
                 </li>
 
+                <li class="{{ setActive(['app.flash.*']) }}">
+                    <a class="nav-link" href="{{ route('app.flash.sales') }}" title="Flash Sale">
+                        <i class="fas fa-percent"></i>
+                        <span>Flash Sale</span>
+                    </a>
+                </li>
+
                 <li class="dropdown">
                     <a href="#" class="nav-link has-dropdown"><i class="fas fa-industry"></i><span>Manajemen
                             Produk</span></a>
@@ -69,37 +76,6 @@
                                 <span>Hak Akses</span></a>
                         </li>
                     </ul>
-                </li>
-            @endrole
-
-            @role('Admin Gudang')
-                <li class="dropdown mt-2">
-                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-window-restore"></i>
-                        <span>Manajemen Barang</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="mt-2 {{ setActive(['app.products.*']) }}">
-                            <a class="nav-link" href="{{ route('app.products.index') }}">
-                                <span>Barang</span></a>
-                        </li>
-                    </ul>
-                </li>
-            @endrole
-
-            @role('Admin Sales')
-                {{-- {{ setActive(['app.order.*']) }} --}}
-                <li class="">
-                    <a class="nav-link" href="#"><i class="fas fa-cart-arrow-down"></i>
-                        <span>Faktur Order</span></a>
-                </li>
-            @endrole
-
-            @role('Sales')
-                {{-- {{ setActive(['app.order.*']) }} --}}
-                {{-- {{ route('app.order.index') }} --}}
-                <li class="mt-2">
-                    <a class="nav-link" href="{{ route('app.sales') }}"><i class="fas fa-cart-arrow-down"></i>
-                        <span>Order</span></a>
                 </li>
             @endrole
         </ul>

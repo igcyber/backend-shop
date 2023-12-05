@@ -1,7 +1,7 @@
 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" style="padding-top: 10vh">
     <div class="carousel-inner shadow">
         <div class="carousel-item active">
-            <img src="{{ asset('front-end/img/carousel.jpg') }}" alt="Image to Blur" class="d-block w-100" />
+            <img src="{{ asset('front-end/img/feature/carousel.jpg') }}" alt="Image to Blur" class="d-block w-100" />
             <div class="carousel-caption text-start text-dark"
                 style="max-width: 400px; margin-left: 20px; height: 450px;">
             </div>

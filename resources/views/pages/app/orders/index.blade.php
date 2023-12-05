@@ -1,22 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Order')
+@section('title', 'Pesanan')
 
 @push('style')
 @endpush
 
 @section('main')
-    <div class="main-content">
+    <div class="main-content" style="padding-left:14px; !important">
         <section class="section">
             <div class="section-header">
-                <h1>Halaman Order</h1>
+                <h1>Halaman Pesanan</h1>
             </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-8 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Order</h4>
+                                <h4>Data Pesanan</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">

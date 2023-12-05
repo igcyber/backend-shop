@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('sell_price_pcs')->nullable();
             $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
             $table->enum('periode', ['Reguler', 'Seasonal'])->default('Reguler');
+            $table->decimal('discount', 5, 2)->nullable();
             $table->timestamps();
 
             //relationship categories

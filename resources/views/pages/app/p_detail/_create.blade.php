@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Detil Produk')
+@section('title', 'Detail Produk')
 
 @push('style')
     <style>
@@ -28,9 +28,6 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Detail Produk</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
@@ -94,7 +91,7 @@
 
                                     {{-- SELECT JENIS PAJAK & PERIODE --}}
                                     <div class="form-row">
-                                        <div class="col-md-6 mt-2">
+                                        <div class="col-md-4 mt-2">
                                             <label for="tax" style="font-weight: bold">Jenis Pajak</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -116,7 +113,26 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6 mt-2">
+                                        <div class="col-md-4 mt-2">
+                                            <label for="discount" style="font-weight: bold">Diskon (%)</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">
+                                                        <i class="fas fa-percent"></i>
+                                                    </div>
+                                                </div>
+                                                <input type="text" name="discount"
+                                                    class="form-control @error('discount') is-invalid @enderror"
+                                                    placeholder="0" id="discount">
+                                                @error('discount')
+                                                    <div class="invalid-feedback" style="display: block">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mt-2">
                                             <label for="per" style="font-weight: bold">Periode</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">

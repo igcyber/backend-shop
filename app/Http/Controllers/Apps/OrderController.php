@@ -75,13 +75,23 @@ class OrderController extends Controller
                             $duzToPakFactor = $productDetail->product->dus_pak;
                             $pakToPcsFactor = $productDetail->product->pak_pcs;
 
-                            // Convert quantities to pcs
-                            $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
-                            $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; //4*20
-                            $pcs = $orderDetail->qty_pcs;
+                            // Check if the product is withoutPcs
+                            $productWithoutPcs = $productDetail->product->withoutPcs;
 
-                            // Update stock based on quantities in pcs
-                            $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
+                            if ($productWithoutPcs) {
+                                // If withoutPcs is true, update stock using decStockPack
+                                $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
+                                $onlyPak =  $orderDetail->qty_pak;
+                                $productDetail->product->decStockPack($duzToPak, $onlyPak);
+                            } else {
+                                // If withoutPcs is false, convert quantities to pcs and update stock
+                                $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor; // 480 pcs
+                                $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; // 4 * 20
+                                $pcs = $orderDetail->qty_pcs;
+
+                                // Update stock based on quantities in pcs
+                                $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
+                            }
                         }
                     }
                 }

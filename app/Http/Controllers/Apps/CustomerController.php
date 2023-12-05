@@ -18,6 +18,11 @@ class CustomerController extends Controller
             $customers = $customers->where('name', 'like', '%' . request()->q . '%');
         })->paginate(10);
 
+        return view('pages.app.customers.index', compact('customers'));
+    }
+
+    public function create()
+    {
         $salesRole = Role::where('name', 'Sales')->first();
         $users = User::role($salesRole->name)->get();
 
@@ -27,7 +32,7 @@ class CustomerController extends Controller
         $existingOutlets = Customer::pluck('outlet_id')->toArray();
         $existingOutletIds = array_unique($existingOutlets);
 
-        return view('pages.app.customers.index', compact('customers', 'users', 'outlets', 'existingOutletIds'));
+        return view('pages.app.customers._create', compact('users', 'outlets', 'existingOutletIds'));
     }
 
 
