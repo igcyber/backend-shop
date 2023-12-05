@@ -133,19 +133,18 @@ class SalesController extends Controller
             // Validate the requested quantities against the available stock
             if (!$this->validateRequestedQuantities($quantity, $request->input('satuan')[$key], $productDetail)) {
                 $validationErrors[] = "Pesanan Barang Melebihi Stok Gudang untuk produk {$productDetail->product->title}.";
+            } else {
+                // Save or update the corresponding row in the sales_carts table
+                SalesCart::updateOrCreate(
+                    [
+                        'sales_id' => $sales,
+                        'detail_id' => $request->input('detail_id')[$key],
+                    ],
+                    [
+                        $quantityField => $quantity,
+                    ]
+                );
             }
-
-            // Save or update the corresponding row in the sales_carts table
-            SalesCart::updateOrCreate(
-                [
-                    'sales_id' => $sales,
-                    'detail_id' => $request->input('detail_id')[$key],
-                ],
-                [
-                    $quantityField => $quantity,
-                    // Add other fields as needed
-                ]
-            );
         }
 
         // Check if there are validation errors

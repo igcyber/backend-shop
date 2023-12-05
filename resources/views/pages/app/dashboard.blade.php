@@ -47,7 +47,7 @@
 @endpush
 
 @section('main')
-    <div class="main-content" style="padding-left:14px; !important">
+    <div class="main-content" style="{{ auth()->user()->hasRole('Supervisor')? '': 'padding-left:14px;' }}">
         <section class="section">
             <div class="section-header">
                 <h1>Selamat Datang di PT. UPINDO RAYA SEMESTA BORNEO</h1>

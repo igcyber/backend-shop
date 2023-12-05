@@ -63,7 +63,8 @@
                                         </span>
                                     @endif
                                     <div class="card-body p-1">
-                                        <span class="badge bg-success mb-2 mt-0 fs-8"> {{ $detail->product->title }}</span>
+                                        <p class="mb-2 mt-0 text-small text-gray-700"> {{ $detail->product->title }}
+                                        </p>
                                         @guest
                                             {{-- direct to login page --}}
                                             <a href="{{ route('login') }}" target="_blank">

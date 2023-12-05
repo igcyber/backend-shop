@@ -20,7 +20,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="table-1">
+                                    <table class="table table-striped" class="display" id="table-1" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 3%">
@@ -29,8 +29,8 @@
                                                 <th scope="col" style="width: 8%">No. Trans</th>
                                                 <th scope="col" style="width: 14%">Tgl Pesan</th>
                                                 <th scope="col" style="width: 15%">Outlet</th>
-                                                <th scope="col" style="width: 20%">Alamat</th>
-                                                <th scope="col" style="width: 20%">Pesanan</th>
+                                                <th scope="col" style="width: 25%">Alamat</th>
+                                                <th scope="col" style="width: 40%">Pesanan</th>
                                                 <th scope="col" style="width: 10%">Total</th>
                                                 <th scope="col" style="width: 5%">Status</th>
                                                 <th scope="col" style="width: 10%">Pilihan</th>
@@ -124,6 +124,10 @@
 @endsection
 
 @push('scripts')
+    <!-- Include DataTables FixedColumns extension -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/fixedcolumns/3.3.5/js/dataTables.fixedColumns.js"></script>
+
     <!-- JS Libraies -->
     <script>
         $("#table-1").dataTable({
@@ -131,7 +135,7 @@
                 "sortable": false,
                 "targets": [1, 2, 5]
             }],
-            "iDisplayLength": 25
+            "iDisplayLength": 25,
         });
     </script>
 

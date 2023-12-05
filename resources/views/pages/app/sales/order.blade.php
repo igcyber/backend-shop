@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Take Order')
+@section('title', 'Buat Pesanan')
 
 @push('style')
 @endpush
