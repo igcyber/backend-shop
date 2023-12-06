@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Blank Page')
+@section('title', 'Hak Izin')
 
 @push('style')
     <style>
@@ -13,9 +13,6 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Hak Izin</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">

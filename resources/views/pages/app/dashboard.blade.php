@@ -47,10 +47,35 @@
 @endpush
 
 @section('main')
-    <div class="main-content">
+    <div class="main-content" style="{{ auth()->user()->hasRole('Supervisor')? '': 'padding-left:14px;' }}">
         <section class="section">
             <div class="section-header">
                 <h1>Selamat Datang di PT. UPINDO RAYA SEMESTA BORNEO</h1>
+                @role('Admin Gudang')
+                    <a href="{{ route('app.products.index') }}" class="btn btn-lg btn-info ml-auto">
+                        <i class="fas fa-window-restore"></i>
+                        <span>KELOLA BARANG</span>
+                    </a>
+                @endrole
+                @role('Sales')
+                    <a class="btn btn-lg btn-info ml-auto" href="{{ route('app.sales') }}">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <span>LIHAT ORDER</span>
+                    </a>
+                @endrole
+                @role('Admin Sales')
+                    {{-- {{ setActive(['app.order.*']) }} --}}
+                    <a class="btn btn-lg btn-info ml-auto" href="#">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <span>Faktur Order</span></a>
+                    </a>
+                @endrole
+                @role('Outlet')
+                    <a class="btn btn-lg btn-info ml-auto" href="{{ route('front.home') }}">
+                        <i class="fas fa-globe"></i>
+                        <span>WEBSITE</span>
+                    </a>
+                @endrole
             </div>
             <div class="marquee mb-3">
                 <p id="wisdomText" style="font-weight: bolder" class="text-uppercase text-white"></p>

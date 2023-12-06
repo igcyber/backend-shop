@@ -9,9 +9,6 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Pengguna</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-8">

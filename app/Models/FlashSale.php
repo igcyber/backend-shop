@@ -5,14 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class FlashSale extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    public function orderDetails()
-    {
-        return $this->hasMany(OrderDetail::class, 'order_id');
-    }
 }

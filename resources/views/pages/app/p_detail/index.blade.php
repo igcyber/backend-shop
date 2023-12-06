@@ -5,9 +5,6 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Detail Produk</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
@@ -26,14 +23,15 @@
                                                 <th scope="col" style="width: 5%" class="align-middle">
                                                     No. Urut
                                                 </th>
-                                                <th scope="col" style="width: 20%">Nama Produk</th>
-                                                <th scope="col" style="width: 10%">Total Stok</th>
-                                                <th scope="col" style="width: 10%">Detail Stok</th>
-                                                <th scope="col" style="width: 10%">Harga Jual</th>
-                                                <th scope="col" style="width: 10%">Jenis Pajak</th>
-                                                <th scope="col" style="width: 10%">Periode</th>
+                                                <th scope="col" style="width: 25%">Nama Produk</th>
+                                                <th scope="col" style="width: 5%">Total Stok</th>
+                                                <th scope="col" style="width: 7%">Detail Stok</th>
+                                                <th scope="col" style="width: 5%">Diskon</th>
+                                                <th scope="col" style="width: 8%">Harga Jual</th>
+                                                <th scope="col" style="width: 5%">Jenis Pajak</th>
+                                                <th scope="col" style="width: 5%">Periode</th>
                                                 <th scope="col" style="width: 10%">Tanggal Kadaluarsa</th>
-                                                <th scope="col" style="width: 10%">Pilihan</th>
+                                                <th scope="col" style="width: 5%">Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -46,7 +44,12 @@
                                                         {{ $key + 1 }}
                                                     </td>
                                                     <td class="align-middle" style="padding: 0px 0px;">
-                                                        {{ $detail->product->title }}
+                                                        @can('products.edit')
+                                                            <a href="{{ route('app.detail-products.edit', $detail->id) }}"
+                                                                style="text-decoration: none; color:#2f2222">
+                                                                {{ $detail->product->title }}
+                                                            </a>
+                                                        @endcan
                                                     </td>
                                                     <td class="align-middle">
                                                         <span
@@ -67,6 +70,9 @@
                                                                 <li>{{ $detail->product->stock_pcs }} pcs</li>
                                                             @endif
                                                         </ul>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        {{ number_format($detail->discount, 0) }}%
                                                     </td>
                                                     <td style="padding: 0px 0px;">
                                                         <ul
@@ -89,14 +95,14 @@
                                                     <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ dateID($detail->product->exp_date) }}
                                                     </td>
-                                                    <td class="align-middle" style="padding: 0px 0px;">
-                                                        @can('products.edit')
-                                                            <a href="{{ route('app.products.edit', $detail->id) }}"
+                                                    <td class="align-middle text-center" style="padding: 0px 0px;">
+                                                        {{-- @can('products.edit')
+                                                            <a href="{{ route('app.detail-products.edit', $detail->id) }}"
                                                                 class="btn btn-success btn-sm">
                                                                 <i class="fa fa-pencil-alt me-1" title="Edit Produk">
                                                                 </i>
                                                             </a>
-                                                        @endcan
+                                                        @endcan --}}
                                                         @can('products.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $detail->id }}"
                                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Produk')
+@section('title', 'Produk')
 
 @push('style')
     <style>
@@ -26,11 +26,8 @@
 @endpush
 
 @section('main')
-    <div class="main-content">
+    <div class="main-content" style="padding-left:14px; !important">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Produk</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-8 col-lg-12">
@@ -117,15 +114,11 @@
                                     {{-- INPUT PABRIKAN DAN TIPE PRODUK --}}
                                     <div class="form-row">
                                         <div class="col-md-6 mt-2">
+                                            <i class="fas fa-industry"></i>
                                             <label for="vendor" style="font-weight: bold">Pabrikan</label>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">
-                                                        <i class="fas fa-industry"></i>
-                                                    </div>
-                                                </div>
                                                 <select name="vendor_id" id="vendor"
-                                                    class="form-control @error('vendor_id') is-invalid @enderror">
+                                                    class="form-control @error('vendor_id') is-invalid @enderror select2">
                                                     <option disabled selected>PILIH PABRIKAN</option>
                                                     @foreach ($vendors as $v)
                                                         <option value="{{ $v->id }}">{{ $v->name }}</option>
@@ -140,15 +133,11 @@
                                         </div>
 
                                         <div class="col-md-6 mt-2">
+                                            <i class="fas fa-tag"></i>
                                             <label for="tipe" style="font-weight: bold">Tipe</label>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">
-                                                        <i class="fas fa-tag"></i>
-                                                    </div>
-                                                </div>
                                                 <select name="category_id" id="tipe"
-                                                    class="form-control @error('vendor_id') is-invalid @enderror">
+                                                    class="form-control @error('vendor_id') is-invalid @enderror select2">
                                                     <option disabled selected>PILIH TIPE</option>
                                                     @foreach ($categories as $c)
                                                         <option value="{{ $c->id }}">{{ $c->name }}</option>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 
@@ -49,6 +50,27 @@ if (!function_exists('getInvoiceNumber')) {
             ->whereMonth('created_at', $month)
             ->count() + 10569;
         return $totalTransactions . "-{$month}-{$year}";
+    }
+}
+
+if (!function_exists('getUniqueTransactionId')) {
+    function getUniqueTransactionId()
+    {
+        $maxAttempts = 3;
+
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            try {
+                $transactionId = getInvoiceNumber();
+
+                if (!Order::where('transaction_id', $transactionId)->exists()) {
+                    return $transactionId;
+                }
+            } catch (\Exception $e) {
+                // Log or handle the exception if needed
+            }
+        }
+
+        throw new \Exception('Failed to generate a unique transaction_id after ' . $maxAttempts . ' attempts.');
     }
 }
 

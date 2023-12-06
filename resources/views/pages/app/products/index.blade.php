@@ -1,13 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Data Produk')
+@section('title', 'Produk')
 
 @section('main')
-    <div class="main-content">
+    <div class="main-content" style="padding-left:14px; !important">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Produk</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-8 col-lg-12">

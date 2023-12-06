@@ -38,20 +38,27 @@
                                             {{ $item->productDetail->product->title }}
                                         </td>
                                         <td>
-                                            {{ $item->productDetail->product->stock_duz }} Dus
+                                            @if ($item->productDetail->product->stock_duz !== 0)
+                                                {{ $item->productDetail->product->stock_duz }} dus
+                                            @endif
                                             <br>
-                                            {{ $item->productDetail->product->stock_pak }} Pak
+                                            @if ($item->productDetail->product->stock_pak !== 0)
+                                                <span>{{ $item->productDetail->product->stock_pak }} pak</span>
+                                            @endif
                                             <br>
-                                            {{ $item->productDetail->product->stock_pcs }} Pcs
+                                            @if ($item->productDetail->product->stock_pcs !== 0)
+                                                <span>{{ $item->productDetail->product->stock_pcs }} pcs</span>
+                                            @endif
                                         </td>
                                         <td style="text-align: left">
                                             <ul>
-                                                <li>{{ moneyFormat($item->productDetail->sell_price_duz) }}/dus
-                                                </li>
-                                                <li>{{ moneyFormat($item->productDetail->sell_price_pak) }}/pak
-                                                </li>
-                                                <li>{{ moneyFormat($item->productDetail->sell_price_pcs) }}/pcs
-                                                </li>
+                                                <li>{{ moneyFormat($item->productDetail->sell_price_duz) }}/dus</li>
+                                                @if ($item->productDetail->sell_price_duz !== $item->productDetail->sell_price_pak)
+                                                    <li>{{ moneyFormat($item->productDetail->sell_price_pak) }}/pak</li>
+                                                @endif
+                                                @if ($item->productDetail->sell_price_pcs != 0)
+                                                    <li>{{ moneyFormat($item->productDetail->sell_price_pcs) }}/pcs</li>
+                                                @endif
                                             </ul>
                                         </td>
 

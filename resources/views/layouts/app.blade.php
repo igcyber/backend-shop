@@ -19,15 +19,18 @@
     {{-- Sweet Alert --}}
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" id="theme-styles">
     {{-- Datatable --}}
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     {{-- Databtable Bootstrap --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
     {{-- Summernote --}}
     <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.css') }}">
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     {{-- Date Picker --}}
     <link rel="stylesheet" href="{{ asset('library/bootstrap-daterangepicker/daterangepicker.css') }}">
+    {{-- Select2 --}}
+    <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
 
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -49,8 +52,14 @@
             <!-- Header -->
             @include('components.header')
 
-            <!-- Sidebar -->
-            @include('components.sidebar')
+            @auth
+                @if (auth()->user()->hasRole(['Sales', 'Outlet', 'Admin Gudang', 'Admin Sales']))
+                    <!-- The user has one of the specified roles, hide the sidebar -->
+                @else
+                    <!-- The user doesn't have the specified roles, show the sidebar -->
+                    @include('components.sidebar')
+                @endif
+            @endauth
 
             <!-- Content -->
             @yield('main')
@@ -73,24 +82,18 @@
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 
-
-
     {{-- Sweet Alert --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
     {{-- Datatable --}}
-    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     {{-- Date Picker --}}
     <script src="{{ asset('library/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-
     {{-- Datatable Bootstrap --}}
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
     {{-- Summernote Javascript --}}
     <script src="{{ asset('library/summernote/dist/summernote-bs4.js') }}"></script>
-
-
+    {{-- Select2 --}}
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
     @stack('scripts')
 
