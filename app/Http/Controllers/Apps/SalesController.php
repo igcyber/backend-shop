@@ -25,6 +25,51 @@ class SalesController extends Controller
         $customers = Customer::where('sales_id', $userId)->get();
         return view('pages.app.sales.index', compact('orders', 'customers'));
     }
+
+    public function editOrderDetail($orderId)
+    {
+        $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode')->get();
+
+        // Find the order by ID
+        $order = Order::findOrFail($orderId);
+
+        // Get all order details for the specified order
+        $orderDetails = $order->orderDetails;
+
+        // Pass the order and order details to the edit view
+        return view('pages.app.sales.edit_order_detail', compact('order', 'orderDetails', 'detailProducts'));
+    }
+
+    public function updateOrderDetail($orderId, Request $request)
+    {
+        $request->validate([
+            // 'qty_product' => 'required',
+            'qty_product.*' => 'required|numeric', // Ensure each item in the array is present and not empty
+            // Add other validation rules as needed
+        ]);
+
+        try {
+            // Find the order detail by ID
+            $orderDetail = OrderDetail::findOrFail($orderId);
+
+            // Update the order detail based on Sales' input
+            $orderDetail->update([
+                'qty_duz' => $request->input('qty_duz'),
+                'qty_pak' => $request->input('qty_pak'),
+                'qty_pcs' => $request->input('qty_pcs'),
+                'price_duz' => $request->input('price_duz'),
+                'price_pak' => $request->input('price_pak'),
+                'price_pcs' => $request->input('price_pcs'),
+            ]);
+
+            // Optionally, you can return a success response or redirect to a specific page
+            return redirect()->route('sales.index')->with('success', 'Order detail updated successfully');
+        } catch (\Exception $e) {
+            // Handle exceptions, for example, order detail not found
+            return back()->with('error', 'Error updating order detail');
+        }
+    }
+
     public function order()
     {
 
@@ -112,10 +157,8 @@ class SalesController extends Controller
             'qty_product.*' => 'required|numeric', // Ensure each item in the array is present and not empty
             // Add other validation rules as needed
         ]);
-
         // Retrieve the updated cart items
         $updatedCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
-
         // Validate and save sales cart data
         $validationErrors = [];
         // dd($request->input('qty_product'));
@@ -175,7 +218,7 @@ class SalesController extends Controller
         // Create the order
         $order = Order::create([
             'sales_id' => $sales,
-            'transaction_id' => $request->input('transaction_id'),
+            'transaction_id' => getUniqueTransactionId(),
             'total' => $total,
             'customer_name' => optional($customer->outlet)->name,
             'customer_sales' => optional($customer->seller)->name,
@@ -240,7 +283,6 @@ class SalesController extends Controller
         return redirect()->route('app.sales')->with('success', 'Order created successfully');
     }
 
-
     public function deleteCart($id)
     {
         $sales_cart = SalesCart::find($id);
@@ -253,15 +295,22 @@ class SalesController extends Controller
     // Function to validate requested quantities against available stock
     private function validateRequestedQuantities($requestedQuantity, $unit, $productDetail)
     {
+        $isValid = false;
+
         switch ($unit) {
             case 'duz':
-                return $requestedQuantity <= $productDetail->product->stock_duz;
+                $isValid = $requestedQuantity <= $productDetail->product->stock_duz;
+                break;
             case 'pak':
-                return $requestedQuantity <= $productDetail->product->stock_pak;
+                $isValid = $requestedQuantity <= $productDetail->product->stock_pak;
+                break;
             case 'pcs':
-                return $requestedQuantity <= $productDetail->product->stock_pcs;
+                $isValid = $requestedQuantity <= $productDetail->product->stock_pcs;
+                break;
             default:
-                return false;
+                $isValid;
         }
+
+        return $isValid;
     }
 }

@@ -63,7 +63,8 @@
                                         </span>
                                     @endif
                                     <div class="card-body p-1">
-                                        <p class="mb-2 mt-0 text-small text-gray-700"> {{ $detail->product->title }}
+                                        <p class="mb-2 mt-0 text-small text-gray-700" style="font-size:0.8rem">
+                                            {{ $detail->product->title }}
                                         </p>
                                         @guest
                                             {{-- direct to login page --}}

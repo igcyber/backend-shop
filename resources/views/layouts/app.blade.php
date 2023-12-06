@@ -19,9 +19,10 @@
     {{-- Sweet Alert --}}
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" id="theme-styles">
     {{-- Datatable --}}
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     {{-- Databtable Bootstrap --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
     {{-- Summernote --}}
     <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.css') }}">
     <!-- Start GA -->
@@ -84,7 +85,7 @@
     {{-- Sweet Alert --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     {{-- Datatable --}}
-    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     {{-- Date Picker --}}
     <script src="{{ asset('library/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     {{-- Datatable Bootstrap --}}

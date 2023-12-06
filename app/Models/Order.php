@@ -15,10 +15,4 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
-
-
-    public function profits()
-    {
-        return $this->hasMany(Profit::class);
-    }
 }

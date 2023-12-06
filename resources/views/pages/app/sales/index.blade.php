@@ -6,7 +6,7 @@
 @endpush
 
 @section('main')
-    <div class="main-content" style="padding-left:14px; !important">
+    <div class="main-content" style="padding-left:28px; !important">
         <section class="section">
             <div class="section-body">
                 <div class="row">
@@ -19,18 +19,18 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped" class="display" id="table-1" style="width:100%">
+                                <div class="table table-striped">
+                                    <table class="display" id="table-1" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 3%">
+                                                <th scope="col" style="width: 2%">
                                                     No.
                                                 </th>
-                                                <th scope="col" style="width: 8%">No. Trans</th>
-                                                <th scope="col" style="width: 14%">Tgl Pesan</th>
-                                                <th scope="col" style="width: 15%">Outlet</th>
-                                                <th scope="col" style="width: 25%">Alamat</th>
-                                                <th scope="col" style="width: 40%">Pesanan</th>
+                                                <th scope="col" style="width: 10%">No. Trans</th>
+                                                <th scope="col" style="width: 12%">Tgl Pesan</th>
+                                                <th scope="col" style="width: 12%">Outlet</th>
+                                                <th scope="col" style="width: 20%">Alamat</th>
+                                                <th scope="col" style="width: 20%">Pesanan</th>
                                                 <th scope="col" style="width: 10%">Total</th>
                                                 <th scope="col" style="width: 5%">Status</th>
                                                 <th scope="col" style="width: 10%">Pilihan</th>
@@ -39,10 +39,15 @@
                                         <tbody>
                                             @foreach ($orders as $key => $order)
                                                 <tr>
-                                                    <td class="text-center align-middle">
+                                                    <td class="text-center align-middle p-1">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $order->transaction_id }}</td>
+                                                    <td class="align-middle px-2">
+                                                        <a href="{{ route('app.sales.editOrderDetail', $order->id) }}"
+                                                            style="text-decoration:none;color:rgb(37, 34, 34);">
+                                                            <i class="far fa-edit"></i> {{ $order->transaction_id }}
+                                                        </a>
+                                                    </td>
                                                     <td class="align-middle">
                                                         {{ dateID($order->created_at) }}
                                                     </td>
@@ -55,7 +60,7 @@
                                                     <td class="align-left">
                                                         <ul style="padding: 0;">
                                                             @foreach ($order->orderDetails as $orderDetail)
-                                                                <li style="line-height: 16px;">
+                                                                <li style="line-height: 20px; width:200px;">
                                                                     @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
                                                                         @if ($orderDetail->qty_duz > 0)
                                                                             {{ $orderDetail->qty_duz }} Dus
@@ -124,18 +129,16 @@
 @endsection
 
 @push('scripts')
-    <!-- Include DataTables FixedColumns extension -->
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/fixedcolumns/3.3.5/js/dataTables.fixedColumns.js"></script>
-
     <!-- JS Libraies -->
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
-                "sortable": false,
+                "sortable": true,
                 "targets": [1, 2, 5]
             }],
             "iDisplayLength": 25,
+            responsive: true,
+            scrollX: true,
         });
     </script>
 

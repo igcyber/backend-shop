@@ -36,15 +36,6 @@
                                         <div class="input-group mt-2">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">
-                                                    <i class="fas fa-cash-register"></i>
-                                                </div>
-                                            </div>
-                                            <input type="text" name="transaction_id" class="form-control"
-                                                value="{{ $transaction_id }}" readonly>
-                                        </div>
-                                        <div class="input-group mt-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
                                                     <i class="fas fa-shop"></i>
                                                 </div>
                                             </div>
@@ -60,13 +51,13 @@
                                         <div class="form-group">
 
                                             <p class="mb-0 bg bg-success text-white p-2 text-uppercase">
-                                                <i class="fas fa-shopping-cart"></i> Keranjang Order
+                                                <i class="fas fa-shopping-cart"></i> Keranjang Pesanan
                                             </p>
                                             @if ($errors->any())
                                                 <ul style="list-style: none;">
                                                     @foreach ($errors->unique() as $error)
-                                                        <div class="alert alert-danger mt-3 mr-5 text-center text-uppercase"
-                                                            style="font-weight: bolder; line-height: 9px; !important">
+                                                        <div class="alert alert-danger mt-3 mr-5 text-center text-uppercase fs-10"
+                                                            style="font-weight: bolder; line-height: 12px; !important">
                                                             <li>{{ $error }}</li>
                                                         </div>
                                                     @endforeach
@@ -78,8 +69,7 @@
                                                         value="{{ $item->productDetail->product->title }}">
                                                     <input type="hidden" class="form-control" name="detail_id[]"
                                                         value="{{ $item->detail_id }}">
-                                                    <input type="text"
-                                                        class="form-control col-md-2 mt-3 text-small @error('qty_product.*') is-invalid @enderror"
+                                                    <input type="text" class="form-control col-md-2 mt-3"
                                                         name="qty_product[]" placeholder="Banyak">
 
                                                     <select name="satuan[]" class="form-control col-md-2 mt-3">

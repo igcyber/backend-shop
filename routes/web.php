@@ -94,6 +94,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     //delete order
     Route::delete('/sales/delete/{order}', [SalesController::class, 'delete'])->name('order.delete');
 
+    //edit order_details
+    Route::get('/sales/edit-order-detail/{orderId}', [SalesController::class, 'editOrderDetail'])->name('sales.editOrderDetail');
+
+    //update order details
+    Route::put('/sales/update-order-detail/{orderId}', [SalesController::class, 'updateOrderDetail'])->name('sales.updateOrderDetail');
+
     //Flash Sale Route
     Route::get('/sales/flash', [FlashSaleController::class, 'index'])->name('flash.sales');
     Route::put('/sales/flash/update', [FlashSaleController::class, 'update'])->name('flash.sales.update');
