@@ -49,8 +49,8 @@ class CategoryDataTable extends DataTable
 
                 return $button;
             })
-            ->rawColumns(['action', 'status']);
-        // ->setRowId('id');
+            ->rawColumns(['action', 'status'])
+            ->setRowId('id');
     }
 
     /**
@@ -89,9 +89,13 @@ class CategoryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('row_number')
+            // Column::make('row_number')
+            //     ->title('#')
+            //     ->render('meta.row + meta.settings._iDisplayStart + 1;')
+            //     ->width(10)
+            //     ->orderable(false),
+            Column::make('id')
                 ->title('#')
-                ->render('meta.row + meta.settings._iDisplayStart + 1;')
                 ->width(10)
                 ->orderable(false),
             Column::make('name')

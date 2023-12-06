@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sales_id');
             $table->unsignedBigInteger('outlet_id');
-            $table->string('nomor')->nullable();
+            $table->string('nomor', 50)->nullable();
             $table->enum('klasifikasi', ['Toko', 'Perorangan', 'MT', 'PS. Basah', 'Grosir', 'Retail']);
-            $table->string('no_telp')->nullable();
+            $table->string('no_telp', 14)->nullable();
             $table->text('address');
             //relationship sales
             $table->foreign('sales_id')->references('id')->on('users');

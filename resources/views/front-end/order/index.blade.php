@@ -52,14 +52,10 @@
                                 @endif
                                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                                 <h5 class="card-title mt-2">Total Pembayaran : {{ moneyFormat($subtotal) }}</h5>
-                                <input type="hidden" name="subtotal" value="{{ $subtotal }}">
-                                <h5 class="card-title mt-2">Petugas Sales : {{ $nonZeroQuantityCarts }}</h5>
-
                                 <p>
-                                    <small class="text-muted">*Bayar Saat Sales Datang Ke Toko Anda</small>
+                                    <small style="font-weight: bolder">*Bayar Saat Sales Datang Ke Toko Anda</small>
                                     <br>
-                                    <small class="text-muted">*Jika Terdapat Perubahan Alamat Mohon Segera
-                                        Konfirmasi</small>
+                                    <small style="font-weight: bolder">*Pastikan Pesanan Anda Sudah Sesuai</small>
                                 </p>
                                 {{-- <a href="{{ route('app.checkout', auth()->user()->id) }}" class="btn btn-primary">Checkout</a> --}}
                                 <a href="{{ route('app.cart.get', auth()->user()->id) }}"

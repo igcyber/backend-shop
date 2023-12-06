@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 
@@ -52,6 +53,27 @@ if (!function_exists('getInvoiceNumber')) {
     }
 }
 
+if (!function_exists('getUniqueTransactionId')) {
+    function getUniqueTransactionId()
+    {
+        $maxAttempts = 3;
+
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            try {
+                $transactionId = getInvoiceNumber();
+
+                if (!Order::where('transaction_id', $transactionId)->exists()) {
+                    return $transactionId;
+                }
+            } catch (\Exception $e) {
+                // Log or handle the exception if needed
+            }
+        }
+
+        throw new \Exception('Failed to generate a unique transaction_id after ' . $maxAttempts . ' attempts.');
+    }
+}
+
 if (!function_exists('countQty')) {
     function countQty($totalBiji, $bijiPerDus, $bijiPerPak)
     {
@@ -75,17 +97,18 @@ if (!function_exists('countQty')) {
     }
 }
 
-if (!function_exists('getInvoiceNumber')) {
-    function getInvoiceNumber()
+if (!function_exists('countQtyWithoutPcs')) {
+    function countQtyWithoutPcs($totalBiji, $pakPerDus)
     {
-        $month = date('m');
-        $year = date('Y');
-        $totalTransactions = DB::table('orders')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
-            ->count() + 10569;
-        $invoiceNumber = $totalTransactions . "-{$month}-{$year}";
+        // Hitung jumlah dus yang dibutuhkan
+        $jumlahDus = floor($totalBiji / $pakPerDus);
 
-        return $invoiceNumber;
+        // Hitung sisa pak jika ada
+        $sisaPak = $totalBiji % $pakPerDus;
+
+        return [
+            'jumlah_dus' => $jumlahDus,
+            'sisa_pak' => $sisaPak,
+        ];
     }
 }

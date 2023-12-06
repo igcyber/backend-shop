@@ -11,50 +11,128 @@ class DetailProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        $d_products = DetailProduct::all();
-        return view('pages.app.p_detail.index', compact('d_products', 'products'));
+
+        $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode', 'discount')->get();
+
+        return view('pages.app.p_detail.index', compact('detailProducts'));
+    }
+
+    public function create()
+    {
+        $products = Product::select('id', 'title')->get();
+        $existProduct = DetailProduct::pluck('product_id')->toArray();
+        $existProducIds = array_unique($existProduct);
+        return view('pages.app.p_detail._create', compact('products', 'existProducIds'));
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $products = Product::select('id', 'title')->get();
+        $detailProduct = DetailProduct::findOrFail($id);
+        return view('pages.app.p_detail._edit', compact('products', 'detailProduct'));
     }
 
     public function store(Request $request)
     {
-        //validate every request from user's input
         $this->validate($request, [
             'product_id' => 'required',
             'sell_price_duz' => 'required',
             'tax_type' => 'required',
             'periode' => 'required',
+            'discount' => 'nullable|numeric'
         ]);
 
-        //get all the $request
-        $data = $request->all();
-        //take product_id from $request
-        $data['product_id'] = $request->product_id;
-        //take sell_price_duz from $request and make in integer value, remove every String
-        $data['sell_price_duz'] = intval(str_replace(['Rp.', '.', ','], '',  $data['sell_price_duz']));
-        //get data product based one $request->product_id
-        $productContent =  Product::where('id', $data['product_id'])->first();
-        //get price for pak from sell_price_duz / pak_content
-        $getPricePak = $data['sell_price_duz'] / $productContent['dus_pak'];
-        //get price for pcs from $getPricePak / pak_pcs
-        $getPricePcs = $getPricePak / $productContent['pak_pcs'];
+        $productContent = Product::findOrFail($request->product_id);
 
-        //create data
-        $d_product = DetailProduct::create([
-            'product_id' => $request->product_id,
-            'sell_price_duz' => $data['sell_price_duz'],
-            'sell_price_pak' => $getPricePak,
-            'sell_price_pcs' =>  $getPricePcs,
-            'tax_type' => $request->tax_type,
-            'periode' => $request->periode
-        ]);
+        $sell_price_duz = intval(str_replace(['Rp.', '.', ','], '', $request->sell_price_duz));
 
-        if ($d_product) {
-            //redirect dengan pesan sukses
-            return redirect()->route('app.detail-products.index')->with(['success' => 'Data Berhasil Disimpan!']);
-        } else {
-            //redirect dengan pesan error
-            return redirect()->route('app.detail-products.index')->with(['error' => 'Data Gagal Disimpan!']);
+        if ($productContent->withoutPcs == 0) {
+            // If withoutPcs is equal to 0
+            $getPricePak = $sell_price_duz / $productContent->dus_pak;
+            $getPricePcs = $getPricePak / $productContent->pak_pcs;
+        } elseif ($productContent->withoutPcs == 1) {
+            // If withoutPcs is equal to 1
+            $getPricePak = $sell_price_duz / $productContent->pak_pcs;
+            // Adjust $getPricePcs accordingly if needed
         }
+
+        // Use the 'discount' field from the request
+        $discountPercentage = $request->input('discount');
+
+        // Apply the discount if it's provided
+        if ($discountPercentage !== null) {
+            $discountMultiplier = 1 - ($discountPercentage / 100);
+            $sell_price_duz *= $discountMultiplier;
+            $getPricePak *= $discountMultiplier;
+            $getPricePcs *= $discountMultiplier ?? 0;
+        }
+
+        $detail = DetailProduct::create([
+            'product_id' => $request->product_id,
+            'sell_price_duz' => $sell_price_duz,
+            'sell_price_pak' => $getPricePak,
+            'sell_price_pcs' => $getPricePcs ?? 0,
+            'tax_type' => $request->tax_type,
+            'periode' => $request->periode,
+            'discount' => $discountPercentage ?? 0,
+        ]);
+
+        $message = $detail ? 'Data Berhasil Disimpan!' : 'Data Gagal Disimpan!';
+
+        return redirect()->route('app.detail-products.index')->with(['success' => $message]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'discount' => 'nullable|numeric'
+        ]);
+
+        $detailProduct = DetailProduct::findOrFail($id);
+        $productContent = Product::findOrFail($request->product_id);
+
+        // Reverse the existing discount to get the original prices
+        $originalSellPriceDuz = $detailProduct->sell_price_duz / (1 - ($detailProduct->discount / 100));
+        $originalSellPricePak = $detailProduct->sell_price_pak / (1 - ($detailProduct->discount / 100));
+        $originalSellPricePcs = $detailProduct->sell_price_pcs / (1 - ($detailProduct->discount / 100));
+
+        // Calculate prices based on withoutPcs
+        if ($productContent->withoutPcs == 0) {
+            $getPricePak = $originalSellPriceDuz / $productContent->dus_pak;
+            $getPricePcs = $getPricePak / $productContent->pak_pcs;
+        } elseif ($productContent->withoutPcs == 1) {
+            $getPricePak = $originalSellPriceDuz / $productContent->pak_pcs;
+            // Adjust $getPricePcs accordingly if needed
+        }
+
+        // Use the new 'discount' field from the request
+        $newDiscountPercentage = $request->input('discount');
+
+        // Apply the new discount or revert to original prices if discount is 0
+        if ($newDiscountPercentage !== null && $newDiscountPercentage != 0) {
+            $discountMultiplier = 1 - ($newDiscountPercentage / 100);
+            $sell_price_duz = $originalSellPriceDuz * $discountMultiplier;
+            $getPricePak *= $discountMultiplier;
+            $getPricePcs *= $discountMultiplier ?? 0;
+        } else {
+            // If new discount is 0, revert to original prices
+            $sell_price_duz = $originalSellPriceDuz;
+            $getPricePak = $originalSellPricePak;
+            $getPricePcs = $originalSellPricePcs;
+        }
+
+        // Update the DetailProduct
+        $detailProduct->update([
+            'product_id' => $request->product_id,
+            'sell_price_duz' => $sell_price_duz,
+            'sell_price_pak' => $getPricePak,
+            'sell_price_pcs' => $getPricePcs ?? 0,
+            'tax_type' => $detailProduct->tax_type,
+            'periode' => $detailProduct->periode,
+            'discount' => $newDiscountPercentage ?? 0,
+        ]);
+
+        $message = 'Data Berhasil Diupdate!';
+        return redirect()->route('app.detail-products.index')->with(['success' => $message]);
     }
 }

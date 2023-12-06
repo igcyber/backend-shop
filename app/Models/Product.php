@@ -12,6 +12,12 @@ class Product extends Model
 
     protected $guarded = [];
 
+
+    protected $casts = [
+        'is_checked' => 'boolean',
+    ];
+
+
     /**
      * Belongs to Relationship model with category model
      *
@@ -49,6 +55,18 @@ class Product extends Model
         );
     }
 
+    /**
+     * Get the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => strtoupper($value)
+        );
+    }
+
     public function decrementStock($duz, $pak, $pcs)
     {
 
@@ -61,6 +79,10 @@ class Product extends Model
             $this->decrement('total_stock', $duz);
         }
 
+        // If $pcs has a value, decrement total_stock using $pcs value
+        $this->decrement('total_stock', $pcs);
+
+
         //How much pcs/Duz
         $pcsPerDuz = $this->dus_pak * $this->pak_pcs;
 
@@ -72,6 +94,34 @@ class Product extends Model
             'stock_duz' => $finalQty['jumlah_dus'],
             'stock_pak' => $finalQty['sisa_pak'],
             'stock_pcs' => $finalQty['sisa_biji'],
+        ]);
+
+        // Return the updated product instance
+        return $this;
+    }
+
+
+    public function decStockPack($quantityInDuz, $quantityInPak)
+    {
+        // Check if $duz is equal to 0 or empty
+        if ($quantityInDuz === 0 || empty($quantityInDuz)) {
+            // If $duz is 0 or empty, decrement total_stock using $pak value
+            $this->decrement('total_stock', $quantityInPak);
+        } else {
+            // If $duz has a value, decrement total_stock using $duz value
+            $this->decrement('total_stock', $quantityInDuz);
+        }
+
+        // Calculate the conversion factor for dus to pak to pcs
+        $packPerDuz = $this->dus_pak * $this->pak_pcs;
+
+        // Calculate remaining quantities using the global helper function
+        $remainingQuantities = countQtyWithoutPcs($this->total_stock, $packPerDuz);
+
+        // Update the remaining quantities in the product table
+        $this->update([
+            'stock_duz' => $remainingQuantities['jumlah_dus'],
+            'stock_pak' => $remainingQuantities['sisa_pak']
         ]);
 
         // Return the updated product instance

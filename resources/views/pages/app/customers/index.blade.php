@@ -9,15 +9,15 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Outlet</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-12">
+                    <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Outlet</h4>
+                                <a href="{{ route('app.customers.create') }}" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-plus"></i> Tambah Outlet
+                                </a>
                             </div>
                             <div class="card-body">
                                 <form action="#" method="GET">
@@ -95,9 +95,6 @@
                                 {{ $customers->links('vendor.pagination.bootstrap-4') }}
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-12">
-                        @include('pages.app.customers._create')
                     </div>
                 </div>
             </div>

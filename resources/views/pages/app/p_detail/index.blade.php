@@ -2,67 +2,107 @@
 
 @section('title', 'Detail Produk')
 
-@push('style')
-@endpush
-
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Detail Produk</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
-                    <div class="col-12 col-md-8 col-lg-12">
+                    <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Detail Produk</h4>
+                                <a href="{{ route('app.detail-products.create') }}" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-plus"></i> Tambah Detail Produk
+                                </a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped" id="table-1">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 10%">
+                                                <th scope="col" style="width: 5%" class="align-middle">
                                                     No. Urut
                                                 </th>
-                                                <th>Nama Produk</th>
-                                                <th>Harga Jual <br>
-                                                    (Duz/Pak/Pcs)
-                                                </th>
-                                                <th>Jenis Pajak</th>
-                                                <th>Periode</th>
-                                                <th>Pilihan</th>
+                                                <th scope="col" style="width: 25%">Nama Produk</th>
+                                                <th scope="col" style="width: 5%">Total Stok</th>
+                                                <th scope="col" style="width: 7%">Detail Stok</th>
+                                                <th scope="col" style="width: 5%">Diskon</th>
+                                                <th scope="col" style="width: 8%">Harga Jual</th>
+                                                <th scope="col" style="width: 5%">Jenis Pajak</th>
+                                                <th scope="col" style="width: 5%">Periode</th>
+                                                <th scope="col" style="width: 10%">Tanggal Kadaluarsa</th>
+                                                <th scope="col" style="width: 5%">Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($d_products as $key => $detail)
+                                            @foreach ($detailProducts as $key => $detail)
                                                 <tr>
-                                                    <td class="text-center align-middle">
+                                                    @php
+                                                        $min_stok = $detail->product->dus_pak * $detail->product->pak_pcs;
+                                                    @endphp
+                                                    <td class="text-center align-middle" style="padding: 0px 0px;">
                                                         {{ $key + 1 }}
                                                     </td>
-                                                    <td class="align-middle">{{ $detail->product->title }}</td>
-                                                    <td class="px-0 mx-0">
-                                                        <ul>
-                                                            <li>{{ moneyFormat($detail->sell_price_duz) }}</li>
-                                                            <li>{{ moneyFormat($detail->sell_price_pak) }}</li>
-                                                            <li>{{ moneyFormat($detail->sell_price_pcs) }}</li>
+                                                    <td class="align-middle" style="padding: 0px 0px;">
+                                                        @can('products.edit')
+                                                            <a href="{{ route('app.detail-products.edit', $detail->id) }}"
+                                                                style="text-decoration: none; color:#2f2222">
+                                                                {{ $detail->product->title }}
+                                                            </a>
+                                                        @endcan
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <span
+                                                            class="badge badge-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}">
+                                                            {{ $detail->product->total_stock }}
+                                                            {{ $detail->product->withoutPcs == 0 ? 'pcs' : 'pak' }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <ul style="padding: 0; list-style-type: none; line-height:18px;">
+                                                            @if ($detail->product->stock_duz > 0)
+                                                                <li>{{ $detail->product->stock_duz }} dus</li>
+                                                            @endif
+                                                            @if ($detail->product->stock_pak > 0)
+                                                                <li>{{ $detail->product->stock_pak }} pak</li>
+                                                            @endif
+                                                            @if ($detail->product->stock_pcs > 0)
+                                                                <li>{{ $detail->product->stock_pcs }} pcs</li>
+                                                            @endif
                                                         </ul>
                                                     </td>
                                                     <td class="align-middle">
+                                                        {{ number_format($detail->discount, 0) }}%
+                                                    </td>
+                                                    <td style="padding: 0px 0px;">
+                                                        <ul
+                                                            style="padding: 0; list-style-type: none; line-height: 19px;margin-top:5%;">
+                                                            <li>{{ moneyFormat($detail->sell_price_duz) }}/dus</li>
+                                                            @if ($detail->sell_price_duz !== $detail->sell_price_pak)
+                                                                <li>{{ moneyFormat($detail->sell_price_pak) }}/pak</li>
+                                                            @endif
+                                                            @if ($detail->sell_price_pcs != 0)
+                                                                <li>{{ moneyFormat($detail->sell_price_pcs) }}/pcs</li>
+                                                            @endif
+                                                        </ul>
+                                                    </td>
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ $detail->tax_type }}
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle" style="padding: 0px 0px;">
                                                         {{ $detail->periode }}
                                                     </td>
-                                                    <td class="align-middle">
-                                                        @can('products.edit')
-                                                            <a href="{{ route('app.products.edit', $detail->id) }}"
+                                                    <td class="align-middle" style="padding: 0px 0px;">
+                                                        {{ dateID($detail->product->exp_date) }}
+                                                    </td>
+                                                    <td class="align-middle text-center" style="padding: 0px 0px;">
+                                                        {{-- @can('products.edit')
+                                                            <a href="{{ route('app.detail-products.edit', $detail->id) }}"
                                                                 class="btn btn-success btn-sm">
                                                                 <i class="fa fa-pencil-alt me-1" title="Edit Produk">
                                                                 </i>
                                                             </a>
-                                                        @endcan
+                                                        @endcan --}}
                                                         @can('products.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $detail->id }}"
                                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
@@ -78,9 +118,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-12">
-                        @include('pages.app.p_detail._create')
-                    </div>
                 </div>
             </div>
         </section>
@@ -94,38 +131,10 @@
             "columnDefs": [{
                 "sortable": false,
                 "targets": [1, 2, 5]
-            }]
+            }],
+            "iDisplayLength": 25
         });
     </script>
-
-    <script>
-        //format rupiah real-time
-        var rupiah = document.getElementById('rupiahInput');
-        rupiah.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah.value = formatRupiah(this.value, 'Rp. ');
-        });
-
-        /* Fungsi formatRupiah */
-        function formatRupiah(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            // tambahkan titik jika yang di input sudah menjadi angka ribuan
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-        }
-    </script>
-
 
     <!-- Page Specific JS File -->
     <script>

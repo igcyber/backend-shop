@@ -18,6 +18,12 @@
         @include('front-end.layouts._about')
     </section>
 
+    <!-- banner promosi -->
+    <section
+        class="py-2 mx-5 {{ $flashSaleItems->where('detail_id', '!=', 0)->where('status', 1)->isEmpty()? 'd-none': '' }}">
+        @include('front-end.layouts._promotion')
+    </section>
+
     {{-- main content --}}
     <div class="container">
         <div class="title text-center mt-5">
@@ -26,7 +32,7 @@
         </div>
 
         <div class="row g-0">
-            <div class="d-flex flex-wrap justify-content-center mt-5 filter-button-group">
+            <div class="d-flex flex-wrap justify-content-center mt-2 filter-button-group">
                 <button type="button" class="btn m-2 text-dark shadow active-filter-btn" data-filter="*">SEMUA</button>
                 @foreach ($categories as $key => $category)
                     <button type="button" class="btn m-2 text-dark shadow"
@@ -38,38 +44,41 @@
             <!-- bagian foto produk -->
             <section class="py-3">
                 <div class="container px-4 px-lg-5 mt-3">
-                    <div class="collection-list mt-2 row gx-0 gy-3">
+                    <div class="collection-list mt-2 row gx-0 gy-3" style="height: 2000px;">
                         @foreach ($detailProducts as $key => $detail)
-                            <div class="col mb-5 col-lg-4 col-xl-3 p-2 category-{{ $key }}">
+                            <div class="col mb-2 col-lg-4 col-xl-3 p-2 category-{{ $key }}">
                                 <div class="card h-100 shadow">
-                                    <!-- Product image-->
-                                    <img class="card-img-top"
-                                        src="{{ Storage::exists($detail->product->image) ? Storage::url($detail->product->image) : asset('img/no-image.png') }}"
-                                        alt="Image"" alt="Product Image" />
                                     <!-- Product details-->
-                                    <div class="card-body p-3">
-
-                                        <span class="badge bg-info py-1">Nama Produk</span>
-                                        <h5 class="card-title mt-1 mb-2" style="font-size: 1rem">
-                                            {{ $detail->product->title }}</h5>
-
-                                        {{-- <button type="button" class="btn btn-sm btn-info d-inline" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal-{{ $detail->id }}">
-                                            <i class="fas fa-eye"></i> Detail
-                                        </button> --}}
+                                    @if ($flashSaleItems->where('detail_id', $detail->id)->where('status', 1)->isNotEmpty())
+                                        <span class="badge bg-info mb-0" style="text-align: left">
+                                            <i class="fas fa-bell">
+                                                {{ number_format($detail->discount, 0) }}
+                                            </i>
+                                            % Diskon
+                                        </span>
+                                    @else
+                                        <span class="badge bg-primary mb-0">
+                                            <i class="fas fa-bell text-primary">
+                                            </i>
+                                        </span>
+                                    @endif
+                                    <div class="card-body p-1">
+                                        <p class="mb-2 mt-0 text-small text-gray-700" style="font-size:0.8rem">
+                                            {{ $detail->product->title }}
+                                        </p>
                                         @guest
                                             {{-- direct to login page --}}
-                                            <a href="{{ route('login') }}" class="btn btn-sm btn-success" target="_blank">
-                                                <i class="fas fa-cart-plus"></i> Tambah
+                                            <a href="{{ route('login') }}" target="_blank">
+                                            @else
+                                                <a href="{{ route('app.cart.add', [$detail->id, auth()->user()->id]) }}">
+                                                @endguest
+                                                <!-- Product image-->
+                                                @php
+                                                    $imageSource = Storage::exists($detail->product->image) ? Storage::url($detail->product->image) : asset('img/no-image.png');
+                                                @endphp
+                                                <img class="card-img-top" src="{{ $imageSource }}" alt="Image"
+                                                    alt="Product Image" />
                                             </a>
-                                        @else
-                                            <a href="{{ route('app.cart.add', [$detail->id, auth()->user()->id]) }}"
-                                                class="btn btn-sm btn-success">
-                                                <i class="fas fa-cart-plus"></i> Tambah
-                                            </a>
-                                        @endguest
-
-
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +86,7 @@
                     </div>
                     <!-- Tombol "Lihat Lebih Lengkap" -->
                     <div class="container text-end">
-                        <a href="#" class="btn btn-primary shadow">Lihat Lebih Lengkap <i
+                        <a href="#" class="btn btn-default shadow">Lihat Semua Produk <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -86,9 +95,6 @@
 
         </div>
     </div>
-
-    <!-- Modal -->
-    @include('front-end.layouts._modal')
 
 @endsection
 

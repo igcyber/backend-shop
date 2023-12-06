@@ -5,38 +5,39 @@ namespace App\Http\Controllers\Apps;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\DetailProduct;
+use App\Models\FlashSaleItem;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index()
     {
-
-        //tampilkan product dengan stock diatas 0 duz, dan status is_top true
-        //urutkan berdasarkan id dari table detail_products dan batasi hanya ambil 8 item
-        // $detailProducts = DetailProduct::whereHas('product', function ($query) {
-        //     $query->where('stock', '>', 0);
-        //     $query->where('stock_baal', '>', 0);
-        //     $query->where('stock_pack', '>', 0);
-        //     $query->where('stock_pcs', '>', 0);
-        // })->orderBy('id', 'ASC')->limit(8)->get();
-
-        // dd($detailProducts);
-        // $detailProducts = DetailProduct::where('is_top', 1)
-        //     ->orderBy('id', 'ASC')
-        //     ->limit(8)
-        //     ->get();
-
         // Query detail_products where total_stock in products is not equal to zero
-        $detailProducts = DetailProduct::whereHas('product', function ($query) {
-            $query->where('total_stock', '>', 0);
-        })->get();
+        $detailProducts = Cache::remember('detailProducts', 1, function () {
+            return DetailProduct::with('product')
+                ->whereHas('product', function ($query) {
+                    $query->where('total_stock', '>', 0);
+                })
+                ->select('id', 'product_id', 'discount')
+                ->limit(8)
+                ->get();
+        });
+
+        $flashSaleItems = FlashSaleItem::where('status', 1)
+            ->with('detailProduct', 'flashSale')
+            ->select('id', 'detail_id', 'flash_id', 'status')
+            ->get();
+
+        // relationship is 'detailProducts' and 'discount' is the column name
+        $maxDiscount = $flashSaleItems->pluck('detailProduct.discount')->max();
+
 
         $categories = Category::where('status', 1)
             ->orderBy('name', 'ASC')
             ->limit(6)
             ->get();
 
-        return view('front-end.index', compact('categories', 'detailProducts'));
+        return view('front-end.index', compact('categories', 'detailProducts', 'flashSaleItems', 'maxDiscount'));
     }
 }

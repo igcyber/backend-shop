@@ -37,10 +37,4 @@ class Customer extends Model
     {
         return $this->belongsTo(User::class, 'outlet_id');
     }
-
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
 }

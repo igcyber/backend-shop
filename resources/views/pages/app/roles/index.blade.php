@@ -9,12 +9,9 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Hak Akses</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-8">
+                    <div class="col-md-12 col-lg-8">
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Hak Akses</h4>
@@ -87,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <div class="col-md-12 col-lg-4">
                         @include('pages.app.roles._create')
                     </div>
                 </div>

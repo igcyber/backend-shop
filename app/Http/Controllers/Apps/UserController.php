@@ -18,7 +18,10 @@ class UserController extends Controller
     {
         $users = User::when(request()->q, function ($users) {
             $users = $users->where('name', 'like', '%' . request()->q . '%');
-        })->with('roles')->latest()->paginate(10);
+        })
+            ->with('roles')
+            ->latest()
+            ->paginate(10);
 
         $roles = Role::all();
 
@@ -27,23 +30,16 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:200',
-            'username' => 'required|max:20|unique:users,username',
+        $request->validate([
+            'name' => 'required|max:150',
+            'username' => 'required|max:150|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:8',
         ], [
-            'name.required' => 'Data Wajib Diisi',
-            'name.max' => 'Data Terlalu Panjang',
-            'username.required' => 'Data Wajib Diisi',
-            'username.max' => 'Data Terlalu Panjang',
-            'username.unique' => 'Data Sudah Terdaftar',
-            'email.required' => 'Data Wajib Diisi',
-            'email.email' => 'Format Email Salah',
-            'email.unique' => 'Email Sudah Terdaftar',
-            'password.required' => 'Data Wajib Diisi',
-            'password.confirmed' => 'Konfirmasi Password Salah',
-            'password.min' => 'Password Terlalu Pendek',
+            'name.*' => 'Data :attribute Wajib Diisi',
+            'username.*' => 'Data :attribute Wajib Diisi',
+            'email.*' => 'Data :attribute Wajib Diisi',
+            'password.*' => 'Data :attribute Wajib Diisi',
         ]);
 
         $user = User::create([
@@ -57,13 +53,9 @@ class UserController extends Controller
         $user->assignRole($request->roles);
 
         //redirect back to roles page
-        if ($user) {
-            //redirect dengan pesan sukses
-            return redirect()->route('app.users.index')->with(['success' => 'Data Berhasil Disimpan!']);
-        } else {
-            //redirect dengan pesan error
-            return redirect()->route('app.users.index')->with(['error' => 'Data Gagal Disimpan!']);
-        }
+        $message = $user ? 'Data Berhasil Disimpan!' : 'Data Gagal Disimpan!';
+
+        return redirect()->route('app.users.index')->with(['success' => $message]);
     }
 
     public function edit($id)
@@ -83,52 +75,40 @@ class UserController extends Controller
             'password' => 'nullable',
         ]);
 
-        //check if password is empty
-        if ($request->password == '') {
-            $user->update([
-                'name' => $request->name,
-                'username' => $request->username,
-                'email' => $request->email,
-            ]);
-        } else {
-            $user->update([
-                'name' => $request->name,
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
+        $data = [
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
         }
 
-        //assign roles to user
+        $user->update($data);
+
+        // Assign roles to user
         $user->syncRoles($request->roles);
 
-        //redirect back to roles page
-        if ($user) {
-            //redirect dengan pesan sukses
-            return redirect()->route('app.users.index')->with(['success' => 'Data Berhasil Diperbarui!']);
-        } else {
-            //redirect dengan pesan error
-            return redirect()->route('app.users.index')->with(['error' => 'Data Gagal Diperbarui!']);
-        }
+        // Redirect back to users page
+        $message = $user ? 'Data Berhasil Diperbarui!' : 'Data Gagal Diperbarui!';
+
+        return redirect()->route('app.users.index')->with(['success' => $message]);
     }
 
     public function destroy($id)
     {
-        //find user
+
         $user = User::findOrFail($id);
 
-        //delete user
-        $user->delete();
+        // Check if there are related records in the 'customers' table
+        if ($user->sales()->exists() || $user->outlet()->exists()) {
+            return response()->json(['status' => 'error']);
+        }
 
-        //check for status destroy
-        if ($user) {
-            return response()->json([
-                'status' => 'success'
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error'
-            ]);
+        // Perform the delete
+        if ($user->delete()) {
+            return response()->json(['status' => 'success']);
         }
     }
 }

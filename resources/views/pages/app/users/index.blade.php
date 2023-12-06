@@ -9,12 +9,9 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Pengguna</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-8">
+                    <div class="col-md-12 col-lg-8">
                         <div class="card">
                             <div class="card-header">
                                 <h4>Data Pengguna</h4>
@@ -91,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <div class="col-md-12 col-lg-4">
                         @include('pages.app.users._create')
                     </div>
                 </div>
