@@ -14,21 +14,18 @@
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Outlet</h4>
+                                <h4>DATA OUTLET</h4>
                                 <a href="{{ route('app.customers.create') }}" class="btn btn-primary ml-auto">
-                                    <i class="fas fa-plus"></i> Tambah Outlet
+                                    <i class="fas fa-plus"></i> TAMBAH OUTLET
                                 </a>
                             </div>
                             <div class="card-body">
                                 <form action="#" method="GET">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" name="q"
-                                            placeholder="Cari Berdasarkan Nama Outlet">
-                                        <button class="btn btn-primary input-group-text" type="submit">
-                                            <i class="fa fa-search me-2 text-white"></i>
-                                        </button>
-                                        <button class="btn btn-primary input-group-text" onclick="resetPage()">
-                                            <i class="fas fa-sync-alt me-2 text-white"></i>
+                                            placeholder="Cari Nama Outlet">
+                                        <button class="btn btn-outline-primary input-group-text" onclick="resetPage()">
+                                            <i class="fas fa-sync-alt me-2"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -36,9 +33,9 @@
                                     <table class="table table-bordered table-m">
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="width: 5%">No. Urut</th>
-                                                <th scope="col">Nomor Outlet</th>
-                                                <th scope="col">Nama Outlet</th>
+                                                <th scope="col" style="width: 5%">No.</th>
+                                                <th scope="col">Nomor</th>
+                                                <th scope="col">Nama</th>
                                                 <th scope="col">Klasifikasi</th>
                                                 <th scope="col">Telp. Kantor</th>
                                                 <th scope="col">Alamat</th>
@@ -73,14 +70,14 @@
                                                     <td class="text-center">
 
                                                         <a href="{{ route('app.roles.edit', $customer->id) }}"
-                                                            class="btn btn-success btn-sm">
+                                                            class="btn btn-outline-success btn-sm">
                                                             <i class="fa fa-pencil-alt me-1" title="Edit Hak Akses">
                                                             </i>
                                                         </a>
 
 
                                                         <button onclick="Delete(this.id)" id="{{ $customer->id }}"
-                                                            class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                            class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"
                                                                 title="Hapus Hak Akses"></i>
                                                         </button>
 

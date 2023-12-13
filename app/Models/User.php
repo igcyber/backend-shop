@@ -84,4 +84,9 @@ class User extends Authenticatable
             get: fn ($value) => strtoupper($value)
         );
     }
+
+    public function markedProducts()
+    {
+        return $this->hasMany(MarkedProduct::class);
+    }
 }

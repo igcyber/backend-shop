@@ -1,19 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Detil Produk')
+@section('title', 'Detail Produk')
 
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Diskon Produk</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Perbarui Diskon Produk</h4>
+                                <h4>PERBARUI DETAIL PRODUK</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.detail-products.update', $detailProduct->id) }}" method="POST">
@@ -70,17 +67,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="text-right mt-3">
-                                        <button class="btn btn-sm btn-primary" type="submit">
-                                            <i class="fa fa-paper-plane"></i> Update</button>
-                                        <a href="{{ route('app.detail-products.index') }}" class="btn btn-sm btn-info">
-                                            <i class="fas fa-arrow-left"></i>
-                                            Kembali
-                                        </a>
+                                    <div class="text-right mt-4">
+                                        <button class="btn btn-lg btn-outline-primary" type="submit">
+                                            <i class="fa fa-paper-plane"></i> UPDATE</button>
                                     </div>
                                 </form>
-
-
+                            </div>
+                            <div class="card-footer text-right">
+                                <a href="{{ route('app.detail-products.index') }}" class="btn btn-lg btn-outline-success">
+                                    <i class="fas fa-arrow-left"></i>
+                                    KEMBALI
+                                </a>
                             </div>
                         </div>
                     </div>

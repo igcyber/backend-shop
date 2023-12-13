@@ -5,32 +5,57 @@
 @section('main')
     <div class="main-content">
         <section class="section">
+            <div class="section-header">
+                <h4>DATA DETAIL PRODUK</h4>
+                <div class="ml-auto">
+                    <a href="{{ route('app.detail-products.create') }}" class="btn btn-primary ml-auto">
+                        <i class="fas fa-plus"></i> TAMBAH DETAIL PRODUK
+                    </a>
+                </div>
+            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4>Data Detail Produk</h4>
-                                <a href="{{ route('app.detail-products.create') }}" class="btn btn-primary ml-auto">
-                                    <i class="fas fa-plus"></i> Tambah Detail Produk
-                                </a>
-                            </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped" id="table-1">
+                                <form action="{{ route('app.detail-products.import') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-row mb-3">
+                                        <label for="img" style="font-weight: bold">Pilih File Excel</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-file-excel"></i>
+                                                </div>
+                                            </div>
+                                            <input type="file" name="excel_file" id="excel_file"
+                                                class="form-control col-md-2 @error('excel_file') @enderror">
+                                            <button type="submit" class="btn btn-outline-info">IMPORT DATA</button>
+                                        </div>
+                                        @error('excel_file')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </form>
+                                <hr>
+                                <div class="table table-striped">
+                                    <table class="display" id="table-1">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%" class="align-middle">
-                                                    No. Urut
+                                                    No.
                                                 </th>
-                                                <th scope="col" style="width: 25%">Nama Produk</th>
+                                                <th scope="col" style="width: 22%">Nama</th>
                                                 <th scope="col" style="width: 5%">Total Stok</th>
                                                 <th scope="col" style="width: 7%">Detail Stok</th>
                                                 <th scope="col" style="width: 5%">Diskon</th>
-                                                <th scope="col" style="width: 8%">Harga Jual</th>
-                                                <th scope="col" style="width: 5%">Jenis Pajak</th>
+                                                <th scope="col" style="width: 10%">Harga Jual</th>
+                                                <th scope="col" style="width: 6%">Jenis Pajak</th>
                                                 <th scope="col" style="width: 5%">Periode</th>
-                                                <th scope="col" style="width: 10%">Tanggal Kadaluarsa</th>
+                                                <th scope="col" style="width: 9%">Tgl Kadaluarsa</th>
                                                 <th scope="col" style="width: 5%">Pilihan</th>
                                             </tr>
                                         </thead>
@@ -47,6 +72,7 @@
                                                         @can('products.edit')
                                                             <a href="{{ route('app.detail-products.edit', $detail->id) }}"
                                                                 style="text-decoration: none; color:#2f2222">
+                                                                <i class="far fa-edit"></i>
                                                                 {{ $detail->product->title }}
                                                             </a>
                                                         @endcan
@@ -105,7 +131,7 @@
                                                         @endcan --}}
                                                         @can('products.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $detail->id }}"
-                                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                                class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"
                                                                     title="Hapus Produk"></i>
                                                             </button>
                                                         @endcan
@@ -130,9 +156,11 @@
         $("#table-1").dataTable({
             "columnDefs": [{
                 "sortable": false,
-                "targets": [1, 2, 5]
+                "targets": [1, 2, 3, 4, 5, 6, 7, 8, 9]
             }],
-            "iDisplayLength": 25
+            "iDisplayLength": 25,
+            responsive: true,
+            scrollX: true,
         });
     </script>
 

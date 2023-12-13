@@ -14,18 +14,18 @@
                     <div class="col-md-12 col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Pengguna</h4>
+                                <h4>DATA PENGGUNA</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.users.index') }}" method="GET">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" name="q"
-                                            placeholder="cari berdasarkan nama pengguna">
-                                        <button class="btn btn-primary input-group-text" type="submit">
+                                            placeholder="Cari Nama Pengguna">
+                                        {{-- <button class="btn btn-primary input-group-text" type="submit">
                                             <i class="fa fa-search me-2 text-white"></i>
-                                        </button>
-                                        <button class="btn btn-primary input-group-text" onclick="resetPage()">
-                                            <i class="fas fa-sync-alt me-2 text-white"></i>
+                                        </button> --}}
+                                        <button class="btn btn-outline-primary input-group-text" onclick="resetPage()">
+                                            <i class="fas fa-sync-alt me-2"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -54,7 +54,7 @@
                                                     </td>
                                                     <td>
                                                         @foreach ($user->roles as $role)
-                                                            <span class="badge badge-primary shadow border-0 ms-2 mb-2">
+                                                            <span class="badge badge-primary border-0 ms-2 mb-2">
                                                                 {{ $role->name }}
                                                             </span>
                                                         @endforeach
@@ -63,14 +63,14 @@
 
                                                         @can('roles.edit')
                                                             <a href="{{ route('app.users.edit', $user->id) }}"
-                                                                class="btn btn-success btn-sm">
+                                                                class="btn btn-outline-success btn-sm">
                                                                 <i class="fa fa-pencil-alt me-1" title="Edit Hak Akses">
                                                                 </i>
                                                             </a>
                                                         @endcan
                                                         @can('roles.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $user->id }}"
-                                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                                class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"
                                                                     title="Hapus Hak Akses"></i>
                                                             </button>
                                                         @endcan

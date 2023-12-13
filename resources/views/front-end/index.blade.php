@@ -18,11 +18,10 @@
         @include('front-end.layouts._about')
     </section>
 
-    <!-- banner promosi -->
-    <section
-        class="py-2 mx-5 {{ $flashSaleItems->where('detail_id', '!=', 0)->where('status', 1)->isEmpty()? 'd-none': '' }}">
-        @include('front-end.layouts._promotion')
-    </section>
+    <!-- our product -->
+    {{-- <section id="collection" class="py-5 mx-3 font-gone">
+        @include('front-end.layouts._product')
+    </section> --}}
 
     {{-- main content --}}
     <div class="container">
@@ -70,7 +69,7 @@
                                             {{-- direct to login page --}}
                                             <a href="{{ route('login') }}" target="_blank">
                                             @else
-                                                <a href="{{ route('app.cart.add', [$detail->id, auth()->user()->id]) }}">
+                                                <a href="{{ route('app.markProduct', [$detail->id, auth()->user()->id]) }}">
                                                 @endguest
                                                 <!-- Product image-->
                                                 @php
@@ -95,6 +94,12 @@
 
         </div>
     </div>
+
+    <!-- banner promosi -->
+    <section
+        class="py-2 mx-5 {{ $flashSaleItems->where('detail_id', '!=', 0)->where('status', 1)->isEmpty()? 'd-none': '' }}">
+        @include('front-end.layouts._promotion')
+    </section>
 
 @endsection
 

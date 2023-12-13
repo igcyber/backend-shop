@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Pengguna')
+@section('title', 'Perbarui Data Pengguna')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -9,15 +9,12 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Pengguna</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Edit Pengguna</h4>
+                                <h4>Perbarui Data Pengguna</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.users.update', $user->id) }}" method="POST">
@@ -78,12 +75,17 @@
                                         @endforeach
                                     </div>
                                     <div class="text-right mt-3">
-                                        <button class="btn btn-sm btn-primary" type="submit">
-                                            <i class="fa fa-paper-plane"></i> Perbarui</button>
-                                        <a href="{{ route('app.users.index') }}" class="btn btn-sm btn-info">
-                                            <i class="fa fa-arrow-back"></i> Kembali</a>
+                                        <div class="text-right mt-3">
+                                            <button class="btn btn-lg btn-outline-primary p-2 px-4" type="submit">
+                                                <i class="fa fa-paper-plane"></i> PERBARUI </button>
+                                        </div>
                                     </div>
                                 </form>
+                            </div>
+                            <hr>
+                            <div class="card-footer">
+                                <a href="{{ route('app.users.index') }}" class="btn btn-lg btn-outline-info text-right">
+                                    <i class="fa fa-arrow-left"></i> KEMBALI</a>
                             </div>
                         </div>
                     </div>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Apps;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Imports\CategoryImport;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\DataTables\CategoryDataTable;
 
 class CategoryController extends Controller
@@ -80,5 +82,22 @@ class CategoryController extends Controller
         $category->status = $request->status == 'true' ? 1 : 0;
         $category->save();
         return response(['message' => 'Status Has Been Updated']);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        try {
+            $file = $request->file('excel_file');
+            $import = new CategoryImport();
+            Excel::import($import, $file);
+
+            return redirect()->route('app.categories.index')->with(['success' => 'Data imported successfully']);
+        } catch (\Exception $e) {
+            return redirect()->route('app.categories.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
+        }
     }
 }

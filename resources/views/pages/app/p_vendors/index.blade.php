@@ -13,14 +13,37 @@
 @section('main')
     <div class="main-content">
         <section class="section">
+            <div class="section-header">
+                <h4>DATA PABRIKAN PRODUK</h4>
+            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-8 col-lg-8">
                         <div class="card">
-                            <div class="card-header">
-                                <h4>Data Pabrikan Produk</h4>
-                            </div>
                             <div class="card-body">
+                                <form action="{{ route('app.vendors.import.excel') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-row mb-3">
+                                        <label for="img" style="font-weight: bold">Pilih File Excel</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-file-excel"></i>
+                                                </div>
+                                            </div>
+                                            <input type="file" name="excel_file" id="excel_file"
+                                                class="form-control col-md-2 @error('excel_file') @enderror">
+                                            <button type="submit" class="btn btn-outline-info">IMPORT DATA</button>
+                                        </div>
+                                        @error('excel_file')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </form>
+                                <hr>
                                 <div class="table table-responsive">
                                     {{ $dataTable->table() }}
                                 </div>
