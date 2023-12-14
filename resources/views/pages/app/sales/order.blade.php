@@ -14,7 +14,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>BUAT PESANAN</h4>
-                                <a href="{{ route('app.sales') }}" class="btn btn-sm btn-warning ml-auto">
+                                <a href="{{ route('app.sales') }}" class="btn btn-sm btn-outline-warning ml-auto">
                                     <i class="fas fa-arrow-left"></i>
                                     KEMBALI
                                 </a>
@@ -77,11 +77,10 @@
                                                         <option value="pak">pak</option>
                                                         <option value="pcs">pcs</option>
                                                     </select>
-                                                    <button type="button" class="btn btn-sm btn-danger col-md-1 mt-3"
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger col-md-1 mt-3"
                                                         onclick="deleteItem(this.id)" id="{{ $item->id }}">
-                                                        <i
-                                                            class="fa
-                                                    fa-times"></i>
+                                                        <i class="fa fa-times"></i>
                                                     </button>
                                                 </div>
                                             @endforeach
@@ -89,8 +88,8 @@
                                         </div>
 
                                         <div class="text-right mt-3">
-                                            <button class="btn btn-sm btn-primary" type="submit">
-                                                <i class="fa fa-paper-plane"></i> Submit</button>
+                                            <button class="btn btn-outline-primary" type="submit">
+                                                <i class="fa fa-paper-plane"></i> SUBMIT</button>
                                         </div>
                                     @endif
                                 </form>

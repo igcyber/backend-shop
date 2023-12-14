@@ -104,6 +104,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     //sales delete cart
     Route::delete('/sales/delete/{id}', [SalesController::class, 'deleteCart'])->name('sales.delete');
 
+    Route::get('/sales/process-order/{userId}', [SalesController::class, 'processOrder'])->name('sales.process-order');
+
+
     //confirmation order
     Route::get('/confirmation/{type}/{order}', [SalesController::class, 'confirmation'])->name('confirmation');
     //update order
