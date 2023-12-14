@@ -7,10 +7,10 @@ use App\Models\Vendor;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Picqer\Barcode\BarcodeGeneratorHTML;
 use App\Http\Controllers\Controller;
-use Faker\Core\Barcode;
 use Picqer\Barcode\BarcodeGeneratorSVG;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -86,7 +86,7 @@ class ProductController extends Controller
             'stock_duz' => $hasil_perhitungan['jumlah_dus'],
             'stock_pak' => $hasil_perhitungan['sisa_pak'],
             'stock_pcs' => $hasil_perhitungan['sisa_biji'] ?? 0,
-            'dus_pak' => $data['pak_content'],
+            'dus_pak' => $data['dus_pak'],
             'pak_pcs' => $data['pak_pcs'],
             'exp_date' => $data['exp_date'],
             'short_description' => $data['short_description']
@@ -131,7 +131,7 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $data['total_stock'] = $request->filled('total_stock') ? $data['total_stock'] : 0;
-        $data['pak_content'] = $request->filled('pak_content') ? $data['pak_content'] : 0;
+        $data['dus_pak'] = $request->filled('dus_pak') ? $data['dus_pak'] : 0;
         $data['pak_pcs'] = $request->filled('pak_pcs') ? $data['pak_pcs'] : 0;
         $data['exp_date'] = $request->filled('exp_date') ? Carbon::parse($data['exp_date'])->format('Y-m-d') : null;
 
@@ -146,5 +146,22 @@ class ProductController extends Controller
         }
 
         return null;
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        try {
+            $file = $request->file('excel_file');
+            $import = new ProductImport();
+            Excel::import($import, $file);
+            return redirect()->route('app.products.index')->with(['success' => 'Data imported successfully']);
+        } catch (\Exception $e) {
+            // return redirect()->route('app.products.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
+            return redirect()->route('app.products.index')->with(['error' => 'Terjadi Masalah Silahkan Coba Lagi']);
+        }
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Hak Akses')
+@section('title', 'Perbarui Hak Akses')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -9,22 +9,19 @@
 @section('main')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1>Halaman Hak Akses</h1>
-            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Edit Hak Akses</h4>
+                                <h4>HAK AKSES</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.roles.update', $role->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
-                                        <label>Nama Hak Akses</label>
+                                        <label>Nama</label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                             name="name" value="{{ $role->name }}">
                                         @error('name')
@@ -34,7 +31,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label>Hak Izin</label>
+                                        <label>Izin Akses</label>
                                         <br>
                                         @foreach ($permissions as $permission)
                                             <div class="form-check form-check-inline">
@@ -48,12 +45,18 @@
                                         @endforeach
                                     </div>
                                     <div class="text-right mt-3">
-                                        <button class="btn btn-sm btn-primary" type="submit">
-                                            <i class="fa fa-paper-plane"></i> Submit</button>
-                                        <a href="{{ route('app.roles.index') }}" class="btn btn-sm btn-info">
-                                            <i class="fa fa-arrow-back"></i> Kembali</a>
+                                        <div class="text-right mt-3">
+                                            <button class="btn btn-lg btn-outline-primary p-2 px-4" type="submit">
+                                                <i class="fa fa-paper-plane"></i> PERBARUI </button>
+                                        </div>
+
                                     </div>
                                 </form>
+                            </div>
+                            <hr>
+                            <div class="card-footer">
+                                <a href="{{ route('app.roles.index') }}" class="btn btn-lg btn-outline-info">
+                                    <i class="fa fa-arrow-left"></i> KEMBALI</a>
                             </div>
                         </div>
                     </div>

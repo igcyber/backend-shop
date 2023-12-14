@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Apps;
 use App\Models\Vendor;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Imports\VendorImport;
 use App\DataTables\VendorDataTable;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VendorController extends Controller
 {
@@ -101,5 +103,22 @@ class VendorController extends Controller
         $vendor->status = $request->status == 'true' ? 1 : 0;
         $vendor->save();
         return response(['message' => 'Status Has Been Updated']);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        try {
+            $file = $request->file('excel_file');
+            $import = new VendorImport();
+            Excel::import($import, $file);
+
+            return redirect()->route('app.vendors.index')->with(['success' => 'Data imported successfully']);
+        } catch (\Exception $e) {
+            return redirect()->route('app.vendors.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
+        }
     }
 }

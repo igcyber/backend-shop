@@ -14,9 +14,16 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>DATA PESANAN</h4>
-                                <a href="{{ route('app.sales.order') }}" class="btn btn-primary ml-auto">
-                                    <i class="fas fa-cart-plus"></i> TAMBAH PESANAN
-                                </a>
+                                <div class="ml-auto">
+                                    <a href="{{ route('app.allOrder') }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-concierge-bell"></i> PESANAN BARU
+                                    </a>
+                                    <a href="{{ route('app.sales.order') }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-plus"></i> TAMBAH PESANAN
+                                    </a>
+                                </div>
+
+
                             </div>
                             <div class="card-body">
                                 <div class="table table-striped">
@@ -43,19 +50,16 @@
                                                         {{ $key + 1 }}
                                                     </td>
                                                     <td class="align-middle px-2">
-                                                        <a href="{{ route('app.sales.editOrderDetail', $order->id) }}"
-                                                            style="text-decoration:none;color:rgb(37, 34, 34);">
-                                                            <i class="far fa-edit"></i> {{ $order->transaction_id }}
-                                                        </a>
+                                                        {{ $order->transaction_id }}
                                                     </td>
                                                     <td class="align-middle">
                                                         {{ dateID($order->created_at) }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $order->customer_name }}
+                                                        {{ $order->outlet->name }}
                                                     </td>
                                                     <td class="align-middle">
-                                                        {!! $order->customer_address !!}
+                                                        {!! $customer->address !!}
                                                     </td>
                                                     <td class="align-left">
                                                         <ul style="padding: 0;">
@@ -93,7 +97,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown d-inline mr-2">
-                                                            <button class="btn btn-sm btn-info dropdown-toggle"
+                                                            <button class="btn btn-sm btn-outline-info dropdown-toggle"
                                                                 type="button" id="dropdownMenuButton3"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
@@ -104,9 +108,9 @@
                                                                 <a class="dropdown-item"
                                                                     href="{{ route('app.confirmation', ['accept', $order->id]) }}">Konfirmasi
                                                                     Pesanan</a>
-                                                                <a class="dropdown-item"
+                                                                {{-- <a class="dropdown-item"
                                                                     href="{{ route('app.confirmation', ['decline', $order->id]) }}">Batalkan
-                                                                    Pesanan</a>
+                                                                    Pesanan</a> --}}
                                                                 <a class="dropdown-item" href="#">Hapus Pesanan</a>
                                                             </div>
                                                         </div>
@@ -133,8 +137,8 @@
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
-                "sortable": true,
-                "targets": [1, 2, 5]
+                "sortable": false,
+                "targets": [1, 2, 3, 4, 5, 6, 7, 8]
             }],
             "iDisplayLength": 25,
             responsive: true,

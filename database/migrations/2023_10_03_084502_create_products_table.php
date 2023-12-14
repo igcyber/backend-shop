@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('short_description')->nullable();
             $table->integer('dus_pak');
             $table->integer('pak_pcs');
-            $table->smallInteger('withoutPcs')->default(0);
+            $table->smallInteger('withoutpcs')->default(0);
             $table->integer('total_stock');
             $table->integer('stock_duz')->nullable();
             $table->integer('stock_pak')->nullable();

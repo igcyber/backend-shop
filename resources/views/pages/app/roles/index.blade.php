@@ -14,18 +14,16 @@
                     <div class="col-md-12 col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Data Hak Akses</h4>
+                                <h4>DATA HAK AKSES</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.roles.index') }}" method="GET">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" name="q"
-                                            placeholder="cari berdasarkan hak akses">
-                                        <button class="btn btn-primary input-group-text" type="submit">
-                                            <i class="fa fa-search me-2 text-white"></i>
-                                        </button>
-                                        <button class="btn btn-primary input-group-text" onclick="resetPage()">
-                                            <i class="fas fa-sync-alt me-2 text-white"></i>
+                                            placeholder="Cari Hak Akes">
+                                        <button class="btn btn-outline-primary input-group-text"
+                                            title="Refresh Hasil Pencarian" onclick="resetPage()">
+                                            <i class="fas fa-sync-alt me-2"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -50,8 +48,7 @@
                                                     </td>
                                                     <td>
                                                         @foreach ($role->permissions as $permission)
-                                                            <span
-                                                                class="badge badge-primary shadow border-0 ms-2 mb-1 mt-1">
+                                                            <span class="btn btn-outline-dark border-0">
                                                                 {{ $permission->name }}
                                                             </span>
                                                         @endforeach
@@ -60,14 +57,14 @@
 
                                                         @can('roles.edit')
                                                             <a href="{{ route('app.roles.edit', $role->id) }}"
-                                                                class="btn btn-success btn-sm">
+                                                                class="btn btn-outline-success btn-sm">
                                                                 <i class="fa fa-pencil-alt me-1" title="Edit Hak Akses">
                                                                 </i>
                                                             </a>
                                                         @endcan
                                                         @can('roles.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $role->id }}"
-                                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                                class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"
                                                                     title="Hapus Hak Akses"></i>
                                                             </button>
                                                         @endcan

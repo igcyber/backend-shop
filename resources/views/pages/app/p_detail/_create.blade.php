@@ -33,7 +33,7 @@
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Tambah Detail Produk</h4>
+                                <h4>TAMBAH DETAIL PRODUK</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.detail-products.store') }}" method="POST">
@@ -155,17 +155,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="text-right mt-3">
-                                        <button class="btn btn-sm btn-primary" type="submit">
-                                            <i class="fa fa-paper-plane"></i> Submit</button>
-                                        <button class="btn btn-sm btn-warning" type="reset">
-                                            <i class="fa fa-redo"></i> Reset</button>
-                                        <a href="{{ route('app.detail-products.index') }}" class="btn btn-sm btn-info">
-                                            <i class="fas fa-arrow-left"></i>
-                                            Kembali
-                                        </a>
+                                    <div class="text-right mt-4">
+                                        <button class="btn btn-lg btn-outline-primary" type="submit">
+                                            <i class="fa fa-paper-plane"></i> SUBMIT</button>
+
                                     </div>
                                 </form>
+                            </div>
+                            <hr>
+                            <div class="card-footer text-right">
+                                <a href="{{ route('app.detail-products.index') }}" class="btn btn-lg btn-outline-success">
+                                    <i class="fas fa-arrow-left"></i>
+                                    KEMBALI
+                                </a>
                             </div>
                         </div>
                     </div>

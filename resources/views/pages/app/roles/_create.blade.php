@@ -1,12 +1,12 @@
 <div class="card">
     <div class="card-header">
-        <h4>Tambah Hak Akses</h4>
+        <h4>TAMBAH HAK AKSES</h4>
     </div>
     <div class="card-body">
         <form action="{{ route('app.roles.store') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label>Nama Hak Akses</label>
+                <label>Nama</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" name="name">
                 @error('name')
                     <div class="invalid-feedback" style="display: block">
@@ -15,7 +15,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Hak Izin</label>
+                <label>Izin Akses</label>
                 <br>
                 @foreach ($permissions as $permission)
                     <div class="form-check form-check-inline">
@@ -33,10 +33,10 @@
                 @enderror
             </div>
             <div class="text-right mt-3">
-                <button class="btn btn-sm btn-primary" type="submit">
-                    <i class="fa fa-paper-plane"></i> Submit</button>
-                <button class="btn btn-sm btn-warning" type="reset">
-                    <i class="fa fa-redo"></i> Reset</button>
+                <div class="text-right mt-3">
+                    <button class="btn btn-lg btn-outline-primary p-2 px-4" type="submit">
+                        <i class="fa fa-paper-plane"></i> SUBMIT </button>
+                </div>
             </div>
         </form>
     </div>

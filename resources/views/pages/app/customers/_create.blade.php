@@ -22,7 +22,7 @@
                                     <div class="form-row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="outlet">Outlet</label>
+                                                <label for="outlet">Nama</label>
                                                 <select name="outlet_id" id="outlet"
                                                     class="form-control @error('outlet_id') is-invalid @enderror">
                                                     <option disabled selected>PILIH OUTLET</option>
@@ -41,7 +41,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label for="nomor">Nomor Outlet</label>
+                                            <label for="nomor">Nomor</label>
                                             <input type="text" id="nomor"
                                                 class="form-control @error('nomor') is-invalid @enderror" name="nomor"
                                                 placeholder="Tuliskan Nomor Outlet" value="{{ old('nomor') }}">
@@ -113,14 +113,18 @@
                                         </div>
                                     </div>
                                     <div class="text-right mt-3">
-                                        <button class="btn btn-sm btn-primary" type="submit">
-                                            <i class="fa fa-paper-plane"></i> Submit</button>
-                                        <a href="{{ route('app.customers.index') }}" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-arrow-left"></i>
-                                            Kembali
-                                        </a>
+                                        <button class="btn btn-lg btn-outline-primary" type="submit">
+                                            <i class="fa fa-paper-plane"></i> SUBMIT</button>
+
                                     </div>
                                 </form>
+                            </div>
+                            <hr>
+                            <div class="card-footer text-right">
+                                <a href="{{ route('app.customers.index') }}" class="btn btn-lg btn-outline-success">
+                                    <i class="fas fa-arrow-left"></i>
+                                    KEMBALI
+                                </a>
                             </div>
                         </div>
                     </div>

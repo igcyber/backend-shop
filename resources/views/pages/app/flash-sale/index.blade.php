@@ -166,7 +166,7 @@
     </script>
 
     <!-- Page Specific JS File -->
-    <script>
+    {{-- <script>
         function Delete(id) {
             var id = id;
             var token = $("meta[name='csrf-token']").attr("content");
@@ -224,7 +224,7 @@
                 }
             })
         }
-    </script>
+    </script> --}}
 
     <script>
         $(document).ready(function() {
