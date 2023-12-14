@@ -19,6 +19,7 @@
                 <div class="row">
                     @if ($markedProducts->isNotEmpty())
                         @foreach ($markedProducts->groupBy('user_id') as $userOrders)
+                            {{-- @dd($userOrders->first()->user_id) --}}
                             <div class="col-md-3 col-lg-3">
                                 <div class="card">
                                     <div class="card-header">
@@ -27,7 +28,8 @@
                                             {{ $userOrders->first()->user->name }}
                                         </h4>
                                         <div class="card-header-action">
-                                            <a href="#" class="btn btn-outline-info">Proses Pesanan</a>
+                                            <a href="{{ route('app.sales.process-order', $userOrders->first()->user_id) }}"
+                                                class="btn btn-outline-info">Proses Pesanan</a>
                                         </div>
                                     </div>
                                     <div class="card-body pt-0">
@@ -61,9 +63,6 @@
             </div>
         </section>
     </div>
-
-    <!-- Modal Create -->
-    @include('pages.app.sales._modal_create')
 @endsection
 
 @push('scripts')
