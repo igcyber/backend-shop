@@ -8,7 +8,7 @@
             <div class="section-header">
                 <h4>DATA PRODUK</h4>
                 <div class="ml-auto">
-                    <a href="{{ route('app.products.create') }}" class="btn btn-primary ml-auto">
+                    <a href="{{ route('app.products.create') }}" class="btn btn-outline-primary ml-auto">
                         <i class="fas fa-plus"></i> TAMBAH PRODUK
                     </a>
                 </div>
@@ -49,11 +49,11 @@
                                                     No.
                                                 </th>
                                                 <th scope="col">Kode</th>
-                                                <th scope="col" style="width: 15%">Nama</th>
-                                                <th>Total Stok</th>
-                                                <th>Detail Stok</th>
+                                                <th scope="col" style="width: 25%">Nama</th>
+                                                <th>Total</th>
+                                                <th scope="col" style="width: 8%">Stok</th>
                                                 <th>Tipe</th>
-                                                <th>Pabrikan</th>
+                                                <th scope="col" style="width: 13%">Pabrikan</th>
                                                 <th>Pilihan</th>
                                             </tr>
                                         </thead>
@@ -79,7 +79,14 @@
                                                         @endif
                                                     </td>
                                                     <td class="align-middle">
-                                                        {{ $product->title }}
+                                                        @can('products.edit')
+                                                            <a href="{{ route('app.products.edit', $product->id) }}"
+                                                                style="text-decoration: none;color:rgb(80, 84, 87);">
+                                                                <i class="far fa-edit" title="Perbarui Data"></i>
+                                                                {{ $product->title }}
+                                                            </a>
+                                                        @endcan
+
                                                     </td>
                                                     <td class="align-middle">
                                                         <span
@@ -109,14 +116,6 @@
                                                     </td>
                                                     {{-- <td></td> --}}
                                                     <td class="align-middle">
-                                                        @can('products.edit')
-                                                            <a href="{{ route('app.products.edit', $product->id) }}"
-                                                                class="btn btn-outline-success btn-sm">
-                                                                <i class="fa fa-pencil-alt me-1" title="Edit Produk">
-                                                                </i>
-                                                            </a>
-                                                        @endcan
-
                                                         @can('products.delete')
                                                             <button onclick="Delete(this.id)" id="{{ $product->id }}"
                                                                 class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"

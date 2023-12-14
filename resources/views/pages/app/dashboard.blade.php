@@ -52,26 +52,26 @@
             <div class="section-header">
                 <h1>Selamat Datang di PT. UPINDO RAYA SEMESTA BORNEO</h1>
                 @role('Admin Gudang')
-                    <a href="{{ route('app.products.index') }}" class="btn btn-lg btn-info ml-auto">
+                    <a href="{{ route('app.products.index') }}" class="btn btn-lg btn-outline-info ml-auto">
                         <i class="fas fa-window-restore"></i>
-                        <span>KELOLA BARANG</span>
+                        <span>KELOLA PRODUK</span>
                     </a>
                 @endrole
                 @role('Sales')
-                    <a class="btn btn-lg btn-info ml-auto" href="{{ route('app.allOrder') }}">
+                    <a class="btn btn-lg btn-outline-info ml-auto" href="{{ route('app.sales') }}">
                         <i class="fas fa-cart-arrow-down"></i>
-                        <span>LIHAT PESANAN BARU</span>
+                        <span>DATA PESANAN</span>
                     </a>
                 @endrole
                 @role('Admin Sales')
                     {{-- {{ setActive(['app.order.*']) }} --}}
-                    <a class="btn btn-lg btn-info ml-auto" href="#">
+                    <a class="btn btn-lg btn-outline-info ml-auto" href="#">
                         <i class="fas fa-cart-arrow-down"></i>
                         <span>Faktur Order</span></a>
                     </a>
                 @endrole
                 @role('Outlet')
-                    <a class="btn btn-lg btn-info ml-auto" href="{{ route('front.home') }}">
+                    <a class="btn btn-lg btn-outline-info ml-auto" href="{{ route('front.home') }}">
                         <i class="fas fa-globe"></i>
                         <span>WEBSITE</span>
                     </a>
