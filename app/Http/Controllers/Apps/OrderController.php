@@ -6,8 +6,10 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\OrderDetail;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
@@ -36,14 +38,16 @@ class OrderController extends Controller
     //         // Fetch customers based on the given outlet ID along with related data.
     //         $customers = Customer::with(['outlet', 'seller'])->where('outlet_id', $user)->get();
     //         // Use a transaction to ensure data integrity
+
     //         DB::transaction(function () use ($customers, $request) {
+    //             $transactionId = now()->format('Ymd') . Str::random(3);
     //             foreach ($customers as $customer) {
     //                 $order = Order::create([
     //                     'sales_id' => $customer->sales_id,
     //                     'customer_name' => $customer->outlet->name,
     //                     'customer_sales' => $customer->seller->name,
     //                     'customer_address' => $customer->address,
-    //                     'transaction_id' => getUniqueTransactionId(),
+    //                     'transaction_id' => $transactionId,
     //                     'total' => $request['subtotal'],
     //                     'payment_status' => 0,
     //                     'order_status' => 0,
@@ -128,7 +132,8 @@ class OrderController extends Controller
 
             return redirect(route('front.home'))->with('success', 'Pesanan Berhasil Dikirim');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan. Mohon coba lagi.');
+            // Log::error('Error during order processing: ' . $e->getMessage(), ['exception' => $e]);
+            return redirect()->back()->with('error', $e->getMessage(), ['exception' => $e]);
         }
     }
 
@@ -139,12 +144,15 @@ class OrderController extends Controller
 
     private function createOrder($customer, $request)
     {
+        $transactionId = now()->format('Ymd') . Str::random(3);
+
         return Order::create([
             'sales_id' => $customer->sales_id,
-            'customer_name' => $customer->outlet->name,
-            'customer_sales' => $customer->seller->name,
-            'customer_address' => $customer->address,
-            'transaction_id' => getUniqueTransactionId(),
+            'outlet_id' => $customer->outlet_id,
+            // 'customer_name' => $customer->outlet->name,
+            // 'customer_sales' => $customer->seller->name,
+            // 'customer_address' => $customer->address,
+            'transaction_id' => $transactionId,
             'total' => $request['subtotal'],
             'payment_status' => 0,
             'order_status' => 0,

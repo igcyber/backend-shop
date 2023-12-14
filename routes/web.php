@@ -22,6 +22,7 @@ use App\Http\Controllers\Apps\FlashSaleController;
 use App\Http\Controllers\Apps\PermissionController;
 use App\Http\Controllers\Apps\CustomerLoginController;
 use App\Http\Controllers\Apps\DetailProductController;
+use App\Http\Controllers\Apps\MarkedProductController;
 
 Route::get('/', [HomeController::class, 'index'])->name('front.home');
 
@@ -44,21 +45,30 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Categories Route
     Route::resource('/categories', CategoryController::class)->middleware('permission:categories.index|categories.create|categories.edit|categories.delete');
-
     //Categories Status Route
     Route::put('category/change-status', [CategoryController::class, 'changeStatus'])->name('categories.change-status');
+    //Categories Import Route
+    Route::post('/categories/import-excel', [CategoryController::class, 'importExcel'])->name('categories.import.excel');
+
 
     //Vendors Route
     Route::resource('/vendors', VendorController::class)->middleware('permission:vendors.index|vendors.create|vendor.edit|vendors.delete');
-
     //Vendors Status Route
     Route::put('vendor/change-status', [VendorController::class, 'changeStatus'])->name('vendors.change-status');
+    //Vendors Import Route
+    Route::post('/vendors/import-excel', [VendorController::class, 'importExcel'])->name('vendors.import.excel');
 
     //Products Route
     Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
+    //products import via excel
+    Route::post('/products/import-excel', [ProductController::class, 'importExcel'])->name('products.import.excel');
 
     //Details Product Route
     Route::resource('/detail-products', DetailProductController::class)->middleware('permission:detail_product.index|detail_product.create|detail_product.edit|detail_product.delete');
+
+    // routes import for detail product
+    Route::post('/detail-products/import', [DetailProductController::class, 'importExcel'])->name('detail-products.import');
+
 
     //Customer's Route
     Route::resource('/customers', CustomerController::class);
@@ -72,11 +82,18 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     //delete cart
     Route::delete('/cart/delete/{cart}/{user}', [CartController::class, 'deleteCart'])->name('cart.delete');
 
+    Route::get('/mark-product/{detailId}/{user}', [MarkedProductController::class, 'markProduct'])->name('markProduct');
+
+
+    Route::get('/marked-products', [MarkedProductController::class, 'getMarkedProducts']);
+
     //checkout & order
     Route::get('/checkout/order/{user}', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('/order/{user}', [OrderController::class, 'order'])->name('order');
 
-    //get order for sales
+    //get all new order for sales
+    Route::get('/sales/all-order', [SalesController::class, 'allOrder'])->name('allOrder');
+    //get process order for sales
     Route::get('/sales/order', [SalesController::class, 'index'])->name('sales');
     //POS sales
     Route::get('/sales/order/pos/', [SalesController::class, 'order'])->name('sales.order');

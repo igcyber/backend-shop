@@ -30,10 +30,10 @@
         <section class="section">
             <div class="section-body">
                 <div class="row">
-                    <div class="col-12 col-md-8 col-lg-12">
+                    <div class="col-12 col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Tambah Produk</h4>
+                                <h4>TAMBAH PRODUK</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('app.products.store') }}" method="POST"
@@ -42,6 +42,9 @@
                                     <div class="form-row">
                                         <div class="col-md-6 mt-2">
                                             <label for="img" style="font-weight: bold">Gambar</label>
+                                            <span id="blink" class="badge bg-success text-white mb-2">
+                                                <i class="fas fa-exclamation-triangle"></i> Boleh Tidak Diisi
+                                            </span>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
@@ -60,6 +63,9 @@
 
                                         <div class="col-md-6 mt-2">
                                             <label style="font-weight: bold">Tanggal Kadaluarsa</label>
+                                            <span id="blink" class="badge bg-success text-white mb-2">
+                                                <i class="fas fa-exclamation-triangle"></i> Boleh Tidak Diisi
+                                            </span>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
@@ -156,91 +162,78 @@
 
                                     <div class="form-row">
 
-                                        <div class="col-md-3 mt-3">
+                                        <div class="col-md-3 col-lg-3 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary" style="font-weight: bolder">
-                                                        Banyak Pak/Dus
+                                                        Pak/Dus
                                                     </div>
                                                 </div>
                                                 <input type="text"
-                                                    class="form-control @error('pak_content') is-invalid @enderror"
-                                                    value="{{ old('pak_content') }}" name="pak_content" placeholder="0">
+                                                    class="form-control @error('dus_pak') is-invalid @enderror"
+                                                    value="{{ old('dus_pak') }}" name="dus_pak" placeholder="0">
                                             </div>
-                                            @error('pak_content')
+                                            @error('dus_pak')
                                                 <div class="invalid-feedback" style="display: block">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-
-                                            <span id="blink" class="badge bg-info text-white mt-2">
-                                                <i class="fas fa-exclamation-triangle"></i> Contoh: Barang (6 x 20), Isikan
-                                                Angka 6
-                                            </span>
                                         </div>
 
-                                        <div class="col-md-3 mt-3">
+                                        <div class="col-md-3 col-lg-3 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
                                                         style="font-weight: bolder">
-                                                        Banyak Biji/Pak
+                                                        Pcs/Pak
                                                     </div>
                                                 </div>
                                                 <input type="text"
                                                     class="form-control @error('pak_pcs') is-invalid @enderror"
-                                                    value="{{ old('pak_pcs') }}" name="pak_pcs" placeholder="0">
+                                                    value="{{ old('pak_pcs') }}" name="pak_pcs" placeholder="0"
+                                                    title="Banyaknya Pcs/Pak">
                                             </div>
                                             @error('pak_pcs')
                                                 <div class="invalid-feedback" style="display: block">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-
-                                            <span id="blink" class="badge bg-info text-white mt-2">
-                                                <i class="fas fa-exclamation-triangle"></i> Contoh: Barang (6 x 20), Isikan
-                                                Angka 20
-                                            </span>
                                         </div>
 
-                                        <div class="col-md-3 mt-3">
+                                        <div class="col-md-3 col-lg-3 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
                                                         style="font-weight: bolder">
-                                                        Total Stock
+                                                        Total Stok
                                                     </div>
                                                 </div>
                                                 <input type="text"
                                                     class="form-control @error('total_stock') is-invalid @enderror"
-                                                    value="{{ old('total_stock') }}" name="total_stock" placeholder="0">
+                                                    value="{{ old('total_stock') }}" name="total_stock" placeholder="0"
+                                                    title="Jumlah Stok Satuan Terkecil">
                                             </div>
                                             @error('total_stock')
                                                 <div class="invalid-feedback" style="display: block">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-
-                                            <span id="blink" class="badge bg-info text-white mt-2">
-                                                <i class="fas fa-exclamation-triangle"></i> Jumlah Stok Dari Satuan
-                                                Terkecil
-                                            </span>
                                         </div>
 
-                                        <div class="col-md-3 mt-3">
+                                        <div class="col-md-3 col-lg-3 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
                                                         <input type="checkbox" name="without_pcs" value="1">
                                                     </div>
                                                 </div>
-                                                <span class="form-control">Centang Jika Barang Tanpa Pcs</span>
+                                                <span class="form-control">Tanpa Pcs</span>
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="form-row">
-                                        <div class="col-md-12 mt-3">
+                                        <div class="col-md-12 mt-3" style="min-height:80px;">
                                             <label for="desc" style="font-weight: bold">Deskripsi Singkat</label>
                                             <textarea id="desc" class="summernote-simple @error('short_descriptions') is-invalid @enderror"
                                                 name="short_description">
@@ -248,17 +241,19 @@
                                             </textarea>
                                         </div>
                                     </div>
-                                    <div class="text-right mt-3">
-                                        <button class="btn btn-sm btn-primary" type="submit">
-                                            <i class="fa fa-paper-plane"></i> Submit</button>
-                                        <button class="btn btn-sm btn-warning" type="reset">
-                                            <i class="fa fa-redo"></i> Reset</button>
-                                        <a href="{{ route('app.products.index') }}" class="btn btn-sm btn-info">
-                                            <i class="fas fa-arrow-left"></i>
-                                            Kembali
-                                        </a>
+                                    <div class="text-right">
+                                        <button class="btn btn-lg btn-outline-primary" type="submit">
+                                            <i class="fa fa-paper-plane"></i> SUBMIT</button>
                                     </div>
+
                                 </form>
+                            </div>
+                            <hr>
+                            <div class="card-footer ml-auto">
+                                <a href="{{ route('app.products.index') }}" class="btn btn-lg btn-outline-success ml-3">
+                                    <i class="fas fa-arrow-left"></i>
+                                    KEMBALI
+                                </a>
                             </div>
                         </div>
                     </div>

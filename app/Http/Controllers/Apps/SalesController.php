@@ -11,19 +11,51 @@ use App\Models\SalesCart;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\DetailProduct;
+use App\Models\MarkedProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     //get all order for spesisific sales
     public function index()
     {
         $userId = auth()->id();
-        $orders = Order::with('orderDetails')->where('sales_id', $userId)->get();
+        $orders = Order::with(['orderDetails', 'outlet'])->where('sales_id', $userId)->get();
+        $customer = Customer::where('sales_id', $userId)->first();
+        return view('pages.app.sales.index', compact('orders', 'customer'));
+    }
 
-        $customers = Customer::where('sales_id', $userId)->get();
-        return view('pages.app.sales.index', compact('orders', 'customers'));
+    /**
+     * Display all orders associated with the currently logged-in sales user.
+     * Retrieve the user ID of the logged-in sales user
+     * Retrieve customer information associated with the sales user's outlet, including outlet ID
+     * Extract outlet IDs from the customer information
+     * Fetch marked products related to the outlet IDs, including user and detail product information
+     * @return \Illuminate\Http\Response
+     */
+    public function allOrder()
+    {
+        // Get the currently logged-in user (sales user)
+        if (auth()->check()) {
+            $salesUser = auth()->user()->id;
+            $getCustomer = Customer::with('outlet')->where('sales_id', $salesUser)->select('outlet_id')->get();
+            $outletIds = $getCustomer->pluck('outlet_id')->toArray();
+            $markedProducts = MarkedProduct::with('user', 'detailProduct')->whereIn('user_id', $outletIds)->get();
+            // dd($markedProducts);
+            // Render the 'pages.app.sales.all-order' Blade view, passing the retrieved data
+            return view('pages.app.sales.all-order', compact('markedProducts', 'getCustomer'));
+        }
+
+        // Redirect or handle unauthenticated user
+        return redirect()->route('login');
     }
 
     public function editOrderDetail($orderId)
@@ -73,35 +105,20 @@ class SalesController extends Controller
     public function order()
     {
 
-        $sales_id = auth()->id();
+        $salesId = auth()->id();
 
         $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode')->get();
 
-        $salesCart = SalesCart::with('productDetail')->where('sales_id', $sales_id)->get();
+        $salesCart = SalesCart::with('productDetail')->where('sales_id', $salesId)->get();
 
-        // retrieve the most recent order using orderBy('created_at', 'desc')
-        // and get the latest order first.
-        $lastOrder = Order::select('transaction_id')
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        $customers = Customer::where('sales_id', $sales_id)
+        $customers = Customer::where('sales_id', $salesId)
             ->with('outlet')
             ->get(['id', 'outlet_id']);
 
-        // If there is a last order, we use its transaction_id as a parameter for getInvoiceNumber
-        // and continue from that number.
-        if ($lastOrder) {
-            $transaction_id = getInvoiceNumber($lastOrder->transaction_id);
-        } else {
-            // if there is no last order, we call getInvoiceNumber without a parameter,
-            // and start from the base value.
-            $transaction_id = getInvoiceNumber();
-        }
-
         // return the view
-        return view('pages.app.sales.order', compact('transaction_id', 'customers', 'detailProducts', 'salesCart', 'sales_id'));
+        return view('pages.app.sales.order', compact('customers', 'detailProducts', 'salesCart'));
     }
+
     public function confirmation($type, Order $order)
     {
         $statusMessage = '';
@@ -175,7 +192,7 @@ class SalesController extends Controller
 
             // Validate the requested quantities against the available stock
             if (!$this->validateRequestedQuantities($quantity, $request->input('satuan')[$key], $productDetail)) {
-                $validationErrors[] = "Pesanan Barang Melebihi Stok Gudang untuk produk {$productDetail->product->title}.";
+                $validationErrors[] = "Produk Pesanan Melebihi Stok Gudang {$productDetail->product->title}.";
             } else {
                 // Save or update the corresponding row in the sales_carts table
                 SalesCart::updateOrCreate(
@@ -220,10 +237,13 @@ class SalesController extends Controller
             'sales_id' => $sales,
             'transaction_id' => getUniqueTransactionId(),
             'total' => $total,
-            'customer_name' => optional($customer->outlet)->name,
-            'customer_sales' => optional($customer->seller)->name,
-            'customer_address' => $customer->address,
-            'order_status' => 1
+            'outlet_id' => $customer->outlet_id,
+            'order_status' => 1,
+            'payment_status' => 0,
+            // 'customer_name' => optional($customer->outlet)->name,
+            // 'customer_sales' => optional($customer->seller)->name,
+            // 'customer_address' => $customer->address,
+
         ]);
 
         // Create order details

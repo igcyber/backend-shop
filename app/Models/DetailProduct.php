@@ -10,7 +10,15 @@ class DetailProduct extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'product_id',
+        'sell_price_duz',
+        'sell_price_pak',
+        'sell_price_pcs',
+        'tax_type',
+        'periode',
+        'discount'
+    ];
 
     public function product()
     {

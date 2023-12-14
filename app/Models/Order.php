@@ -15,4 +15,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
+
+    public function sales()
+    {
+        return $this->belongsTo(User::class, 'sales_id');
+    }
+
+    public function outlet()
+    {
+        return $this->belongsTo(User::class, 'outlet_id');
+    }
 }

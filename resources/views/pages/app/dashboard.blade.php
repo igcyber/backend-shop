@@ -58,9 +58,9 @@
                     </a>
                 @endrole
                 @role('Sales')
-                    <a class="btn btn-lg btn-info ml-auto" href="{{ route('app.sales') }}">
+                    <a class="btn btn-lg btn-info ml-auto" href="{{ route('app.allOrder') }}">
                         <i class="fas fa-cart-arrow-down"></i>
-                        <span>LIHAT ORDER</span>
+                        <span>LIHAT PESANAN BARU</span>
                     </a>
                 @endrole
                 @role('Admin Sales')

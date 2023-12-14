@@ -27,18 +27,15 @@
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
+                            <input id="username" type="text"
+                                class="form-control col-md-10 @error('username') is-invalid @enderror" name="username"
+                                tabindex="1" autofocus value="{{ old('username') }}"
+                                placeholder="@error('password') {{ $message }} @enderror">
                             <div class="input-group-text">
                                 <img
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA6ElEQVR4nO2SsQ4BQRRFDz2JipZexV8IFVHiC6yG7Ga/QIJ/UGr1fAo9CZWtGJlkJJsJu5OdaYSb3LzMTOaezLwHv6gKMARmqpZdhucAH4gAEXOkgPLcWr4WLjRPXXyR/gKh+Wb7daMUgFAe2EBCQ0hoAwkMIYENpG8I6dlAisA5BXACCjaQ12vuHwByv4sjtYGjBjgALRwrDzSBjqpy/b0qADUXjY5LBk6APXDVenIBdoAHVLOE14F1wlQJzQ9gCzRMwmUzF+qSSbh4A5unDYWXMVxoHidBVo4gyyRISYE2Fl6pnL/IpCcW0amIN98JjgAAAABJRU5ErkJggg==">
                             </div>
                         </div>
-                        <input id="username" type="text" class="form-control @error('username') is-invalid @enderror"
-                            name="username" tabindex="1" autofocus value="{{ old('username') }}">
-                        @error('username')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
                     </div>
                 </div>
                 <div class="form-group">
@@ -52,18 +49,15 @@
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
+                            <input id="password" type="password"
+                                class="form-control col-md-10 @error('password') is-invalid @enderror" name="password"
+                                tabindex="2" value="{{ old('password') }}"
+                                placeholder="@error('password') {{ $message }} @enderror">
                             <div class="input-group-text">
                                 <img id="toggle-icon" onclick="togglePassword()"
                                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsTAAALEwEAmpwYAAACS0lEQVR4nO1VO2hUURBdG1FLQXD13XPmzrxVWMFGQUwj/gq/hKgRvxEVDDEoiCAiLCgWSnpbxUZrO8VKsPSDlagRbET84ydGDSLzdldW2bd5KRabTPPefczMmXPuzLxSadr+p6WIexW83jUAg+xT8Ic/pxQYY1xq5Fmj3FbKMwVf+9PIWwo5XxFZkQEE6Vfwu4oMFM09Q8k+Ix8pON5IeCoCeyLiOiN7/azgTaNMGPjCGRQGsMRSpdw1yjuF1JIkmdvJX4McUXBCRWqFAJTcpeRng1xL03TeZP4p4g5n2mSwCIgGvjJydXsG5Gklf2qQ4zkF9CnkgVHGlHJPGUdaAf7kAY4a5FsKHPoX4IwzSEPckg/AT4Y4rEGXp+AVo/zyhO38I+Jm91dysJlgt3dFDHF9niwZA8ThhkTbmwzK5fKcvJhUZJVRviqwqaSUUSVH8pzrTGXMGURgWxOgAqh3FMlZ+XGukIz6S28mBbmyA5P7BlxuvQOFHDPwSS4ToKqUt95M9STkoIEfDehpFxDJi34HSh7QhVpxgKwLg/S3ZQAsM8pLn6W/qxUZcEaRPNjm0scjOZQkyWyjvHdm/r0tQJCtjTE4mSML1mZDSF4lOb8JUGSSk6wAXjDIBxPZ2dF5cQgLlLyh4Jciu6harc40xMNKeW7kHW+IyQqqMyI3NnbWOT8beSIlhxRY43r7/nJZnbGSbwx86DIVSt4A2JC1bAsD1zdbhuBjXxtKPm0szZqFsKQ0FfNJ9ZVgQfaXumUGueR/tq4BTFupgP0GTJSuIaQkgNUAAAAASUVORK5CYII=">
                             </div>
                         </div>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" tabindex="2" value="{{ old('password') }}">
-                        @error('password')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
                     </div>
                 </div>
                 <div class="form-group">

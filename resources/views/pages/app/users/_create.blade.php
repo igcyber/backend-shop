@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h4>Tambah Pengguna</h4>
+        <h4>TAMBAH PENGGUNA</h4>
     </div>
     <div class="card-body">
         <form action="{{ route('app.users.store') }}" method="POST">
@@ -72,10 +72,8 @@
                 @endif
             </div>
             <div class="text-right mt-3">
-                <button class="btn btn-sm btn-primary" type="submit">
-                    <i class="fa fa-paper-plane"></i> Submit</button>
-                <button class="btn btn-sm btn-warning" type="reset">
-                    <i class="fa fa-redo"></i> Reset</button>
+                <button class="btn btn-lg btn-outline-primary" type="submit">
+                    <i class="fa fa-paper-plane"></i> SUBMIT</button>
             </div>
         </form>
     </div>

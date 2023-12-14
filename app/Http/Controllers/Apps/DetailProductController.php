@@ -6,6 +6,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\DetailProduct;
 use App\Http\Controllers\Controller;
+use App\Imports\DetailProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DetailProductController extends Controller
 {
@@ -46,11 +48,11 @@ class DetailProductController extends Controller
 
         $sell_price_duz = intval(str_replace(['Rp.', '.', ','], '', $request->sell_price_duz));
 
-        if ($productContent->withoutPcs == 0) {
+        if ($productContent->withoutpcs == 0) {
             // If withoutPcs is equal to 0
             $getPricePak = $sell_price_duz / $productContent->dus_pak;
             $getPricePcs = $getPricePak / $productContent->pak_pcs;
-        } elseif ($productContent->withoutPcs == 1) {
+        } elseif ($productContent->withoutpcs == 1) {
             // If withoutPcs is equal to 1
             $getPricePak = $sell_price_duz / $productContent->pak_pcs;
             // Adjust $getPricePcs accordingly if needed
@@ -97,11 +99,12 @@ class DetailProductController extends Controller
         $originalSellPricePcs = $detailProduct->sell_price_pcs / (1 - ($detailProduct->discount / 100));
 
         // Calculate prices based on withoutPcs
-        if ($productContent->withoutPcs == 0) {
+        if ($productContent->withoutpcs == 0) {
             $getPricePak = $originalSellPriceDuz / $productContent->dus_pak;
             $getPricePcs = $getPricePak / $productContent->pak_pcs;
-        } elseif ($productContent->withoutPcs == 1) {
+        } elseif ($productContent->withoutpcs == 1) {
             $getPricePak = $originalSellPriceDuz / $productContent->pak_pcs;
+            $getPricePcs = 0;
             // Adjust $getPricePcs accordingly if needed
         }
 
@@ -113,7 +116,7 @@ class DetailProductController extends Controller
             $discountMultiplier = 1 - ($newDiscountPercentage / 100);
             $sell_price_duz = $originalSellPriceDuz * $discountMultiplier;
             $getPricePak *= $discountMultiplier;
-            $getPricePcs *= $discountMultiplier ?? 0;
+            $getPricePcs *= $discountMultiplier;
         } else {
             // If new discount is 0, revert to original prices
             $sell_price_duz = $originalSellPriceDuz;
@@ -134,5 +137,22 @@ class DetailProductController extends Controller
 
         $message = 'Data Berhasil Diupdate!';
         return redirect()->route('app.detail-products.index')->with(['success' => $message]);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        try {
+            $file = $request->file('excel_file');
+            $import = new DetailProductImport();
+            Excel::import($import, $file);
+
+            return redirect()->route('app.detail-products.index')->with(['success' => 'Data imported successfully']);
+        } catch (\Exception $e) {
+            return redirect()->route('app.detail-products.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
+        }
     }
 }

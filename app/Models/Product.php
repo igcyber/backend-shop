@@ -10,8 +10,10 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-
+    protected $fillable = [
+        'category_id', 'vendor_id', 'serial_number', 'image', 'title', 'short_description', 'dus_pak',
+        'pak_pcs', 'withoutpcs', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'exp_date'
+    ];
 
     protected $casts = [
         'is_checked' => 'boolean',
