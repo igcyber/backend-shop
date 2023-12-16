@@ -10,16 +10,16 @@
         <section class="section">
             <div class="section-header">
                 <h1>PESANAN BARU DARI OUTLET</h1>
-                <a class="btn btn-lg btn-info ml-auto" href="{{ route('app.sales') }}">
+                <a class="btn btn-lg btn-outline-info ml-auto" href="{{ route('app.sales') }}">
                     <i class="fas fa-clipboard-list"></i>
-                    <span>SEMUA PESANAN</span>
+                    <span>DATA PESANAN</span>
                 </a>
             </div>
             <div class="section-body">
                 <div class="row">
                     @if ($markedProducts->isNotEmpty())
                         @foreach ($markedProducts->groupBy('user_id') as $userOrders)
-                            {{-- @dd($userOrders->first()->user_id) --}}
+                            {{-- @dd($getCustomer) --}}
                             <div class="col-md-3 col-lg-3">
                                 <div class="card">
                                     <div class="card-header">
@@ -28,10 +28,12 @@
                                             {{ $userOrders->first()->user->name }}
                                         </h4>
                                         <div class="card-header-action">
-                                            <a href="{{ route('app.sales.process-order', $userOrders->first()->user_id) }}"
+                                            <a href="{{ route('app.sales.process-order', ['user_id' => $userOrders->first()->user_id]) }}"
                                                 class="btn btn-outline-info">Proses Pesanan</a>
+
                                         </div>
                                     </div>
+
                                     <div class="card-body pt-0">
                                         <div class="summary">
                                             <div class="summary-item">
@@ -45,6 +47,7 @@
                                                                 </div>
                                                                 <div class="text-muted text-small">
                                                                     {{ moneyFormat($order->detailProduct->sell_price_duz) }}/dus
+                                                                    {{ $order->detailProduct->tax_type }}
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -57,7 +60,12 @@
                             </div>
                         @endforeach
                     @else
-                        <p>No orders found.</p>
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card-body">
+                                <p class="bg bg-success text-white text-uppercase text-center">Tidak Ada Pesanan</p>
+                            </div>
+                        </div>
+
                     @endif
                 </div>
             </div>

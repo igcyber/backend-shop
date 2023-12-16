@@ -24,7 +24,7 @@
                                             <div class="form-group">
                                                 <label for="outlet">Nama</label>
                                                 <select name="outlet_id" id="outlet"
-                                                    class="form-control @error('outlet_id') is-invalid @enderror">
+                                                    class="form-control @error('outlet_id') is-invalid @enderror select2">
                                                     <option disabled selected>PILIH OUTLET</option>
                                                     @foreach ($outlets as $outlet)
                                                         @if (!in_array($outlet->id, $existingOutletIds))
@@ -90,7 +90,7 @@
                                             <div class="form-group">
                                                 <label for="sales">Sales</label>
                                                 <select name="sales_id" id="sales"
-                                                    class="form-control @error('sales_id') is-invalid @enderror">
+                                                    class="form-control @error('sales_id') is-invalid @enderror select2">
                                                     <option disabled selected>PILIH SALES</option>
                                                     @foreach ($users as $user)
                                                         <option value="{{ $user->id }}">{{ $user->name }}</option>

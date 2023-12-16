@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
@@ -167,5 +168,23 @@ if (!function_exists('countQtyWithoutPcs')) {
             'jumlah_dus' => $jumlahDus,
             'sisa_pak' => $sisaPak,
         ];
+    }
+}
+
+if (!function_exists('generateUsername')) {
+    function generateUsername($name)
+    {
+        // Remove spaces, '/', '(', and ')' from the name
+        $cleanedName = str_replace([' ', '/', '(', ')', '.'], '', $name);
+
+        // Take the first four characters
+        $baseUsername = strtolower(substr($cleanedName, 0, 4));
+
+        // Generate three random characters
+        $randomChars = str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789');
+        $randomChars = substr($randomChars, 0, 3);
+
+        // Combine the base username and random characters
+        return $baseUsername . '-' . $randomChars;
     }
 }

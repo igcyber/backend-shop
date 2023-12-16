@@ -160,8 +160,8 @@ class ProductController extends Controller
             Excel::import($import, $file);
             return redirect()->route('app.products.index')->with(['success' => 'Data imported successfully']);
         } catch (\Exception $e) {
-            // return redirect()->route('app.products.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
-            return redirect()->route('app.products.index')->with(['error' => 'Terjadi Masalah Silahkan Coba Lagi']);
+            return redirect()->route('app.products.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
+            // return redirect()->route('app.products.index')->with(['error' => 'Terjadi Masalah Silahkan Coba Lagi']);
         }
     }
 }

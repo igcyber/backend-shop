@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Models\User;
+use App\Imports\UserImport;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -21,7 +23,7 @@ class UserController extends Controller
         })
             ->with('roles')
             ->latest()
-            ->paginate(10);
+            ->paginate(20);
 
         $roles = Role::all();
 
@@ -33,7 +35,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|max:150',
             'username' => 'required|max:150|unique:users,username',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'email|unique:users,email|nullable',
             'password' => 'required|confirmed|min:8',
         ], [
             'name.*' => 'Data :attribute Wajib Diisi',
@@ -71,7 +73,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|max:200',
             'username' => 'required|max:200|unique:users,username,' . $user->id,
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'email|nullable|unique:users,email,' . $user->id,
             'password' => 'nullable',
         ]);
 
@@ -109,6 +111,23 @@ class UserController extends Controller
         // Perform the delete
         if ($user->delete()) {
             return response()->json(['status' => 'success']);
+        }
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        try {
+            $file = $request->file('excel_file');
+            $import = new UserImport();
+            Excel::import($import, $file);
+
+            return redirect()->route('app.users.index')->with(['success' => 'Data imported successfully']);
+        } catch (\Exception $e) {
+            return redirect()->route('app.users.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
         }
     }
 }

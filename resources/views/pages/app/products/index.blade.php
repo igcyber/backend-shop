@@ -42,7 +42,7 @@
                                 </form>
                                 <hr>
                                 <div class="table table-striped">
-                                    <table class="display" id="table-1">
+                                    <table class="display" id="table-1" style="width: 100% !important">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%">
@@ -142,7 +142,7 @@
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
-                "sortable": false,
+                "sortable": true,
                 "targets": [1, 2, 3, 4, 5, 6, 7]
             }],
             "iDisplayLength": 25,
