@@ -206,147 +206,182 @@ class SalesController extends Controller
         return back()->with([$messageType => $message]);
     }
 
-    // public function createOrder(Request $request, $sales)
-    // {
-    //     $request->validate([
-    //         // Ensure each item in the array is present and not empty
-    //         'qty_product.*' => 'required|numeric'
-    //     ]);
+    public function createOrder(Request $request, $sales)
+    {
+        // dd($request);
+        $request->validate([
+            // Ensure each item in the array is present and not empty
+            'qty_product.*' => 'required|numeric'
+        ]);
 
-    //     try {
-    //         // Retrieve the updated cart items
-    //         $updatedCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
-    //         // Validate and save sales cart data
-    //         // $validationErrors = [];
-    //         $exceededStockProducts = [];
-    //         // dd($request->input('qty_product'));
-    //         // Iterate over the items and save them in sales_carts
-    //         foreach ($request->input('qty_product') as $key => $quantity) {
-    //             // Determine the quantity field based on the selected unit
-    //             $quantityField = 'qty_' . $request->input('satuan')[$key];
+        try {
+            // Retrieve the updated cart items
+            $updatedCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
+            // Validate and save sales cart data
+            // $validationErrors = [];
+            $exceededStockProducts = [];
+            // dd($request->input('qty_product'));
+            // Iterate over the items and save them in sales_carts
+            foreach ($request->input('qty_product') as $key => $quantity) {
+                // Determine the quantity field based on the selected unit
+                $quantityField = 'qty_' . $request->input('satuan')[$key];
 
-    //             // Retrieve the product detail for the current item
-    //             $productDetail = $updatedCart
-    //                 ->where('detail_id', $request->input('detail_id')[$key])
-    //                 ->first()
-    //                 ->productDetail;
+                // Retrieve the product detail for the current item
+                $productDetail = $updatedCart
+                    ->where('detail_id', $request->input('detail_id')[$key])
+                    ->first()
+                    ->productDetail;
 
-    //             // Validate the requested quantities against the available stock
-    //             if (!$this->validateRequestedQuantities($quantity, $request->input('satuan')[$key], $productDetail)) {
-    //                 // $validationErrors[] = "Produk Pesanan Melebihi Stok Gudang {$productDetail->product->title}.";
-    //                 $exceededStockProducts[] = $productDetail->product->title;
-    //             } else {
-    //                 // Save or update the corresponding row in the sales_carts table
-    //                 SalesCart::updateOrCreate(
-    //                     [
-    //                         'sales_id' => $sales,
-    //                         'detail_id' => $request->input('detail_id')[$key],
-    //                     ],
-    //                     [
-    //                         $quantityField => $quantity,
-    //                     ]
-    //                 );
-    //             }
-    //         }
+                // Validate the requested quantities against the available stock
+                if (!$this->validateRequestedQuantities($quantity, $request->input('satuan')[$key], $productDetail)) {
+                    // $validationErrors[] = "Produk Pesanan Melebihi Stok Gudang {$productDetail->product->title}.";
+                    $exceededStockProducts[] = $productDetail->product->title;
+                } else {
+                    // Save or update the corresponding row in the sales_carts table
+                    SalesCart::updateOrCreate(
+                        [
+                            'sales_id' => $sales,
+                            'detail_id' => $request->input('detail_id')[$key],
+                        ],
+                        [
+                            $quantityField => $quantity,
+                        ]
+                    );
+                }
+            }
 
-    //         // Check if there are validation errors
-    //         if (!empty($exceededStockProducts)) {
-    //             // Construct the error message
-    //             $errorMessage = "Produk Pesanan Melebihi Stok Gudang: " . implode(', ', $exceededStockProducts);
-    //             // Handle validation errors here (e.g., redirect back with errors)
-    //             // return redirect()->back()->with('error', implode(' ', $validationErrors));
-    //             return redirect()->back()->with('error', $errorMessage);
-    //         }
+            // Check if there are validation errors
+            if (!empty($exceededStockProducts)) {
+                // Construct the error message
+                $errorMessage = "Produk Pesanan Melebihi Stok Gudang: " . implode(', ', $exceededStockProducts);
+                // Handle validation errors here (e.g., redirect back with errors)
+                // return redirect()->back()->with('error', implode(' ', $validationErrors));
+                return redirect()->back()->with('error', $errorMessage);
+            }
 
-    //         // Retrieve the updated cart items
-    //         $updatedSalesCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
+            // Retrieve the updated cart items
+            $updatedSalesCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
+            // dd($updatedSalesCart);
 
-    //         // Calculate the total
-    //         $total = $updatedSalesCart->sum(function ($item) {
-    //             return $item->qty_duz * $item->productDetail->sell_price_duz +
-    //                 $item->qty_pak * $item->productDetail->sell_price_pak +
-    //                 $item->qty_pcs * $item->productDetail->sell_price_pcs;
-    //         });
+            // Calculate the total
+            // $total = $updatedSalesCart->sum(function ($item) {
+            //     return $item->qty_duz * $item->productDetail->sell_price_duz +
+            //         $item->qty_pak * $item->productDetail->sell_price_pak +
+            //         $item->qty_pcs * $item->productDetail->sell_price_pcs;
+            // });
 
-    //         $customer = Customer::where('sales_id', $sales)
-    //             ->with('outlet', 'seller')
-    //             ->first(['id', 'outlet_id', 'sales_id', 'address']);
+            $customer = Customer::where('sales_id', $sales)
+                ->with('outlet', 'seller')
+                ->get(['id', 'outlet_id', 'sales_id']);
 
-    //         if (!$customer) {
-    //             // Handle the case where no customer is found
-    //             return redirect()->route('app.sales')->with('error', 'Customer not found');
-    //         }
+            // dd($customer);
 
-    //         // Create the order
-    //         $order = Order::create([
-    //             'sales_id' => $sales,
-    //             'transaction_id' => getUniqueTransactionId(),
-    //             'total' => $total,
-    //             'outlet_id' => $customer->outlet_id,
-    //             'order_status' => 1,
-    //             'payment_status' => 0,
-    //         ]);
+            if (!$customer) {
+                // Handle the case where no customer is found
+                return redirect()->route('app.sales')->with('error', 'Customer not found');
+            }
 
-    //         // Create order details
-    //         $orderDetails = [];
-    //         foreach ($request->input('detail_id') as $key => $detailId) {
-    //             $orderDetails[] = [
-    //                 'order_id' => $order->id,
-    //                 'detail_id' => $detailId,
-    //                 'qty_duz' => $updatedSalesCart[$key]->qty_duz,
-    //                 'qty_pak' => $updatedSalesCart[$key]->qty_pak,
-    //                 'qty_pcs' => $updatedSalesCart[$key]->qty_pcs,
-    //                 'price_duz' => $updatedSalesCart[$key]->productDetail->sell_price_duz,
-    //                 'price_pak' => $updatedSalesCart[$key]->productDetail->sell_price_pak,
-    //                 'price_pcs' => $updatedSalesCart[$key]->productDetail->sell_price_pcs,
-    //             ];
-    //         }
+            // Determine tax types present in the order
+            $taxTypes = array_unique(array_map(function ($item) {
+                return $item->productDetail->tax_type;
+            }, $updatedSalesCart->all()));
 
-    //         // Insert order details in bulk
-    //         OrderDetail::insert($orderDetails);
+            // Create orders based on tax types
+            $orderIds = [];
+            // Create orders based on tax types
+            foreach ($taxTypes as $taxType) {
+                // Filter items based on tax type
+                $filteredItems = array_filter($updatedSalesCart->all(), function ($item) use ($taxType) {
+                    return $item->productDetail->tax_type === $taxType;
+                });
 
-    //         // Retrieve the created order with order details and product details
-    //         $orderList = Order::with('orderDetails.productDetail')->find($order->id);
+                // Calculate total for the tax type
+                $taxTypeTotal = collect($filteredItems)->sum(function ($item) {
+                    return $item->qty_duz * $item->productDetail->sell_price_duz +
+                        $item->qty_pak * $item->productDetail->sell_price_pak +
+                        $item->qty_pcs * $item->productDetail->sell_price_pcs;
+                });
 
-    //         if ($orderList) {
-    //             // Loop through order details and update product stock
-    //             foreach ($orderList->orderDetails as $orderDetail) {
-    //                 $productDetail = $orderDetail->productDetail;
+                // Create the order for the tax type
+                $order = Order::create([
+                    'sales_id' => $sales,
+                    'transaction_id' => getUniqueTransactionId(),
+                    'total' => $taxTypeTotal,
+                    'outlet_id' => $request->outlet_id,
+                    'order_status' => 1,
+                    'payment_status' => 0,
+                    // Add any other order-specific fields here
+                ]);
 
-    //                 // Retrieve conversion factors from the product
-    //                 $duzToPakFactor = $productDetail->product->dus_pak;
-    //                 $pakToPcsFactor = $productDetail->product->pak_pcs;
+                // Save the ID of the created order
+                $orderIds[] = $order->id;
 
-    //                 // Check if the product is withoutPcs
-    //                 $productWithoutPcs = $productDetail->product->withoutPcs;
+                // Create order details for the tax type
+                $orderDetails = [];
+                foreach ($filteredItems as $key => $item) {
+                    $orderDetails[] = [
+                        'order_id' => $order->id,
+                        'detail_id' => $request->input('detail_id')[$key],
+                        'qty_duz' => $item->qty_duz,
+                        'qty_pak' => $item->qty_pak,
+                        'qty_pcs' => $item->qty_pcs,
+                        'price_duz' => $item->productDetail->sell_price_duz,
+                        'price_pak' => $item->productDetail->sell_price_pak,
+                        'price_pcs' => $item->productDetail->sell_price_pcs,
+                        'tax_type' => $item->productDetail->tax_type,
+                    ];
+                }
 
-    //                 if ($productWithoutPcs) {
-    //                     // If withoutPcs is true, update stock using decStockPack
-    //                     $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
-    //                     $onlyPak =  $orderDetail->qty_pak;
-    //                     $productDetail->product->decStockPack($duzToPak, $onlyPak);
-    //                 } else {
-    //                     // If withoutPcs is false, convert quantities to pcs and update stock
-    //                     $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor; // 480 pcs
-    //                     $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; // 4 * 20
-    //                     $pcs = $orderDetail->qty_pcs;
+                // Save order details for the tax type
+                OrderDetail::insert($orderDetails);
+            }
 
-    //                     // Update stock based on quantities in pcs
-    //                     $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
-    //                 }
-    //             }
-    //         }
 
-    //         // Delete items from the cart for the given sales.
-    //         SalesCart::where('sales_id', $sales)->delete();
+            // Retrieve the created orders with order details and product details
+            $orderList = Order::with('orderDetails.productDetail')->whereIn('id', $orderIds)->get();
 
-    //         // Optionally, you might want to redirect the user after successfully storing the order
-    //         return redirect()->route('app.sales')->with('success', 'Order created successfully');
-    //     } catch (\Exception $e) {
-    //         // Handle exceptions, log errors, and provide feedback to the user
-    //         return redirect()->back()->with('error', 'An error occurred while processing the order.');
-    //     }
-    // }
+
+            if ($orderList) {
+                foreach ($orderList as $order) {
+                    // Loop through order details and update product stock
+                    foreach ($order->orderDetails as $orderDetail) {
+                        $productDetail = $orderDetail->productDetail;
+
+                        // Retrieve conversion factors from the product
+                        $duzToPakFactor = $productDetail->product->dus_pak;
+                        $pakToPcsFactor = $productDetail->product->pak_pcs;
+
+                        // Check if the product is withoutPcs
+                        $productWithoutPcs = $productDetail->product->withoutPcs;
+
+                        if ($productWithoutPcs) {
+                            // If withoutPcs is true, update stock using decStockPack
+                            $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
+                            $onlyPak =  $orderDetail->qty_pak;
+                            $productDetail->product->decStockPack($duzToPak, $onlyPak);
+                        } else {
+                            // If withoutPcs is false, convert quantities to pcs and update stock
+                            $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor; // 480 pcs
+                            $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; // 4 * 20
+                            $pcs = $orderDetail->qty_pcs;
+
+                            // Update stock based on quantities in pcs
+                            $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
+                        }
+                    }
+                }
+            }
+
+            // Delete items from the cart for the given sales.
+            SalesCart::where('sales_id', $sales)->delete();
+
+            // Optionally, you might want to redirect the user after successfully storing the order
+            return redirect()->route('app.sales')->with('success', 'Order created successfully');
+        } catch (\Exception $e) {
+            // Handle exceptions, log errors, and provide feedback to the user
+            return redirect()->back()->with('error', 'An error occurred while processing the order.');
+        }
+    }
 
     public function deleteCart($id)
     {
@@ -357,155 +392,157 @@ class SalesController extends Controller
         }
     }
 
-    public function createOrder(Request $request, $sales)
-    {
-        $request->validate([
-            'qty_product.*' => 'required|numeric',
-        ]);
+    // public function createOrder(Request $request, $sales)
+    // {
+    //     // dd($sales);
+    //     $request->validate([
+    //         'qty_product.*' => 'required|numeric',
+    //     ]);
 
-        try {
-            $exceededStockProducts = $this->validateAndUpdateSalesCart($request, $sales);
+    //     try {
+    //         $exceededStockProducts = $this->validateAndUpdateSalesCart($request, $sales);
 
-            if (!empty($exceededStockProducts)) {
-                $errorMessage = "Produk Pesanan Melebihi Stok Gudang: " . implode(', ', $exceededStockProducts);
-                throw new \Exception($errorMessage);
-            }
+    //         if (!empty($exceededStockProducts)) {
+    //             $errorMessage = "Produk Pesanan Melebihi Stok Gudang: " . implode(', ', $exceededStockProducts);
+    //             throw new \Exception($errorMessage);
+    //         }
 
-            $total = $this->calculateTotal($sales);
-            $customer = $this->getCustomer($sales);
+    //         $total = $this->calculateTotal($sales);
+    //         $customer = $this->getCustomer($sales);
+    //         ($customer);
+    //         if (!$customer) {
+    //             throw new \Exception('Outlet Tidak Ditemukan');
+    //         }
 
-            if (!$customer) {
-                throw new \Exception('Outlet Tidak Ditemukan');
-            }
+    //         $order = $this->createOrderRecord($sales, $total, $customer->outlet_id);
+    //         $orderDetails = $this->prepareOrderDetails($request, $order);
+    //         // dd($orderDetails);
 
-            $order = $this->createOrderRecord($sales, $total, $customer->outlet_id);
-            $orderDetails = $this->prepareOrderDetails($request, $order);
-
-            OrderDetail::insert($orderDetails);
-            $this->updateProductStock($order);
-            SalesCart::where('sales_id', $sales)->delete();
+    //         OrderDetail::insert($orderDetails);
+    //         $this->updateProductStock($order);
+    //         SalesCart::where('sales_id', $sales)->delete();
 
 
-            return redirect()->route('app.sales')->with('success', 'Order created successfully');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
+    //         return redirect()->route('app.sales')->with('success', 'Order created successfully');
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('error', $e->getMessage());
+    //     }
+    // }
 
     // Helper Functions
 
-    private function validateAndUpdateSalesCart(Request $request, $sales)
-    {
-        $exceededStockProducts = [];
+    // private function validateAndUpdateSalesCart(Request $request, $sales)
+    // {
+    //     $exceededStockProducts = [];
 
-        $updatedCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
+    //     $updatedCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
 
-        foreach ($request->input('qty_product') as $key => $quantity) {
-            $quantityField = 'qty_' . $request->input('satuan')[$key];
-            $productDetail = $updatedCart
-                ->where('detail_id', $request->input('detail_id')[$key])
-                ->first()
-                ->productDetail;
+    //     foreach ($request->input('qty_product') as $key => $quantity) {
+    //         $quantityField = 'qty_' . $request->input('satuan')[$key];
+    //         $productDetail = $updatedCart
+    //             ->where('detail_id', $request->input('detail_id')[$key])
+    //             ->first()
+    //             ->productDetail;
 
-            if (!$this->validateRequestedQuantities($quantity, $request->input('satuan')[$key], $productDetail)) {
-                $exceededStockProducts[] = $productDetail->product->title;
-            } else {
-                SalesCart::updateOrCreate(
-                    [
-                        'sales_id' => $sales,
-                        'detail_id' => $request->input('detail_id')[$key],
-                    ],
-                    [
-                        $quantityField => $quantity,
-                    ]
-                );
-            }
-        }
+    //         if (!$this->validateRequestedQuantities($quantity, $request->input('satuan')[$key], $productDetail)) {
+    //             $exceededStockProducts[] = $productDetail->product->title;
+    //         } else {
+    //             SalesCart::updateOrCreate(
+    //                 [
+    //                     'sales_id' => $sales,
+    //                     'detail_id' => $request->input('detail_id')[$key],
+    //                 ],
+    //                 [
+    //                     $quantityField => $quantity,
+    //                 ]
+    //             );
+    //         }
+    //     }
 
-        return $exceededStockProducts;
-    }
+    //     return $exceededStockProducts;
+    // }
 
-    private function calculateTotal($sales)
-    {
-        $updatedSalesCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
+    // private function calculateTotal($sales)
+    // {
+    //     $updatedSalesCart = SalesCart::where('sales_id', $sales)->with('productDetail')->get();
 
-        return $updatedSalesCart->sum(function ($item) {
-            return $item->qty_duz * $item->productDetail->sell_price_duz +
-                $item->qty_pak * $item->productDetail->sell_price_pak +
-                $item->qty_pcs * $item->productDetail->sell_price_pcs;
-        });
-    }
+    //     return $updatedSalesCart->sum(function ($item) {
+    //         return $item->qty_duz * $item->productDetail->sell_price_duz +
+    //             $item->qty_pak * $item->productDetail->sell_price_pak +
+    //             $item->qty_pcs * $item->productDetail->sell_price_pcs;
+    //     });
+    // }
 
-    private function getCustomer($sales)
-    {
-        return Customer::where('sales_id', $sales)
-            ->with('outlet', 'seller')
-            ->first(['id', 'outlet_id', 'sales_id', 'address']);
-    }
+    // private function getCustomer($sales)
+    // {
+    //     return Customer::where('sales_id', $sales)
+    //         ->with('outlet', 'seller')
+    //         ->first(['id', 'outlet_id', 'sales_id']);
+    // }
 
-    private function createOrderRecord($sales, $total, $outletId)
-    {
-        return Order::create([
-            'sales_id' => $sales,
-            'transaction_id' => getUniqueTransactionId(),
-            'total' => $total,
-            'outlet_id' => $outletId,
-            'order_status' => 1,
-            'payment_status' => 0,
-        ]);
-    }
+    // private function createOrderRecord($sales, $total, $outletId)
+    // {
+    //     return Order::create([
+    //         'sales_id' => $sales,
+    //         'transaction_id' => getUniqueTransactionId(),
+    //         'total' => $total,
+    //         'outlet_id' => $outletId,
+    //         'order_status' => 1,
+    //         'payment_status' => 0,
+    //     ]);
+    // }
 
-    private function prepareOrderDetails(Request $request, $order)
-    {
-        $orderDetails = [];
+    // private function prepareOrderDetails(Request $request, $order)
+    // {
+    //     $orderDetails = [];
 
-        $updatedSalesCart = SalesCart::where('sales_id', $order->sales_id)->with('productDetail')->get();
+    //     $updatedSalesCart = SalesCart::where('sales_id', $order->sales_id)->with('productDetail')->get();
 
-        foreach ($request->input('detail_id') as $key => $detailId) {
-            $orderDetails[] = [
-                'order_id' => $order->id,
-                'detail_id' => $detailId,
-                'qty_duz' => $updatedSalesCart[$key]->qty_duz,
-                'qty_pak' => $updatedSalesCart[$key]->qty_pak,
-                'qty_pcs' => $updatedSalesCart[$key]->qty_pcs,
-                'price_duz' => $updatedSalesCart[$key]->productDetail->sell_price_duz,
-                'price_pak' => $updatedSalesCart[$key]->productDetail->sell_price_pak,
-                'price_pcs' => $updatedSalesCart[$key]->productDetail->sell_price_pcs,
-            ];
-        }
+    //     foreach ($request->input('detail_id') as $key => $detailId) {
+    //         $orderDetails[] = [
+    //             'order_id' => $order->id,
+    //             'detail_id' => $detailId,
+    //             'qty_duz' => $updatedSalesCart[$key]->qty_duz,
+    //             'qty_pak' => $updatedSalesCart[$key]->qty_pak,
+    //             'qty_pcs' => $updatedSalesCart[$key]->qty_pcs,
+    //             'price_duz' => $updatedSalesCart[$key]->productDetail->sell_price_duz,
+    //             'price_pak' => $updatedSalesCart[$key]->productDetail->sell_price_pak,
+    //             'price_pcs' => $updatedSalesCart[$key]->productDetail->sell_price_pcs,
+    //         ];
+    //     }
 
-        return $orderDetails;
-    }
+    //     return $orderDetails;
+    // }
 
-    private function updateProductStock($order)
-    {
-        $orderList = Order::with('orderDetails.productDetail')->find($order->id);
+    // private function updateProductStock($order)
+    // {
+    //     $orderList = Order::with('orderDetails.productDetail')->find($order->id);
 
-        foreach ($orderList->orderDetails as $orderDetail) {
-            $productDetail = $orderDetail->productDetail;
-            // Retrieve conversion factors from the product
-            $duzToPakFactor = $productDetail->product->dus_pak;
-            $pakToPcsFactor = $productDetail->product->pak_pcs;
+    //     foreach ($orderList->orderDetails as $orderDetail) {
+    //         $productDetail = $orderDetail->productDetail;
+    //         // Retrieve conversion factors from the product
+    //         $duzToPakFactor = $productDetail->product->dus_pak;
+    //         $pakToPcsFactor = $productDetail->product->pak_pcs;
 
-            // Check if the product is withoutPcs
-            $productWithoutPcs = $productDetail->product->withoutPcs;
+    //         // Check if the product is withoutPcs
+    //         $productWithoutPcs = $productDetail->product->withoutPcs;
 
-            if ($productWithoutPcs) {
-                // If withoutPcs is true, update stock using decStockPack
-                $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
-                $onlyPak =  $orderDetail->qty_pak;
-                $productDetail->product->decStockPack($duzToPak, $onlyPak);
-            } else {
-                // If withoutPcs is false, convert quantities to pcs and update stock
-                $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor; // 480 pcs
-                $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; // 4 * 20
-                $pcs = $orderDetail->qty_pcs;
+    //         if ($productWithoutPcs) {
+    //             // If withoutPcs is true, update stock using decStockPack
+    //             $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
+    //             $onlyPak =  $orderDetail->qty_pak;
+    //             $productDetail->product->decStockPack($duzToPak, $onlyPak);
+    //         } else {
+    //             // If withoutPcs is false, convert quantities to pcs and update stock
+    //             $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor; // 480 pcs
+    //             $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor; // 4 * 20
+    //             $pcs = $orderDetail->qty_pcs;
 
-                // Update stock based on quantities in pcs
-                $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
-            }
-        }
-    }
+    //             // Update stock based on quantities in pcs
+    //             $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
+    //         }
+    //     }
+    // }
 
     // Function to validate requested quantities against available stock
     private function validateRequestedQuantities($requestedQuantity, $unit, $productDetail)

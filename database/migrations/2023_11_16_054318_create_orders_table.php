@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sales_id');
             $table->unsignedBigInteger('outlet_id');
-            $table->string('transaction_id', 150)->unique();
+            $table->string('transaction_id', 50)->unique();
             $table->integer('total_transactions')->default(0);
             $table->integer('total');
             $table->integer('payment_status')->comment('0 => due, 1 => paid');
