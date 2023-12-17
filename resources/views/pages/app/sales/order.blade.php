@@ -39,7 +39,8 @@
                                                 <option disabled> PILIH OUTLET
                                                 </option>
                                                 @foreach ($customers as $customer)
-                                                    <option value="{{ $customer->outlet->id }}">{{ $customer->outlet->name }}
+                                                    <option value="{{ $customer->outlet->id }}">
+                                                        {{ $customer->outlet->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -105,12 +106,12 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 2%" class="align-middle">
-                                                    No. Urut
+                                                    No
                                                 </th>
-                                                <th scope="col" style="width: 20%">Nama Produk</th>
-                                                <th scope="col" style="width: 10%">Detail Stok</th>
-                                                <th scope="col" style="width: 10%">Tipe Pajak</th>
-                                                <th scope="col" style="width: 10%">Harga Jual</th>
+                                                <th scope="col" style="width: 25%">Produk</th>
+                                                <th scope="col" style="width: 10%">Stok</th>
+                                                <th scope="col" style="width: 10%">Pajak</th>
+                                                <th scope="col" style="width: 10%">Harga</th>
                                                 <th scope="col" style="width: 2%">Pilihan</th>
                                             </tr>
                                         </thead>
