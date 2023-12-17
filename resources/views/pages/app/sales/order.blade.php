@@ -39,7 +39,7 @@
                                                 <option disabled> PILIH OUTLET
                                                 </option>
                                                 @foreach ($customers as $customer)
-                                                    <option value="{{ $customer->id }}">{{ $customer->outlet->name }}
+                                                    <option value="{{ $customer->outlet->id }}">{{ $customer->outlet->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
