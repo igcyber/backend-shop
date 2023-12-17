@@ -46,7 +46,8 @@ class SalesController extends Controller
         // Get the currently logged-in user (sales user)
         if (auth()->check()) {
             $salesUser = auth()->user()->id;
-            $getCustomer = Customer::with('outlet')->where('sales_id', $salesUser)->select('outlet_id')->get();
+            $getCustomer = Customer::with('outlet')->where('sales_id', $salesUser)->select('outlet_id', 'address')->get();
+            // dd($getCustomer);
             $outletIds = $getCustomer->pluck('outlet_id')->toArray();
             $markedProducts = MarkedProduct::with('user', 'detailProduct')->whereIn('user_id', $outletIds)->get();
             // dd($markedProducts);
@@ -102,27 +103,11 @@ class SalesController extends Controller
         }
     }
 
-    public function order()
-    {
-
-        $salesId = auth()->id();
-
-        $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode')->get();
-
-        $salesCart = SalesCart::with('productDetail')->where('sales_id', $salesId)->get();
-
-        $customers = Customer::where('sales_id', $salesId)
-            ->with('outlet')
-            ->get(['id', 'outlet_id']);
-
-        // return the view
-        return view('pages.app.sales.order', compact('customers', 'detailProducts', 'salesCart'));
-    }
-
     public function processOrder($userId)
     {
         // Mendapatkan ID sales yang sedang login
         $salesId = auth()->id();
+
         $markedProducts = MarkedProduct::where('user_id', $userId)->get();
         // dd($markedProducts);
         // Salin data dari $markedProducts ke sales_cart
@@ -145,8 +130,33 @@ class SalesController extends Controller
         MarkedProduct::where('user_id', $userId)->delete();
 
         // Redirect ke halaman order setelah data berhasil disalin
-        return redirect()->route('app.sales.order')->with('success', 'Pesanan berhasil diproses. Silakan lanjutkan membuat order.');
+        return redirect()->route('app.sales.order', ['userId' => $userId])->with('success', 'Pesanan berhasil diproses. Silakan lanjutkan membuat order.');
     }
+
+    public function order()
+    {
+
+        $salesId = auth()->id();
+
+        $detailProducts = DetailProduct::join('products', 'detail_products.product_id', '=', 'products.id')
+            ->where('products.stock_duz', '>', 0)
+            ->orWhere('products.stock_pak', '>', 0)
+            ->orWhere('products.stock_pcs', '>', 0)
+            ->select('detail_products.id', 'detail_products.product_id', 'detail_products.sell_price_duz', 'detail_products.sell_price_pak', 'detail_products.sell_price_pcs', 'detail_products.tax_type')
+            ->get();
+
+
+        $salesCart = SalesCart::with('productDetail')->where('sales_id', $salesId)->get();
+
+        $customers = Customer::where('sales_id', $salesId)
+            ->with('outlet')
+            ->get(['id', 'outlet_id']);
+
+        // return the view
+        return view('pages.app.sales.order', compact('customers', 'detailProducts', 'salesCart'));
+    }
+
+
 
     public function confirmation($type, Order $order)
     {
@@ -365,7 +375,7 @@ class SalesController extends Controller
             $customer = $this->getCustomer($sales);
 
             if (!$customer) {
-                throw new \Exception('Customer not found');
+                throw new \Exception('Outlet Tidak Ditemukan');
             }
 
             $order = $this->createOrderRecord($sales, $total, $customer->outlet_id);

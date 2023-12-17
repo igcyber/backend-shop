@@ -14,11 +14,13 @@ use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Apps\OrderController;
 use App\Http\Controllers\Apps\SalesController;
 use App\Http\Controllers\Apps\VendorController;
+use App\Http\Controllers\Apps\InvoiceController;
 use App\Http\Controllers\Apps\ProductController;
 use App\Http\Controllers\Apps\CategoryController;
 use App\Http\Controllers\Apps\CheckOutController;
 use App\Http\Controllers\Apps\CustomerController;
 use App\Http\Controllers\Apps\FlashSaleController;
+use App\Http\Controllers\Apps\AdminSalesController;
 use App\Http\Controllers\Apps\PermissionController;
 use App\Http\Controllers\Apps\CustomerLoginController;
 use App\Http\Controllers\Apps\DetailProductController;
@@ -42,6 +44,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Users Route
     Route::resource('/users', UserController::class)->middleware('permission:users.index|users.create|users.edit|users.delete');
+    //Users import Route
+    Route::post('/users/import-excel', [UserController::class, 'importExcel'])->name('users.import.excel');
+
 
     //Categories Route
     Route::resource('/categories', CategoryController::class)->middleware('permission:categories.index|categories.create|categories.edit|categories.delete');
@@ -103,7 +108,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::post('/sales/order/update/{sales}', [SalesController::class, 'createOrder'])->name('sales.cart.update');
     //sales delete cart
     Route::delete('/sales/delete/{id}', [SalesController::class, 'deleteCart'])->name('sales.delete');
-
+    //sales process order
     Route::get('/sales/process-order/{userId}', [SalesController::class, 'processOrder'])->name('sales.process-order');
 
 
@@ -125,4 +130,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::put('/sales/flash/update', [FlashSaleController::class, 'update'])->name('flash.sales.update');
     Route::put('/sales/add-product', [FlashSaleController::class, 'addProduct'])->name('flash.sales.addProduct');
     Route::put('/sales/change-status', [FlashSaleController::class, 'changeStatus'])->name('change.status');
+
+
+    // Admin Sales Route
+    Route::get('/admin-sales', [AdminSalesController::class, 'index'])->name('admin');
+
+    Route::get('/invoice-show/{order_id}', [InvoiceController::class, 'showInvoice'])->name('invoice.show');
 });

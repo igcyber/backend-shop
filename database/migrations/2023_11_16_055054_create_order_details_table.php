@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('price_duz');
             $table->integer('price_pak');
             $table->integer('price_pcs');
+            $table->decimal('disc_atas', 5, 2)->nullable();
             $table->timestamps();
 
             //relationship order

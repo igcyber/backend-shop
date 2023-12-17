@@ -6,17 +6,19 @@
             </div>
             <div class="col-lg-6 col-md-12 text-lg-start">
 
-                <h2 class="display-5 fw-bold mt-5">Diskon Sampai
-                    {{ number_format($maxDiscount, 0) }}% </h2>
+                <h3 class="display-6 fw-bold mt-5">*Diskon Sampai
+                    {{ moneyFormat($totalDiscountAmount) }}</h3>
                 <p class="fs-3 m-0">Yuk Buruan</p>
                 <span class="badge bg-primary">Berlaku Sampai</span>
                 @if ($flashSaleItems->count() > 0)
                     @php
                         $item = $flashSaleItems->first();
                     @endphp
-                    <p class="fs-4">{{ dateID($item->flashSale->end_date) }}</p>
+                    <p class="fs-4 mb-0">{{ dateID($item->flashSale->end_date) }}</p>
                     {{-- Your other Blade code --}}
                 @endif
+                <span style="font-size: 0.5rem;color:rgb(203, 199, 203)">*Diskon merupakan
+                    potongan maksimal harga per-dus dan tidak berlaku ke semua produk</span>
             </div>
         </div>
     </div>

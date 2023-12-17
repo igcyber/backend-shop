@@ -9,7 +9,8 @@
         <ul class="sidebar-menu">
             @role('Supervisor')
                 <li class="dropdown mt-2">
-                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+                    <a href="#" class="nav-link has-dropdown"><i
+                            class="fas fa-dashboard"></i><span>Dashboard</span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="#">General Dashboard</a></li>
                         <li><a class="nav-link" href="#">Ecommerce Dashboard</a></li>
@@ -18,7 +19,7 @@
 
                 <li class="{{ setActive(['app.flash.*']) }}">
                     <a class="nav-link" href="{{ route('app.flash.sales') }}" title="Flash Sale">
-                        <i class="fas fa-percent"></i>
+                        <i class="fas fa-fire"></i>
                         <span>Flash Sale</span>
                     </a>
                 </li>

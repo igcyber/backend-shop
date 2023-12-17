@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('total');
             $table->integer('payment_status')->comment('0 => due, 1 => paid');
             $table->integer('order_status')->comment('0 => pending, 1 => completed');
+            $table->decimal('disc_bawah', 5, 2)->nullable();
             $table->timestamps();
 
             $table->foreign('sales_id')->references('id')->on('users');
