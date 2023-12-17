@@ -9,17 +9,42 @@
 @section('main')
     <div class="main-content">
         <section class="section">
+            <div class="section-header">
+                <h4>DATA OUTLET</h4>
+                <div class="ml-auto">
+                    <a href="{{ route('app.customers.create') }}" class="btn btn-outline-primary ml-auto">
+                        <i class="fas fa-plus"></i> TAMBAH OUTLET
+                    </a>
+                </div>
+            </div>
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4>DATA OUTLET</h4>
-                                <a href="{{ route('app.customers.create') }}" class="btn btn-primary ml-auto">
-                                    <i class="fas fa-plus"></i> TAMBAH OUTLET
-                                </a>
-                            </div>
                             <div class="card-body">
+                                <form action="{{ route('app.detail-products.import') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-row mb-3">
+                                        <label for="img" style="font-weight: bold">Pilih File Excel</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-file-excel"></i>
+                                                </div>
+                                            </div>
+                                            <input type="file" name="excel_file" id="excel_file"
+                                                class="form-control col-md-2 @error('excel_file') @enderror">
+                                            <button type="submit" class="btn btn-outline-info">IMPORT DATA</button>
+                                        </div>
+                                        @error('excel_file')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </form>
+                                <hr>
                                 <form action="#" method="GET">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" name="q"

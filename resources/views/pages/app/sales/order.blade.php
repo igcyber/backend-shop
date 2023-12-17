@@ -33,13 +33,11 @@
                                                 readonly>
                                             <input type="hidden" name="sales_id" value="{{ Auth::user()->id }}">
                                         </div>
-                                        <div class="input-group mt-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-shop"></i>
-                                                </div>
-                                            </div>
-                                            <select name="outlet_id" id="outlet_id" class="form-control">
+
+                                        <div class="input-group mt-4">
+                                            <select name="outlet_id" id="outlet_id" class="form-control select2">
+                                                <option disabled> PILIH OUTLET
+                                                </option>
                                                 @foreach ($customers as $customer)
                                                     <option value="{{ $customer->id }}">{{ $customer->outlet->name }}
                                                     </option>
@@ -102,8 +100,8 @@
                                 <h4>DATA PRODUK</h4>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-product" id="table-1">
+                                <div class="table table-striped">
+                                    <table class="display" id="table-1">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 2%" class="align-middle">
@@ -111,6 +109,7 @@
                                                 </th>
                                                 <th scope="col" style="width: 20%">Nama Produk</th>
                                                 <th scope="col" style="width: 10%">Detail Stok</th>
+                                                <th scope="col" style="width: 10%">Tipe Pajak</th>
                                                 <th scope="col" style="width: 10%">Harga Jual</th>
                                                 <th scope="col" style="width: 2%">Pilihan</th>
                                             </tr>
@@ -137,6 +136,9 @@
                                                             @endif
                                                         </ul>
                                                     </td>
+                                                    <td>
+                                                        {{ $detail->tax_type }}
+                                                    </td>
                                                     <td style="padding: 0px 0px;">
                                                         <ul
                                                             style="padding: 0; list-style-type: none; line-height: 19px;margin-top:5%;">
@@ -151,7 +153,7 @@
                                                     </td>
                                                     <td class="align-middle">
                                                         <a href="{{ route('app.sales.cart', [$detail->id, auth()->user()->id]) }}"
-                                                            class="btn btn-sm btn-success">
+                                                            class="btn btn-sm btn-outline-success">
                                                             <i class="fas fa-cart-plus"></i>
                                                         </a>
                                                     </td>

@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
         /**
          * Get Supervisor Permissions
          */
-        $role = Role::find(1);
+        $role = Role::where('name', 'Supervisor')->first();
 
         /**
          * Assign Permissions To Role

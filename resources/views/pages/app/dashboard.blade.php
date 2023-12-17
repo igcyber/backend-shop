@@ -59,15 +59,15 @@
                 @endrole
                 @role('Sales')
                     <a class="btn btn-lg btn-outline-info ml-auto" href="{{ route('app.sales') }}">
-                        <i class="fas fa-cart-arrow-down"></i>
+                        <i class="fas fa-clipboard-list"></i>
                         <span>DATA PESANAN</span>
                     </a>
                 @endrole
                 @role('Admin Sales')
                     {{-- {{ setActive(['app.order.*']) }} --}}
-                    <a class="btn btn-lg btn-outline-info ml-auto" href="#">
+                    <a class="btn btn-lg btn-outline-info ml-auto" href="{{ route('app.admin') }}">
                         <i class="fas fa-cart-arrow-down"></i>
-                        <span>Faktur Order</span></a>
+                        <span>FAKTUR PESANAN</span></a>
                     </a>
                 @endrole
                 @role('Outlet')

@@ -8,7 +8,7 @@
             <div class="section-header">
                 <h4>DATA DETAIL PRODUK</h4>
                 <div class="ml-auto">
-                    <a href="{{ route('app.detail-products.create') }}" class="btn btn-primary ml-auto">
+                    <a href="{{ route('app.detail-products.create') }}" class="btn btn-outline-primary ml-auto">
                         <i class="fas fa-plus"></i> TAMBAH DETAIL PRODUK
                     </a>
                 </div>
