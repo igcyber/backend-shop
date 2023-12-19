@@ -90,21 +90,34 @@
                                                     </td>
                                                     <td class="align-middle">
                                                         <span
-                                                            class="badge badge-{{ $product->total_stock < $min_stok ? 'danger' : 'success' }}">
-                                                            {{ $product->total_stock }}
-                                                            {{ $product->withoutPcs == 0 ? 'pcs' : 'pak' }}
+                                                            class="badge badge-{{ $product->total_stock <= $min_stok ? 'danger' : 'success' }}">
+                                                            {{ number_format($product->total_stock, 0, ',', '.') }}
+                                                            {{ $product->withoutpcs == 0 ? 'pcs' : 'pak' }}
                                                         </span>
                                                     </td>
                                                     <td class="align-middle">
                                                         <ul style="padding: 0; list-style-type: none; line-height:18px;">
                                                             @if ($product->stock_duz > 0)
-                                                                <li>{{ $product->stock_duz }} dus</li>
+                                                                <li class="text-{{ $product->total_stock <= $min_stok ? 'danger' : 'success' }}"
+                                                                    style="font-weight: bolder">
+                                                                    {{ $product->stock_duz }} dus
+                                                                </li>
                                                             @endif
                                                             @if ($product->stock_pak > 0)
-                                                                <li>{{ $product->stock_pak }} pak</li>
+                                                                <li class="text-{{ $product->total_stock <= $min_stok ? 'danger' : 'success' }}"
+                                                                    style="font-weight: bolder">
+                                                                    {{ $product->stock_pak }} pak
+                                                                </li>
                                                             @endif
                                                             @if ($product->stock_pcs > 0)
-                                                                <li>{{ $product->stock_pcs }} pcs</li>
+                                                                <li class="text-{{ $product->total_stock <= $min_stok ? 'danger' : 'success' }}"
+                                                                    style="font-weight: bolder">
+                                                                    {{ $product->stock_pcs }} pcs
+                                                                </li>
+                                                            @endif
+                                                            @if ($product->stock_duz == 0 && $product->stock_pak == 0 && $product->stock_pcs == 0)
+                                                                <li class="text-danger" style="font-weight: bolder">Stok
+                                                                    Kosong</li>
                                                             @endif
                                                         </ul>
                                                     </td>

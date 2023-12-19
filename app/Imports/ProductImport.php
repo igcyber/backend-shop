@@ -18,7 +18,7 @@ class ProductImport implements ToModel, WithHeadingRow
         if (empty(array_filter($row))) {
             return null;
         }
-        info('Row Data:', $row);
+        // info('Row Data:', $row);
         // Calculate 'pakPerDus' based on the Excel data
         $pakPerDus = $row['dus_pak'] * $row['pak_pcs'];
 
@@ -50,7 +50,7 @@ class ProductImport implements ToModel, WithHeadingRow
             'short_description' => $row['short_description'],
             'dus_pak' => $row['dus_pak'],
             'pak_pcs' => $row['pak_pcs'],
-            'withoutPcs' => $row['withoutpcs'],
+            'withoutpcs' => $row['withoutpcs'],
             'total_stock' => $row['total_stock'],
             'stock_duz' => $row['stock_duz'],
             'stock_pak' => $row['stock_pak'],

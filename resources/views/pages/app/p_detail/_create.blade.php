@@ -43,13 +43,8 @@
                                         <div class="col-md-6 mt-2">
                                             <label for="product" style="font-weight: bold">Produk</label>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">
-                                                        <i class="fas fa-boxes"></i>
-                                                    </div>
-                                                </div>
                                                 <select name="product_id" id="product"
-                                                    class="form-control @error('product_id') is-invalid @enderror">
+                                                    class="form-control @error('product_id') is-invalid @enderror select2">
                                                     <option disabled selected>PILIH PRODUCT</option>
                                                     @foreach ($products as $item)
                                                         @if (!in_array($item->id, $existProducIds))

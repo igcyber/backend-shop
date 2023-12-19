@@ -6,7 +6,10 @@
 @endpush
 
 @section('main')
-    <div class="main-content">
+    <div id="loading-container">
+        <div id="loading-spinner"></div>
+    </div>
+    <div class="main-content" style="padding-left:28px; !important">
         <section class="section">
             <div class="section-body">
                 <div class="row">
@@ -20,60 +23,56 @@
                                         <h4 class="d-inline" style="font-weight: bolder">FAKTUR PENJUALAN</h4><br>
                                         <h5 class="" style="font-weight: bold">PT. UPINDO RAYA SEMESTA BORNEO</h5>
                                         <p style="font-size: 1.2em">
-                                            JL.MUGIREJO RT.14 NO.2A </br>
+                                            JL.MUGIREJO RT.14 NO.2A <br>
                                             (0541)282657 / 7074778 <br>
                                             082158111409
                                         </p>
                                     </div>
-                                    <div class="col-md-5 mt-5">
+                                    <div class="col-md-5 mt-5" style="padding-left: 5%">
                                         <table>
                                             <thead>
-                                                <th scope="col" style="width:200px"></th>
-                                                <th scope="col" style="width:200px"></th>
+                                                <tr>
+                                                    <th scope="col" style="width:200px"></th>
+                                                    <th scope="col" style="width:400px"></th>
+                                                </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td style="font-size: 1.1rem">
-                                                        Jumlah Item
+                                                    <td style="font-size: 0.9rem">
+                                                        No. Transaksi
                                                     </td>
-                                                    <td style="font-weight: bolder;font-size: 1.1rem">
-                                                        : {{ $order->orderDetails->count() }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="font-size: 1.1rem">
-                                                        Potongan
-                                                    </td>
-                                                    <td style="font-size: 1.1rem">
-                                                        : 0
+                                                    <td style="font-weight: bolder;font-size: 0.9rem">
+                                                        : {{ $order->transaction_id }}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-size: 1.1rem">Pajak</td>
-                                                    <td style="font-size: 1.1rem">: 0</td>
+                                                    <td style="font-size: 0.9rem">
+                                                        Tanggal
+                                                    </td>
+                                                    <td style="font-size: 0.9rem">
+                                                        : {{ $order->formatted_created_at }}
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-size: 1.1rem">Tanggal</td>
-                                                    <td style="font-size: 1.1rem">: 0</td>
+                                                    <td style="font-size: 0.9rem">Kode Sales</td>
+                                                    <td style="font-size: 0.9rem">: {{ $order->sales->name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: 0.9rem">Pelanggan</td>
+                                                    <td style="font-size: 0.9rem">:
+                                                        {{ $order->customer_id }}-{{ $order->outlet->name }}{{ $order->customer_phone && $order->customer_phone !== '-' ? '-' . $order->customer_phone : '' }}
+                                                    </td>
+                                                </tr>
+                                                <tr class="align-top">
+                                                    <td style="font-size: 0.9rem">Alamat</td>
+                                                    <td style="font-size: 0.9rem">: {!! $order->customer_address !!}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <p class="mb-0">No. Transaksi <span style="margin-left:10.7%">:</span>
-                                            {{ $order->transaction_id }}</p>
-                                        <p class="mt-0 mb-0 mr-5">Tanggal <span style="margin-left:17.6%">:</span>
-                                            {{ $order->formatted_created_at }}
-                                        </p>
-                                        <p class="mt-0 mb-0">Kode Sales <span style="margin-left:12.9%">:</span>
-                                            {{ $order->sales->name }}</p>
-                                        <p class="mt-0 mb-0">Pelanggan <span style="margin-left:13.3%">:</span>
-                                            {{ $order->customer_id }}-{{ $order->outlet->name }}{{ $order->customer_phone && $order->customer_phone !== '-' ? '-' . $order->customer_phone : '' }}
-                                        </p>
-                                        <p class="mt-0">Alamat <span style="margin-left:16.8%">:</span>
-                                            {{ $order->customer_address }}</p>
                                     </div>
 
                                 </div>
-                                <div class="row mt-4">
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="table-responsive">
                                             <table class="table table-striped table-hover table-md">
@@ -81,12 +80,12 @@
                                                     <tr>
                                                         <th scope="col">No</th>
                                                         <th scope="col">Kode Item</th>
-                                                        <th scope="col">Nama Item</th>
+                                                        <th scope="col" style="width: 40%">Nama Item</th>
                                                         <th scope="col">Jumlah Satuan</th>
-                                                        <th scope="col">Cek</th>
-                                                        <th scope="col">Harga</th>
-                                                        <th scope="col">Pot</th>
-                                                        <th scope="col">Total</th>
+                                                        <th scope="col" style="width: 10%" class="text-center">Cek</th>
+                                                        <th scope="col" style="width: 10%">Harga</th>
+                                                        <th scope="col" style="width: 10%">Pot</th>
+                                                        <th scope="col" style="width: 10%">Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -116,23 +115,38 @@
                                                             <td>
                                                                 @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
                                                                     @if ($orderDetail->qty_duz > 0)
-                                                                        {{ moneyFormat($orderDetail->price_duz) }}
+                                                                        {{ moneyFormat($orderDetail->productDetail->sell_price_duz) }}
                                                                     @endif
                                                                     @if ($orderDetail->qty_pak > 0)
-                                                                        {{ moneyFormat($orderDetail->price_pak) }}
+                                                                        {{ moneyFormat($orderDetail->productDetail->sell_price_pak) }}
                                                                     @endif
                                                                     @if ($orderDetail->qty_pcs > 0)
-                                                                        {{ moneyFormat($orderDetail->price_pcs) }}
+                                                                        {{ moneyFormat($orderDetail->productDetail->sell_price_pcs) }}
                                                                     @endif
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
-                                                                    <!-- Tambahkan form input diskon per-item -->
-                                                                    <input type="number" step="0.01"
-                                                                        class="form-control" placeholder="Diskon"
-                                                                        id="disc_atas_{{ $orderDetail->id }}">
-                                                                @endif
+                                                                <!-- Tambahkan form input diskon per-item -->
+                                                                <form
+                                                                    action="{{ route('app.update-discount', ['orderDetailId' => $orderDetail->id]) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('POST')
+                                                                    <div class="form-row">
+                                                                        <div class="input-group">
+                                                                            <input type="text"
+                                                                                class="form-control col-md-12"
+                                                                                id="disc_atas" placeholder="0%"
+                                                                                name="disc_atas"
+                                                                                value="{{ $orderDetail->disc_atas }}">
+                                                                            <button type="submit"
+                                                                                onclick="alert('Konfirmasi Nilai Diskon')"
+                                                                                class="btn btn-sm btn-outline-primary">
+                                                                                <i class="fas fa-calculator"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
                                                             </td>
                                                             <td>
                                                                 @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
@@ -160,11 +174,13 @@
                                                     DITANDA
                                                     TANGANI</p>
                                             </div>
-                                            <div class="col-md-4 ml-auto" style="padding-left: 15%">
+                                            <div class="col-md-4 ml-auto" style="padding-left: 9%">
                                                 <table>
                                                     <thead>
-                                                        <th scope="col" style="width:200px"></th>
-                                                        <th scope="col" style="width:200px"></th>
+                                                        <tr>
+                                                            <th scope="col" style="width:200px"></th>
+                                                            <th scope="col" style="width:200px"></th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
@@ -175,21 +191,33 @@
                                                                 : {{ $order->orderDetails->count() }}
                                                             </td>
                                                         </tr>
-                                                        <tr>
+                                                        <tr class="align-top">
                                                             <td style="font-size: 1.1rem">
                                                                 Potongan
                                                             </td>
                                                             <td style="font-size: 1.1rem">
-                                                                : 0
+                                                                : <input type="text" name="disc_bawah" placeholder="0"
+                                                                    style="width: 30px;border:none;" id="disc_bawah"> %
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-size: 1.1rem">Pajak</td>
-                                                            <td style="font-size: 1.1rem">: 0</td>
+                                                            <td style="font-size: 1.1rem">:
+                                                                <input type="text" style="width: 30px;border:none;"
+                                                                    readonly
+                                                                    value="{{ $taxTypesString === 'PPN' ? '11' : '0' }}"> %
+                                                                @if ($taxTypesString === 'PPN')
+                                                                    {{ number_format($total, 0, ',', '.') }}
+                                                                @endif
+                                                            </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td style="font-size: 1.1rem">Tanggal</td>
-                                                            <td style="font-size: 1.1rem">: 0</td>
+                                                        <tr class="align-top">
+                                                            <td style="font-size: 1.1rem">Tanggal Tempo</td>
+                                                            <td class="align-top" style="font-size: 1.1rem">
+                                                                : <input type="date" style="border:none;"
+                                                                    id="dateInput">
+                                                                {{-- <span id="formattedDate"> --}}
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -197,8 +225,10 @@
                                             <div class="col-md-4" style="padding-left: 10%">
                                                 <table>
                                                     <thead>
-                                                        <th scope="col" style="width:200px"></th>
-                                                        <th scope="col" style="width:200px"></th>
+                                                        <tr>
+                                                            <th scope="col" style="width:200px"></th>
+                                                            <th scope="col" style="width:200px"></th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
@@ -213,8 +243,9 @@
                                                             <td style="font-size: 1.1rem">
                                                                 Total Akhir
                                                             </td>
-                                                            <td style="font-size: 1.1rem">
-                                                                : {{ moneyFormat($order->total) }}
+                                                            <td style="font-size: 1.1rem">:
+                                                                <span
+                                                                    id="totalAmount">{{ moneyFormat($order->total) }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -228,7 +259,9 @@
                                                         <tr>
                                                             <td style="font-size: 1.1rem">Kredit</td>
                                                             <td style="font-weight: bolder;font-size: 1.1rem">:
-                                                                {{ moneyFormat($order->total) }}</td>
+                                                                <span
+                                                                    id="kreditAmount">{{ moneyFormat($order->total) }}</span>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -239,6 +272,9 @@
                             </div>
                             <hr>
                             <div class="text-md-right">
+                                <a href="{{ route('app.admin') }}" class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-arrow-left"></i> KEMBALI
+                                </a>
                                 <div class="float-lg-left mb-lg-0 mb-3">
 
                                 </div>
@@ -254,17 +290,107 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
+    {{-- <script>
+        function showConfirmation(orderId) {
+            // console.log(orderId);
+            swal({
+                title: "DISKON KONFIRMASI",
+                text: "PASTIKAN NILAI DISKON SUDAH BENAR, DATA TIDAK BISA DIRUBAH",
+                icon: "warning",
+                buttons: [
+                    'TIDAK',
+                    'YA'
+                ],
+                dangerMode: true,
+            }).then(function(isConfirm) {
+                if (isConfirm) {
+                    // If the user clicks "Yes", submit the form
+                    // document.getElementById('discountForm' + orderId).submit();
+                    // If the user clicks "Yes", send an Ajax request
+                    var form = document.getElementById('discountForm' + orderId);
+                    var formData = new FormData(form);
 
-            $('.btn_print').on('click', function() {
-                // alert('Hello')
-                let printBody = $('.invoice-print');
-                let originalContents = $('body').html();
-                $('body').html(printBody.html());
-                window.print();
-                $('body').html(originalContents);
-            })
-        })
+                    // Validate and convert disc_atas to a numeric value
+                    var discAtasValue = parseFloat(formData.get('disc_atas[' + orderId + ']'));
+                    if (isNaN(discAtasValue)) {
+                        console.error('Invalid disc_atas value');
+                        return;
+                    }
+
+                    // Set the numeric disc_atas value back to the FormData object
+                    formData.set('disc_atas[' + orderId + ']', discAtasValue);
+
+                    // Add CSRF token to the formData
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    $.ajax({
+                        url: form.action,
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            // Handle success, if needed
+                            console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle error, if needed
+                            console.error(xhr.responseText);
+                        }
+                    });
+                } else {
+                    return true;
+                }
+            });
+        }
+    </script> --}}
+    <script>
+        // Add an event listener to the disc_bawah input field
+        document.getElementById('disc_bawah').addEventListener('input', function() {
+            // Get the entered disc_bawah value
+            var discBawah = parseFloat(this.value) || 0;
+
+            // Get the initial total amount from the server-side rendered value
+            var initialTotal = parseFloat('{{ $order->total }}');
+
+            // Calculate the discounted total
+            var discountedTotal = initialTotal - (initialTotal * (discBawah / 100));
+
+            // Convert to integer to remove the decimal part
+            var totalWithoutDecimal = Math.floor(discountedTotal);
+
+            // Format the total without decimal using the moneyFormat helper function
+            var formattedTotal = formatCurrency(totalWithoutDecimal);
+            console.log(formattedTotal);
+
+            // Update the 'Total Akhir' element
+            document.getElementById('totalAmount').innerText = formattedTotal;
+
+            // Update the 'Kredit' element
+            document.getElementById('kreditAmount').innerText = formattedTotal;
+        });
+
+        // Helper function to format currency
+        function formatCurrency(amount) {
+            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(amount);
+        }
+    </script>
+    <script>
+        // Function to format the date as DD/MM/YYYY
+        function formatDate(inputDate) {
+            const date = new Date(inputDate);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Event listener for the date input change
+        document.getElementById('dateInput').addEventListener('input', function() {
+            const inputValue = this.value; // Get the current value of the input
+            const formattedDate = formatDate(inputValue); // Format the date
+            // Update the content of the span with the formatted date
+            document.getElementById('formattedDate').textContent = formattedDate;
+        });
     </script>
 @endpush

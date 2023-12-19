@@ -135,5 +135,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     // Admin Sales Route
     Route::get('/admin-sales', [AdminSalesController::class, 'index'])->name('admin');
 
+    //Invoice Route
     Route::get('/invoice-show/{order_id}', [InvoiceController::class, 'showInvoice'])->name('invoice.show');
+    Route::post('/order-details/{orderDetailId}/update-discount', [InvoiceController::class, 'updateDiscount'])->name('update-discount');
 });

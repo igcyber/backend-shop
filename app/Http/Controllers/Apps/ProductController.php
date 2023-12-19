@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = Product::with('category', 'vendor')->latest()->get(['id', 'serial_number', 'title', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'category_id', 'vendor_id', 'exp_date', 'created_at', 'withoutPcs', 'dus_pak', 'pak_pcs']);
+        $products = Product::with('category', 'vendor')->latest()->get(['id', 'serial_number', 'title', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'category_id', 'vendor_id', 'exp_date', 'created_at', 'withoutpcs', 'dus_pak', 'pak_pcs']);
 
         $svgBarcodes = [];
 
@@ -58,16 +58,16 @@ class ProductController extends Controller
         $data = $this->prepareData($request);
 
         // Assuming $data is the input data from the form
-        $withoutPcsChecked = isset($data['without_pcs']) && $data['without_pcs'] == '1';
+        $withoutPcsChecked = isset($data['withoutpcs']) && $data['withoutpcs'] == '1';
 
         if ($withoutPcsChecked) {
             // Checkbox is checked
-            $pakPerDus = $data['pak_content'] * $data['pak_pcs'];
+            $pakPerDus = $data['dus_pak'] * $data['pak_pcs'];
             $hasil_perhitungan = countQtyWithoutPcs($data['total_stock'], $pakPerDus);
         } else {
             // Checkbox is not checked
             // Perform the calculation without considering without_pcs
-            $pakPerDus = $data['pak_content'] * $data['pak_pcs'];
+            $pakPerDus = $data['dus_pak'] * $data['pak_pcs'];
             $hasil_perhitungan = countQty($data['total_stock'], $pakPerDus, $data['pak_pcs']);
         }
 
@@ -82,7 +82,7 @@ class ProductController extends Controller
             'vendor_id' => $data['vendor_id'],
             'title' => $data['title'],
             'total_stock' => $data['total_stock'],
-            'withoutPcs' => $data['without_pcs'] ?? 0,
+            'withoutPcs' => $data['withoutpcs'] ?? 0,
             'stock_duz' => $hasil_perhitungan['jumlah_dus'],
             'stock_pak' => $hasil_perhitungan['sisa_pak'],
             'stock_pcs' => $hasil_perhitungan['sisa_biji'] ?? 0,
@@ -102,10 +102,16 @@ class ProductController extends Controller
 
     public function edit(Request $request, $id)
     {
+        // Find the product
+        $product = Product::findOrFail($id);
+        $vendors = Vendor::where('status', 1)->get(['id', 'name']);
+        $categories = Category::where('status', 1)->get(['id', 'name']);
+        return view('pages.app.products.edit', compact('product', 'vendors', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
+        dd($request->all());
     }
 
     public function destroy($id)
