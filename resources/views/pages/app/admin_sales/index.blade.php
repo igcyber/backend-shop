@@ -75,7 +75,6 @@
                                                                 {{-- <a class="dropdown-item"
                                                                     href="{{ route('app.confirmation', ['decline', $order->id]) }}">Batalkan
                                                                     Pesanan</a> --}}
-                                                                <a class="dropdown-item" href="#">Hapus Pesanan</a>
                                                                 <a href="{{ route('app.invoice.show', $order->id) }}"
                                                                     class="dropdown-item">Lihat Invoice</a>
                                                             </div>

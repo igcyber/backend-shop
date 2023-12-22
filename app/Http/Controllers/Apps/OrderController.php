@@ -209,4 +209,38 @@ class OrderController extends Controller
     {
         Cart::where('outlet_id', $user)->delete();
     }
+
+    public function updateTotalAmount(Order $order)
+    {
+        // Validate the request data
+        request()->validate([
+            'total_amount' => 'required|numeric|min:0',
+            'disc_bawah' => 'nullable|numeric|min:0|max:100',
+        ]);
+
+        // Update the total amount value in the orders table
+        $order->update([
+            'disc_bawah' => request('disc_bawah'),
+            'total' => request('total_amount'),
+        ]);
+
+        // Return a response (optional)
+        return response()->json(['message' => 'Total amount and Discount updated successfully']);
+    }
+
+    public function updateExpDate(Order $order)
+    {
+        // Validate the request data
+        request()->validate([
+            'exp_date' => 'nullable|date',
+        ]);
+
+        // Update the exp_date value in the orders table
+        $order->update([
+            'exp_date' => request('exp_date'),
+        ]);
+
+        // Return a response (optional)
+        return response()->json(['message' => 'Exp_date updated successfully']);
+    }
 }

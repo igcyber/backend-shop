@@ -30,8 +30,8 @@ class InvoiceController extends Controller
         $taxTypesString = implode(', ', $order->orderDetails->pluck('tax_type')->unique()->toArray());
         // dd($taxTypesString);
 
-        // Format the created_at date
-        $order->formatted_created_at = now()->format('d/m/Y');
+        // Format date when invoice printed
+        $order->formatted_printed_at = now()->format('d/m/Y');
 
         //Nilai PPN
         $total = $order->total;
@@ -39,6 +39,54 @@ class InvoiceController extends Controller
         $total = $total * 0.11;
 
         return view('pages.app.admin_sales.invoice-show', compact('order', 'taxTypesString', 'total'));
+    }
+
+
+    public function printInvoice($order_id)
+    {
+        $order = Order::join('customers', 'orders.outlet_id', '=', 'customers.outlet_id')
+            ->select('orders.*', 'customers.address as customer_address', 'customers.nomor as customer_id', 'customers.no_telp as customer_phone')
+            ->with(['orderDetails' => function ($query) {
+                // Eager load the tax_type from order_details
+                $query->select('order_details.*', 'tax_type');
+            }, 'outlet', 'sales'])
+            ->where('orders.id', $order_id)
+            ->first();
+
+        if (!$order) {
+            // Handle case where the order is not found
+            abort(404);
+        }
+
+        // Extract tax_type values from orderDetails and concatenate into a string
+        $taxTypesString = implode(', ', $order->orderDetails->pluck('tax_type')->unique()->toArray());
+        // dd($taxTypesString);
+
+        // Format date when invoice printted
+        $order->formatted_printed_at = now()->format('d/m/Y');
+
+        if ($order->exp_date) {
+            // Check if $order->exp_date is a string
+            if (is_string($order->exp_date)) {
+                // Convert the string to a DateTime object
+                $expDate = new \DateTime($order->exp_date);
+            } else {
+                // Assume $order->exp_date is already a DateTime object
+                $expDate = $order->exp_date;
+            }
+
+            // Format the date and assign it to $order->formatted_exp_date
+            $order->formatted_exp_date = $expDate->format('d/m/Y');
+        } else {
+            $order->formatted_exp_date = null; // Or any default value you prefer
+        }
+
+        //Nilai PPN
+        $total = $order->total;
+        $total = $total / 1.11;
+        $total = $total * 0.11;
+
+        return view('pages.app.admin_sales.invoice-print', compact('order', 'taxTypesString', 'total'));
     }
 
     public function updateDiscount(Request $request, $orderDetailId)

@@ -36,6 +36,7 @@
                                 <form action="{{ route('app.products.update', $product->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
+                                    @method('PUT')
                                     <div class="form-row">
                                         <div class="col-md-6 mt-2">
                                             <label for="img" style="font-weight: bold">Gambar</label>
@@ -208,7 +209,7 @@
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
                                                         style="font-weight: bolder">
-                                                        Total Stok
+                                                        Total Duz
                                                     </div>
                                                 </div>
                                                 <input type="text"
@@ -227,7 +228,7 @@
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
-                                                        <input type="checkbox" name="without_pcs"
+                                                        <input type="checkbox" name="without_pcs" readonly
                                                             value="{{ $product->withoutpcs }}"
                                                             @if ($product->withoutpcs == 1) checked @endif>
                                                     </div>

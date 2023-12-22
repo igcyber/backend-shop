@@ -111,7 +111,36 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        // Find the product
+        $product = Product::findOrFail($id);
+        $conversion = $product->dus_pak * $product->pak_pcs;
+        if ($product->withoutpcs) {
+            $conversionResult = $this->convertDuzToPakPcs($request->total_stock, $conversion, true);
+            $hasil_perhitungan = countQtyWithoutPcs($conversionResult['jumlah'], $conversion);
+        } else {
+            $conversionResult = $this->convertDuzToPakPcs($request->total_stock, $conversion, false);
+            $hasil_perhitungan = countQty($conversionResult['jumlah'], $conversion, $product->pak_pcs);
+        }
+
+
+        // Update product data
+        $updateData = [
+            'total_stock' => $product->total_stock + $conversionResult['jumlah'],
+            'stock_duz' => $product->stock_duz + $hasil_perhitungan['jumlah_dus'],
+            'stock_pak' => $product->stock_pak + $hasil_perhitungan['sisa_pak'],
+        ];
+
+        // Check if 'sisa_biji' key exists before accessing it
+        if (isset($hasil_perhitungan['sisa_biji'])) {
+            $updateData['stock_pcs'] = $product->stock_pcs + $hasil_perhitungan['sisa_biji'];
+        } else {
+            $updateData['stock_pcs'] = $product->stock_pcs;
+        }
+
+        $product->update($updateData);
+
+        // Redirect with success or error message
+        return redirect()->route('app.products.index')->with(['success' => 'Product updated successfully']);
     }
 
     public function destroy($id)
@@ -129,7 +158,7 @@ class ProductController extends Controller
             'stock' => 'nullable|numeric|max:999|min:0',
             'stock_pack' => 'nullable|numeric|max:999|min:0',
             'stock_pcs' => 'nullable|numeric|max:999|min:0',
-            'without_pcs' => 'boolean'
+            'withoutpcs' => 'boolean'
         ]);
     }
 
@@ -153,6 +182,26 @@ class ProductController extends Controller
 
         return null;
     }
+
+
+    private function convertDuzToPakPcs($totalStockDus, $qty, $withoutPcs)
+    {
+
+        if ($withoutPcs) {
+            // Convert dus to pak
+            $jumlahPak = $totalStockDus * $qty;
+            return [
+                'jumlah' => $jumlahPak,
+            ];
+        } else {
+
+            $jumlahPcs = $totalStockDus * $qty;
+            return [
+                'jumlah' => $jumlahPcs,
+            ];
+        }
+    }
+
 
     public function importExcel(Request $request)
     {

@@ -95,6 +95,9 @@
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     {{-- Spin.js --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    {{-- Axios --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
     @stack('scripts')
 

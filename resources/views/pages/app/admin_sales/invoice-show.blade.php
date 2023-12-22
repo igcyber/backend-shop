@@ -15,7 +15,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="invoice">
-                            {{-- @dd($order) --}}
                             <div class="invoice-print">
                                 <div class="row ml-2">
                                     <img src="{{ asset('front-end/img/loogoo (3).png') }}" alt="" width="16%;">
@@ -25,7 +24,10 @@
                                         <p style="font-size: 1.2em">
                                             JL.MUGIREJO RT.14 NO.2A <br>
                                             (0541)282657 / 7074778 <br>
-                                            082158111409
+                                            082158111409 <br>
+                                            @if ($taxTypesString === 'PPN')
+                                                NPWP : 080.905.149.3-722.000
+                                            @endif
                                         </p>
                                     </div>
                                     <div class="col-md-5 mt-5" style="padding-left: 5%">
@@ -50,7 +52,7 @@
                                                         Tanggal
                                                     </td>
                                                     <td style="font-size: 0.9rem">
-                                                        : {{ $order->formatted_created_at }}
+                                                        : {{ $order->formatted_printed_at }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -197,7 +199,9 @@
                                                             </td>
                                                             <td style="font-size: 1.1rem">
                                                                 : <input type="text" name="disc_bawah" placeholder="0"
-                                                                    style="width: 30px;border:none;" id="disc_bawah"> %
+                                                                    style="width: 30px;border:none;" id="disc_bawah"
+                                                                    value="{{ number_format($order->disc_bawah, 0, ',', '.') }}"
+                                                                    oninput="updateDiscBawah(this.value)"> %
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -214,9 +218,9 @@
                                                         <tr class="align-top">
                                                             <td style="font-size: 1.1rem">Tanggal Tempo</td>
                                                             <td class="align-top" style="font-size: 1.1rem">
-                                                                : <input type="date" style="border:none;"
-                                                                    id="dateInput">
-                                                                {{-- <span id="formattedDate"> --}}
+                                                                : <input type="date" name="exp_date"
+                                                                    style="border:none;" id="dateInput"
+                                                                    onchange="updateExpDate(this.value)">
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -258,7 +262,8 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-size: 1.1rem">Kredit</td>
-                                                            <td style="font-weight: bolder;font-size: 1.1rem">:
+                                                            <td style="font-weight: bolder;font-size: 1.1rem">
+                                                                :
                                                                 <span
                                                                     id="kreditAmount">{{ moneyFormat($order->total) }}</span>
                                                             </td>
@@ -275,11 +280,10 @@
                                 <a href="{{ route('app.admin') }}" class="btn btn-outline-primary btn-lg">
                                     <i class="fas fa-arrow-left"></i> KEMBALI
                                 </a>
-                                <div class="float-lg-left mb-lg-0 mb-3">
-
-                                </div>
-                                <button class="btn btn-outline-warning btn-lg"><i class="fas fa-print"></i>
-                                    PRINT</button>
+                                <a href="{{ route('app.invoice.print', $order->id) }}"
+                                    class="btn btn-outline-warning btn-lg" target="_blank">
+                                    <i class="fas fa-print"></i> PRINT
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -345,52 +349,98 @@
         }
     </script> --}}
     <script>
+        // Add an event listener to the date input field
+        function updateExpDate(value) {
+            // Send an AJAX request to update the exp_date in the database
+            updateExpDateOnServer(value);
+        }
+        // Helper function to send an AJAX request to update exp_date in the database
+        function updateExpDateOnServer(expDate) {
+            axios.post('{{ route('app.update.exp_date', ['order' => $order->id]) }}', {
+                    exp_date: expDate
+                })
+                .then(function(response) {
+                    // Handle the success response (optional)
+                    console.log(response.data.message);
+                })
+                .catch(function(error) {
+                    // Handle the error response (optional)
+                    console.error('Error updating exp_date:', error);
+                });
+        }
+    </script>
+    <script>
         // Add an event listener to the disc_bawah input field
-        document.getElementById('disc_bawah').addEventListener('input', function() {
-            // Get the entered disc_bawah value
-            var discBawah = parseFloat(this.value) || 0;
+        // document.getElementById('disc_bawah').addEventListener('input', function() {
+        //     // Get the entered disc_bawah value
+        //     var discBawah = parseFloat(this.value) || 0;
+
+        //     // Get the initial total amount from the server-side rendered value
+        //     var initialTotal = parseFloat('{{ $order->total }}');
+
+        //     // Calculate the discounted total
+        //     var discountedTotal = initialTotal - (initialTotal * (discBawah / 100));
+
+        //     // Convert to integer to remove the decimal part
+        //     var totalWithoutDecimal = Math.floor(discountedTotal);
+
+        //     // Format the total without decimal using the moneyFormat helper function
+        //     var formattedTotal = formatCurrency(totalWithoutDecimal);
+        //     // console.log(formattedTotal);
+
+        //     // Update the 'Total Akhir' element
+        //     document.getElementById('totalAmount').innerText = formattedTotal;
+
+        //     // Update the 'Kredit' element
+        //     document.getElementById('kreditAmount').innerText = formattedTotal;
+
+        //     // Send an AJAX request to update the total in the database
+        //     updateTotalAmount(totalWithoutDecimal);
+        // });
+
+        // Helper function to format currency
+        function formatCurrency(amount) {
+            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(amount);
+        }
+
+        // Add an event listener to the disc_bawah input field
+        function updateDiscBawah(value) {
 
             // Get the initial total amount from the server-side rendered value
             var initialTotal = parseFloat('{{ $order->total }}');
 
             // Calculate the discounted total
-            var discountedTotal = initialTotal - (initialTotal * (discBawah / 100));
+            var discountedTotal = initialTotal - (initialTotal * (value / 100));
 
             // Convert to integer to remove the decimal part
             var totalWithoutDecimal = Math.floor(discountedTotal);
 
             // Format the total without decimal using the moneyFormat helper function
             var formattedTotal = formatCurrency(totalWithoutDecimal);
-            console.log(formattedTotal);
 
             // Update the 'Total Akhir' element
             document.getElementById('totalAmount').innerText = formattedTotal;
 
             // Update the 'Kredit' element
             document.getElementById('kreditAmount').innerText = formattedTotal;
-        });
 
-        // Helper function to format currency
-        function formatCurrency(amount) {
-            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(amount);
-        }
-    </script>
-    <script>
-        // Function to format the date as DD/MM/YYYY
-        function formatDate(inputDate) {
-            const date = new Date(inputDate);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+            // Send an AJAX request to update the disc_bawah and total in the database
+            updateDiscBawahAndTotal(value, totalWithoutDecimal);
         }
 
-        // Event listener for the date input change
-        document.getElementById('dateInput').addEventListener('input', function() {
-            const inputValue = this.value; // Get the current value of the input
-            const formattedDate = formatDate(inputValue); // Format the date
-            // Update the content of the span with the formatted date
-            document.getElementById('formattedDate').textContent = formattedDate;
-        });
+        function updateDiscBawahAndTotal(discBawah, totalWithoutDecimal) {
+            axios.post('{{ route('app.update.total_amount', ['order' => $order->id]) }}', {
+                    disc_bawah: discBawah,
+                    total_amount: totalWithoutDecimal
+                })
+                .then(function(response) {
+                    // Handle the success response (optional)
+                    console.log(response.data.message);
+                })
+                .catch(function(error) {
+                    // Handle the error response (optional)
+                    console.error('Error updating disc_bawah and total amount:', error);
+                });
+        }
     </script>
 @endpush
