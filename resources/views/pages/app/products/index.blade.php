@@ -40,6 +40,8 @@
                                         @enderror
                                     </div>
                                 </form>
+                                <a href="{{ route('app.products.export') }}" class="btn btn-lg btn-outline-success">Download
+                                    Excel</a>
                                 <hr>
                                 <div class="table table-striped">
                                     <table class="display" id="table-1" style="width: 100% !important">

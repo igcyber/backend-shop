@@ -70,7 +70,7 @@
                                                             <div class="dropdown-menu" x-placement="bottom-start"
                                                                 style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
                                                                 <a class="dropdown-item"
-                                                                    href="{{ route('app.confirmation', ['accept', $order->id]) }}">Konfirmasi
+                                                                    href="{{ route('app.confirmation', ['accept', $order->id]) }}">Retur
                                                                     Pesanan</a>
                                                                 {{-- <a class="dropdown-item"
                                                                     href="{{ route('app.confirmation', ['decline', $order->id]) }}">Batalkan

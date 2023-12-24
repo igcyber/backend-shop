@@ -67,6 +67,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
     //products import via excel
     Route::post('/products/import-excel', [ProductController::class, 'importExcel'])->name('products.import.excel');
+    //products export via excel
+    Route::get('/export-orders', [ProductController::class, 'exportToExcel'])->name('products.export');
 
     //Details Product Route
     Route::resource('/detail-products', DetailProductController::class)->middleware('permission:detail_product.index|detail_product.create|detail_product.edit|detail_product.delete');

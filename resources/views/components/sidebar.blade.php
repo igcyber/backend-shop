@@ -12,7 +12,7 @@
                     <a href="#" class="nav-link has-dropdown"><i
                             class="fas fa-dashboard"></i><span>Dashboard</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="#">General Dashboard</a></li>
+                        <li><a class="nav-link" href="{{ route('app.home') }}">General Dashboard</a></li>
                         <li><a class="nav-link" href="#">Ecommerce Dashboard</a></li>
                     </ul>
                 </li>

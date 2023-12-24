@@ -7,10 +7,11 @@ use App\Models\Vendor;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Picqer\Barcode\BarcodeGeneratorSVG;
 use App\Imports\ProductImport;
+use App\Exports\ProductsExport;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Picqer\Barcode\BarcodeGeneratorSVG;
 
 class ProductController extends Controller
 {
@@ -218,5 +219,10 @@ class ProductController extends Controller
             return redirect()->route('app.products.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
             // return redirect()->route('app.products.index')->with(['error' => 'Terjadi Masalah Silahkan Coba Lagi']);
         }
+    }
+
+    public function exportToExcel()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
     }
 }

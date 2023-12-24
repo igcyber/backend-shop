@@ -68,7 +68,11 @@
 
         /** Padding area **/
         .sheet.padding-5mm {
-            padding: 5mm;
+            padding: 6mm;
+        }
+
+        .sheet.padding-3mm {
+            padding: 3mm;
         }
 
         .sheet.padding-10mm {
@@ -141,7 +145,8 @@
         td,
         th {
             /* border: 1px solid black; */
-            padding: 2px;
+            padding: 1px;
+            /* line-height: 0px; */
         }
 
         tr {
@@ -150,10 +155,19 @@
 
         table {
             table-layout: fixed;
-            font-size: 11px;
+            font-size: 9px;
             font-family: monospace;
             /* font-family: monako; */
             /* font-family: arial; */
+        }
+
+        .order-detail-row {
+            page-break-inside: avoid;
+        }
+
+        .sheet {
+            /* ... (existing styles) */
+            page-break-after: always;
         }
     </style>
 </head>
@@ -163,7 +177,7 @@
 <body class="continuous_form landscape">
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
-    <section class="sheet padding-5mm">
+    <section class="sheet padding-5mm" style="padding-top:0mm !important">
         <!-- Write HTML just like a web page -->
         <!-- <article>This is an Continuous Form document.</article> -->
         <?php $cols = [35, 180, 200, 70, 70, 100, 110]; ?>
@@ -181,16 +195,21 @@
             <thead>
                 <tr>
                     <td>
-
                     </td>
-                    <td style="padding-left:0px; margin-right:0px;">
-                        <img src="{{ asset('front-end/img/loogoo (3).png') }}" alt="site icon" />
+                    <td style="padding-left:0px; margin-right:0px;vertical-align:top">
+                        <img style="height:60px;width:80px;vertical-align:top"
+                            src="{{ asset('front-end/img/loogoo (3).png') }}" alt="site icon" />
                     </td>
-                    <td style="padding-bottom:20px;">
-                        <p style="font-weight: bolder;font-size:1.1rem;margin-bottom:0px;">FAKTUR PENJUALAN</p>
-                        <p style="font-weight: bold; margin-top:0px;margin-bottom:5px;">PT. UPINDO RAYA SEMESTA BORNEO
+                    <td style="vertical-align:top">
+                        <p
+                            style="font-weight: bolder;font-size:1em;margin-bottom:0px;margin-top:0px;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;letter-spacing: 4px;">
+                            FAKTUR PENJUALAN</p>
+                        <p
+                            style="font-weight: bold; margin-top:0px;margin-bottom:8px;letter-spacing:3px; font-size:0.8em; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
+                            PT. UPINDO
+                            RAYA SEMESTA BORNEO
                         </p>
-                        <p style="font-size: 0.9em;margin-top:0px;">
+                        <p style="font-size: 0.8em;margin-top:0px;letter-spacing: 2.5px;">
                             JL.MUGIREJO RT.14 NO.2A <br>
                             (0541)282657 / 7074778 <br>
                             082158111409 <br>
@@ -199,41 +218,43 @@
                             @endif
                         </p>
                     </td>
-                    <td colspan="2" style="font-size: 0.9em;text-align:initial;padding-bottom:5%;">
-                        No. Transaksi <br>
-                        Tanggal <br>
-                        Kode Sales <br>
-                        Alamat
+                    <td colspan="2" style="font-size: 0.8em;vertical-align:top;letter-spacing: 2.5px;">
+                        No. Transaksi <span style="padding-left: 40px;">:</span> <br>
+                        Tanggal <span style="padding-left: 78.8px;">:</span> <br>
+                        Kode Sales <span style="padding-left: 59.5px;">:</span> <br>
+                        Alamat <span style="padding-left: 85.5px;">:</span>
                     </td>
-                    <td style="font-weight: bolder;font-size: 0.9em;padding-bottom:5%;padding-top:3%;" colspan="3">
-                        : {{ $order->transaction_id }} <br>
-                        : {{ $order->formatted_printed_at }} <br>
-                        : {{ $order->sales->name }} <br>
-                        : {!! $order->customer_address !!}</td>
+                    <td style="font-size: 0.8em;vertical-align:top;letter-spacing: 2.5px;" colspan="3">
+                        {{ $order->transaction_id }} <br>
+                        {{ $order->formatted_printed_at }} <br>
+                        {{ $order->sales->name }} <br>
+                        {!! $order->customer_address !!}</td>
                     </td>
                 </tr>
             </thead>
             <tbody>
-                <tr style="text-align: center;font-weight:bold;">
-                    <td style="border: 1px solid black; text-align: left; width:2%;">No</td>
-                    <td style="border: 1px solid black; text-align: left;width:10%;">Kode Item</td>
-                    <td style="border: 1px solid black; text-align: left;width:32%;">Nama Item</td>
-                    <td style="border: 1px solid black; text-align: center;width:7%">Jml Satuan</td>
-                    <td style="border: 1px solid black; text-align: center;width:12%">Cek</td>
-                    <td style="border: 1px solid black; text-align: left;">Harga</td>
-                    <td style="border: 1px solid black; text-align: left;width:5%">Pot</td>
-                    <td style="border: 1px solid black; text-align: left;" colspan="5">Total</td>
+                <tr style="text-align: center; letter-spacing: 2.5px;">
+                    <td style="border: 1px solid black; text-align: center; width:2%; font-size: 0.8em;">NO</td>
+                    <td style="border: 1px solid black; text-align: center;width:10%; font-size: 0.8em;">KODE ITEM</td>
+                    <td style="border: 1px solid black; text-align: center;width:32%; font-size: 0.8em;">NAMA ITEM</td>
+                    <td style="border: 1px solid black; text-align: center;width:7%; font-size: 0.8em;">JML SATUAN</td>
+                    <td style="border: 1px solid black; text-align: center;width:12%; font-size: 0.8em;">CEK</td>
+                    <td style="border: 1px solid black; text-align: center; font-size: 0.8em;">HARGA</td>
+                    <td style="border: 1px solid black; text-align: center;width:5%; font-size: 0.8em;">POT</td>
+                    <td style="border: 1px solid black; text-align: center; font-size: 0.8em;" colspan="5">TOTAL
+                    </td>
                 </tr>
                 @foreach ($order->orderDetails as $orderDetail)
-                    <tr>
-                        <td style="border: 1px solid black; text-align: center;">
+                    <tr class="order-detail-row" style="letter-spacing: 2.5px;">
+                        <td
+                            style="border: 1px solid black; text-align: center; font-size:0.7em;vertical-align:top;margin-bottom:0px;">
                             {{ ++$loop->index }}
                         </td>
-                        <td style="border: 1px solid black; text-align: left;">
+                        <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
                             {{ $orderDetail->productDetail->product->serial_number }}</td>
-                        <td style="border: 1px solid black; text-align: left;">
+                        <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
                             {{ $orderDetail->productDetail->product->title }}</td>
-                        <td style="border: 1px solid black; text-align: center;">
+                        <td style="border: 1px solid black; text-align: center;font-size:0.7em;vertical-align:top">
                             @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
                                 @if ($orderDetail->qty_duz > 0)
                                     {{ $orderDetail->qty_duz }} Dus
@@ -246,10 +267,14 @@
                                 @endif
                             @endif
                         </td>
-                        <td style="border: 1px solid black; text-align: center; ">
-                            <input type="checkbox" style="width: 30px;  height: 15px;">
+                        <td style="border: 1px solid black; font-size: 0.7em; text-align: center; line-height: 5px;">
+                            {{-- <input type="checkbox" style="width: 30px;  height: 15px;"> --}}
+                            <div
+                                style="width: 20px; height: 13px; background-color: #ffffff; border: 1px solid #181818; display: inline-block;">
+                            </div>
                         </td>
-                        <td style="border: 1px solid black; text-align: left;">
+
+                        <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
                             @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
                                 @if ($orderDetail->qty_duz > 0)
                                     {{ moneyFormat($orderDetail->productDetail->sell_price_duz) }}
@@ -262,10 +287,11 @@
                                 @endif
                             @endif
                         </td>
-                        <td style="border: 1px solid black; text-align: center;">
+                        <td style="border: 1px solid black; text-align: center;font-size:0.7em;vertical-align:top">
                             {{ number_format($orderDetail->disc_atas, 0, ',', '.') }} %
                         </td>
-                        <td colspan="5" style="border: 1px solid black; text-align: left;">
+                        <td colspan="5"
+                            style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
                             @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
                                 @if ($orderDetail->qty_duz > 0)
                                     {{ moneyFormat($orderDetail->price_duz * $orderDetail->qty_duz) }}
@@ -294,17 +320,20 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <p style="margin-top: 0px;margin-bottom:0px;">Keterangan :</p>
-                                <p style="text-align: center;margin-bottom:0px;margin-top:0px;">TIDAK MENERIMA
+                                <p style="margin-top: 0px;margin-bottom:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    Keterangan :</p>
+                                <p
+                                    style="text-align: center;margin-bottom:0px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em">
+                                    TIDAK MENERIMA
                                     KOMPLAIN
-                                    SETELAH FAKTUR
+                                    SETELAH <br> FAKTUR
                                     DITANDA TANGANI</p>
                             </tr>
                             <tr>
-                                <th style="padding-top: 0px;">Hormat Kami</th>
+                                <th style="padding-top: 0px;letter-spacing: 2.5px;font-size:0.9em">Hormat Kami</th>
                                 <td></td>
                                 <td></td>
-                                <th style="padding-top: 0px;">Penerima</th>
+                                <th style="padding-top: 0px;letter-spacing: 2.5px;font-size:0.9em">Penerima</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -315,8 +344,8 @@
                                 <td style="padding-top:40px;">(......................)</td>
                             </tr>
                             <tr>
-                                <td colspan="4">
-                                    <p style="font-size:0.5rem;text-align: left;" id="hasilTerbilang">Terbilang :</p>
+                                <td colspan="5">
+                                    <p style="font-size:0.7em;letter-spacing: 2px" id="hasilTerbilang">Terbilang :</p>
                                 </td>
                             </tr>
                             <tr></tr>
@@ -336,23 +365,30 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Jml
+                                <p
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    Jml
                                     Item
                                     <span>: {{ $order->orderDetails->count() }}</span>
                                 </p>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Potongan
+                                <p
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    Potongan
                                     <span>: {{ number_format($order->disc_bawah, 0, ',', '.') }}%</span>
                                 </p>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Pajak
-
-                                    <span style="margin-left:16.6px;">:
+                                <p
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    Pajak
+                                    <span style="margin-left:16.8px;">:
                                         {{ $taxTypesString === 'PPN' ? '11' : '0' }} %
                                         @if ($taxTypesString === 'PPN')
                                             {{ number_format($total, 0, ',', '.') }}
                                         @endif
                                     </span>
                                 </p>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Tgl.
+                                <p
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    Tgl.
                                     JT <span style="margin-left:6px;">: {{ $order->formatted_exp_date }} <br></span>
                                 </p>
                             </tr>
@@ -379,22 +415,31 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Sub
+                                <p
+                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    Sub
                                     Total
                                     <span style="margin-left:75.6px;">: {{ moneyFormat($order->total) }}</span>
                                 </p>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Total
+                                <p
+                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    Total
                                     Akhir
                                     <span style="margin-left:64.8px;">: {{ moneyFormat($order->total) }}</span>
                                 </p>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">DP PO
+                                <p
+                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    DP PO
                                     <span style="margin-left:98.4px;">: 0</span>
                                 </p>
-                                <p style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Tunai
+                                <p
+                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    Tunai
                                     <span style="margin-left:98.4px;">: 0</span>
                                 </p>
                                 <p id="nilaiKredit"
-                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px;">Kredit
+                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    Kredit
                                     <span style="margin-left:92.4px;">: {{ moneyFormat($order->total) }}</span>
                                 </p>
                             </tr>

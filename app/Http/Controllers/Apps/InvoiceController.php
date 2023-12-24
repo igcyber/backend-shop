@@ -78,7 +78,7 @@ class InvoiceController extends Controller
             // Format the date and assign it to $order->formatted_exp_date
             $order->formatted_exp_date = $expDate->format('d/m/Y');
         } else {
-            $order->formatted_exp_date = null; // Or any default value you prefer
+            $order->formatted_exp_date = null;
         }
 
         //Nilai PPN

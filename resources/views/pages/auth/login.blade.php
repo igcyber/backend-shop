@@ -11,7 +11,7 @@
     <div class="card card-primary" style="border-top: 4px solid #008829; !important">
         <div class="card-header d-block">
             <h3 class="text-center" style="color: #008829;">SIGAP</h3>
-            <h4 class="text-center" style="color: #008829;">PT. Upindo Raya Semesta Borneo</h4>
+            <h4 class="text-center" style="color: #008829;">PT. UPINDO RAYA SEMESTA BORNEO</h4>
         </div>
         <div class="card-body">
             @if (session('status'))
@@ -23,12 +23,12 @@
                 @csrf
                 <div class="form-group">
                     <div class="d-block">
-                        <label for="password" class="control-label text-default">USERNAME</label>
+                        <label for="password" class="control-label text-default">NAMA PENGGUNA</label>
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <input id="username" type="text"
-                                class="form-control col-md-10 @error('username') is-invalid @enderror" name="username"
+                                class="form-control col-md-11 @error('username') is-invalid @enderror" name="username"
                                 tabindex="1" autofocus value="{{ old('username') }}"
                                 placeholder="@error('password') {{ $message }} @enderror">
                             <div class="input-group-text">
@@ -40,17 +40,17 @@
                 </div>
                 <div class="form-group">
                     <div class="d-block">
-                        <label for="password" class="control-label">PASSWORD</label>
+                        <label for="password" class="control-label">KATA SANDI</label>
                         <div class="float-right">
                             <a href="{{ route('password.request') }}" class="text-small">
-                                Lupa Password
+                                Lupa Sandi ?
                             </a>
                         </div>
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <input id="password" type="password"
-                                class="form-control col-md-10 @error('password') is-invalid @enderror" name="password"
+                                class="form-control col-md-11 @error('password') is-invalid @enderror" name="password"
                                 tabindex="2" value="{{ old('password') }}"
                                 placeholder="@error('password') {{ $message }} @enderror">
                             <div class="input-group-text">
@@ -60,9 +60,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-lg btn-block" tabindex="4">
-                        Login
+                <div class="form-group col-md-8 mx-auto">
+                    <button type="submit" class="btn btn-outline-success btn-lg btn-block" tabindex="4">
+                        <i class="fas fa-door-open"></i> MASUK
                     </button>
                 </div>
             </form>
