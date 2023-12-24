@@ -17,6 +17,8 @@ class DetailProductImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        // dd($row);
+
         // Skip empty rows
         if (empty(array_filter($row))) {
             return null;
@@ -52,7 +54,7 @@ class DetailProductImport implements ToModel, WithHeadingRow
             'product_id' => $row['product_id'],
             'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,
-            'sell_price_pcs' => $getPricePcs,
+            'sell_price_pcs' => $getPricePcs ?? 0,
             'tax_type' => $row['tax_type'],
             'periode' => $row['periode'],
             'discount' => $row['discount']

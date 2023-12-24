@@ -42,15 +42,15 @@
                                 </form>
                                 <hr>
                                 <div class="table table-striped">
-                                    <table class="display" id="table-1">
+                                    <table class="display" id="table-1" style="width: 100% !important">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%" class="align-middle">
                                                     No.
                                                 </th>
                                                 <th scope="col" style="width: 22%">Nama</th>
-                                                <th scope="col" style="width: 5%">Total Stok</th>
-                                                <th scope="col" style="width: 7%">Detail Stok</th>
+                                                <th scope="col" style="width: 5%">Total</th>
+                                                <th scope="col" style="width: 7%">Stok</th>
                                                 <th scope="col" style="width: 5%">Diskon</th>
                                                 <th scope="col" style="width: 10%">Harga Jual</th>
                                                 <th scope="col" style="width: 6%">Jenis Pajak</th>
@@ -81,19 +81,32 @@
                                                         <span
                                                             class="badge badge-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}">
                                                             {{ $detail->product->total_stock }}
-                                                            {{ $detail->product->withoutPcs == 0 ? 'pcs' : 'pak' }}
+                                                            {{ $detail->product->withoutpcs == 0 ? 'pcs' : 'pak' }}
                                                         </span>
                                                     </td>
                                                     <td class="align-middle">
                                                         <ul style="padding: 0; list-style-type: none; line-height:18px;">
                                                             @if ($detail->product->stock_duz > 0)
-                                                                <li>{{ $detail->product->stock_duz }} dus</li>
+                                                                <li class="text-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}"
+                                                                    style="font-weight: bolder">
+                                                                    {{ $detail->product->stock_duz }} dus
+                                                                </li>
                                                             @endif
                                                             @if ($detail->product->stock_pak > 0)
-                                                                <li>{{ $detail->product->stock_pak }} pak</li>
+                                                                <li class="text-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}"
+                                                                    style="font-weight: bolder">
+                                                                    {{ $detail->product->stock_pak }} pak
+                                                                </li>
                                                             @endif
                                                             @if ($detail->product->stock_pcs > 0)
-                                                                <li>{{ $detail->product->stock_pcs }} pcs</li>
+                                                                <li class="text-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}"
+                                                                    style="font-weight: bolder">
+                                                                    {{ $detail->product->stock_pcs }} pcs
+                                                                </li>
+                                                            @endif
+                                                            @if ($detail->product->stock_duz == 0 && $detail->product->stock_pak == 0 && $detail->product->stock_pcs == 0)
+                                                                <li class="text-danger" style="font-weight: bolder">Stok
+                                                                    Kosong</li>
                                                             @endif
                                                         </ul>
                                                     </td>

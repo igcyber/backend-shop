@@ -67,6 +67,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     Route::resource('/products', ProductController::class)->middleware('permission:products.index|products.create|products.edit|products.delete');
     //products import via excel
     Route::post('/products/import-excel', [ProductController::class, 'importExcel'])->name('products.import.excel');
+    //products export via excel
+    Route::get('/export-orders', [ProductController::class, 'exportToExcel'])->name('products.export');
 
     //Details Product Route
     Route::resource('/detail-products', DetailProductController::class)->middleware('permission:detail_product.index|detail_product.create|detail_product.edit|detail_product.delete');
@@ -125,6 +127,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     //update order details
     Route::put('/sales/update-order-detail/{orderId}', [SalesController::class, 'updateOrderDetail'])->name('sales.updateOrderDetail');
 
+    Route::post('/update-total-amount/{order}', [OrderController::class, 'updateTotalAmount'])->name('update.total_amount');
+
     //Flash Sale Route
     Route::get('/sales/flash', [FlashSaleController::class, 'index'])->name('flash.sales');
     Route::put('/sales/flash/update', [FlashSaleController::class, 'update'])->name('flash.sales.update');
@@ -135,5 +139,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
     // Admin Sales Route
     Route::get('/admin-sales', [AdminSalesController::class, 'index'])->name('admin');
 
+    //Invoice Route
     Route::get('/invoice-show/{order_id}', [InvoiceController::class, 'showInvoice'])->name('invoice.show');
+    Route::get('/invoice-print/{order_id}', [InvoiceController::class, 'printInvoice'])->name('invoice.print');
+    Route::post('/order-details/{orderDetailId}/update-discount', [InvoiceController::class, 'updateDiscount'])->name('update-discount');
+    Route::post('/update-exp-date/{order}', [OrderController::class, 'updateExpDate'])->name('update.exp_date');
 });

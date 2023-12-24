@@ -1,8 +1,8 @@
-<div class="navbar-bg" style="background-color: #2bb75b; !important"></div>
+<div class="navbar-bg" style="background-color: #2bb75b; !important;"></div>
 <nav class="navbar navbar-expand-lg main-navbar">
     <div class="d-inline mr-auto">
         @auth
-            @if (auth()->user()->hasRole(['Sales', 'Outlet', 'Admin Gudang']))
+            @if (auth()->user()->hasRole(['Sales', 'Outlet', 'Admin Gudang', 'Admin Sales']))
                 <!-- The user has one of the specified roles, hide the sidebar -->
             @else
                 <!-- The user doesn't have the specified roles, show the sidebar -->
@@ -14,7 +14,7 @@
         @endauth
     </div>
     <ul class="navbar-nav navbar-right">
-        <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+        {{-- <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
                 class="nav-link nav-link-lg message-toggle beep" title="Notifikasi"><i class="far fa-envelope"></i></a>
             <div class="dropdown-menu dropdown-list dropdown-menu-right">
                 <div class="dropdown-header">Messages
@@ -39,14 +39,14 @@
                     <a href="#">View All <i class="fas fa-chevron-right"></i></a>
                 </div>
             </div>
-        </li>
+        </li> --}}
 
         <li class="dropdown dropdown-list-toggle">
             <form action="{{ route('logout') }}" method="POST" id="logout-form">
                 @csrf
                 <a class="nav-link nav-link-lg" style="cursor: pointer" title="Logout"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit()">
-                    <i class="fas fa-sign-out-alt"></i>
+                    <i class="fas fa-power-off"></i>
                 </a>
             </form>
         </li>

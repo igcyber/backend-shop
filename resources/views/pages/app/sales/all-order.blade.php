@@ -28,7 +28,7 @@
                                             {{ $userOrders->first()->user->name }}
                                         </h4>
                                         <div class="card-header-action">
-                                            <a href="{{ route('app.sales.process-order', ['user_id' => $userOrders->first()->user_id]) }}"
+                                            <a href="{{ route('app.sales.process-order', $userOrders->first()->user_id) }}"
                                                 class="btn btn-outline-info">Proses Pesanan</a>
 
                                         </div>

@@ -9,16 +9,16 @@
 @section('main')
     <div class="card card-primary">
         <div class="card-header">
-            <h4>Lupa Password</h4>
+            <h4>LUPA PASSWORD ?</h4>
         </div>
         <div class="card-body">
-            <p class="text-muted">Kami akan kirimkan link untuk reset password anda</p>
+            <p class="text-muted">Seger Hubungi/Lapor Pada Petugas Sales Outlet Anda, Jika Lupa Password(Kata Sandi)</p>
             @if (session('status'))
                 <div class="alert alert-success mt-2">
                     {{ session('status') }}
                 </div>
             @endif
-            <form method="POST" action="{{ url('/forgot-password') }}">
+            {{-- <form method="POST" action="{{ url('/forgot-password') }}">
                 @csrf
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -36,7 +36,10 @@
                         Kirim Link
                     </button>
                 </div>
-            </form>
+            </form> --}}
+            <a href="{{ url('/') }}" class="btn btn-lg btn-outline-primary">
+                <i class="fa fa-arrow-left"></i> KEMBALI
+            </a>
         </div>
     </div>
 @endsection
