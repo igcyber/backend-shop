@@ -6,6 +6,9 @@
 @endpush
 
 @section('main')
+    <div id="loading-container">
+        <div id="loading-spinner"></div>
+    </div>
     <div class="main-content" style="padding-left:14px; !important">
         <section class="section">
             <div class="section-header">

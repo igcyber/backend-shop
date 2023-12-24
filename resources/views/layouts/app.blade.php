@@ -44,7 +44,6 @@
     </script>
     <!-- END GA -->
 </head>
-</head>
 
 <body class="sidebar-mini">
     <div id="app">
@@ -94,6 +93,11 @@
     <script src="{{ asset('library/summernote/dist/summernote-bs4.js') }}"></script>
     {{-- Select2 --}}
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+    {{-- Spin.js --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    {{-- Axios --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
     @stack('scripts')
 
@@ -122,6 +126,39 @@
                 buttons: false,
             });
         @endif
+    </script>
+
+    <script>
+        // Initialize spin.js
+        var opts = {
+            lines: 13, // The number of lines to draw
+            length: 38, // The length of each line
+            width: 17, // The line thickness
+            radius: 45, // The radius of the inner circle
+            scale: 0.5, // Scales overall size of the spinner
+            corners: 1, // Corner roundness (0..1)
+            color: '#000', // CSS color or array of colors
+            fadeColor: 'transparent', // CSS color or array of colors
+            speed: 1, // Rounds per second
+            rotate: 0, // The rotation offset
+            animation: 'spinner-line-fade-quick', // The CSS animation name for the lines
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            className: 'spinner', // The CSS class to assign to the spinner
+            top: '50%', // Top position relative to parent
+            left: '50%', // Left position relative to parent
+            shadow: '0 0 1px transparent', // Box-shadow for the lines
+            position: 'absolute' // Element positioning
+        };
+        var target = document.getElementById('loading-spinner');
+        var spinner = new Spinner(opts).spin(target);
+
+        // Simulate a delay (e.g., API request)
+        setTimeout(function() {
+            // Remove the loading spinner and show the actual content
+            document.getElementById('loading-container').style.display = 'none';
+            // Add your other logic here to display the main content
+        }, 3000); // Replace 3000 with the actual time your operation takes in milliseconds
     </script>
 
 

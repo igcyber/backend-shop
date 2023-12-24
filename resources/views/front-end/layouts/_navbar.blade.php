@@ -21,7 +21,7 @@
                 <a class="nav-link text-capitalize" href="#" style="color:#5A5A5A">
                     <i class="fas fa-box" style="font-size: 15px;"></i> Produk</a>
             </li>
-
+            {{--
             <li class="nav-item px-2">
                 @guest
                     <a class="nav-link text-capitalize {{ setActive(['login']) }}" style="color:#5A5A5A"
@@ -37,7 +37,7 @@
                     </a>
                 @endguest
 
-            </li>
+            </li> --}}
             <li class="nav-item px-2">
                 @if (Auth::check())
                     <form action="{{ route('logout') }}" method="POST" id="logout-form">

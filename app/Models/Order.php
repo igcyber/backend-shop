@@ -25,4 +25,22 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'outlet_id');
     }
+
+    // Calculate Total Overall
+    public function calculateTotal()
+    {
+        $total = 0;
+
+        foreach ($this->orderDetails as $orderDetail) {
+            $total += $orderDetail->calculateSubtotal();
+        }
+
+        // Terapkan diskon bawah jika ada
+        if ($this->disc_bawah > 0) {
+            $total -= ($total * ($this->disc_bawah / 100));
+        }
+
+        $this->total = $total;
+        $this->save();
+    }
 }
