@@ -11,6 +11,7 @@ class DetailProduct extends Model
     use HasFactory;
 
     protected $fillable = [
+        'sales_id',
         'product_id',
         'sell_price_duz',
         'sell_price_pak',
@@ -23,5 +24,15 @@ class DetailProduct extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Belongs to Relationship model with User model
+     *
+     * @return void
+     */
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'sales_id');
     }
 }

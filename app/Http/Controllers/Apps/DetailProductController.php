@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Apps;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\DetailProduct;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Imports\DetailProductImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,9 +15,12 @@ class DetailProductController extends Controller
     public function index()
     {
 
-        $detailProducts = DetailProduct::with('product')->select('id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode', 'discount')->get();
+        $detailProducts = DetailProduct::with('product', 'seller')->select('id', 'sales_id', 'product_id', 'sell_price_duz', 'sell_price_pak', 'sell_price_pcs', 'tax_type', 'periode', 'discount')->get();
 
-        return view('pages.app.p_detail.index', compact('detailProducts'));
+        // Get sales options
+        $salesOptions = Role::where('name', 'Sales')->first()->users;
+
+        return view('pages.app.p_detail.index', compact('detailProducts', 'salesOptions'));
     }
 
     public function create()
@@ -154,5 +158,20 @@ class DetailProductController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('app.detail-products.index')->with(['error' => 'Error importing data: ' . $e->getMessage()]);
         }
+    }
+
+    public function updateSalesProduct($detailId)
+    {
+        $newSalesId = request('sales_id');
+        $salesProduct = DetailProduct::find($detailId);
+
+        if ($salesProduct) {
+            $salesProduct->sales_id = $newSalesId;
+            $salesProduct->save();
+
+            return response()->json(['newSalesName' => $salesProduct->seller->name]);
+        }
+
+        return response()->json(['error' => 'Sales not found'], 404);
     }
 }

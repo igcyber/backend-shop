@@ -13,7 +13,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h4>DATA OUTLET</h4>
+                <h4>PEMBAGIAN OUTLET</h4>
                 <div class="ml-auto">
                     <a href="{{ route('app.customers.create') }}" class="btn btn-outline-primary ml-auto">
                         <i class="fas fa-plus"></i> TAMBAH OUTLET
@@ -25,7 +25,7 @@
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="{{ route('app.detail-products.import') }}" method="post"
+                                <form action="{{ route('app.customer.import') }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-row mb-3">
@@ -48,7 +48,7 @@
                                     </div>
                                 </form>
                                 <hr>
-                                <form action="#" method="GET">
+                                <form action="{{ route('app.customers.index') }}" method="GET">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" name="q"
                                             placeholder="Cari Nama Outlet">
@@ -62,12 +62,10 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%">No.</th>
-                                                <th scope="col">Nomor</th>
-                                                <th scope="col">Nama</th>
+                                                <th scope="col" style="width: 20%;">Sales</th>
+                                                <th scope="col">Outlet</th>
                                                 <th scope="col">Klasifikasi</th>
-                                                <th scope="col">Telp. Kantor</th>
                                                 <th scope="col">Alamat</th>
-                                                <th scope="col">Petugas Sales</th>
                                                 <th scope="col" style="width: 15%">Pilihan</th>
                                             </tr>
                                         </thead>
@@ -78,7 +76,15 @@
                                                         {{ ++$no + ($customers->currentPage() - 1) * $customers->perPage() }}
                                                     </th>
                                                     <td>
-                                                        {{ $customer->nomor }}
+                                                        <select class="form-control select2"
+                                                            onchange="changeSales(this, {{ $customer->id }})">
+                                                            @foreach ($salesOptions as $salesOption)
+                                                                <option value="{{ $salesOption->id }}"
+                                                                    {{ $customer->seller->id == $salesOption->id ? 'selected' : '' }}>
+                                                                    {{ $salesOption->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </td>
                                                     <td>
                                                         {{ $customer->outlet->name }}
@@ -87,26 +93,18 @@
                                                         {{ $customer->klasifikasi }}
                                                     </td>
                                                     <td>
-                                                        {{ $customer->no_telp }}
-                                                    </td>
-                                                    <td>
                                                         {!! $customer->address !!}
-                                                    </td>
-                                                    <td>
-                                                        {{ $customer->seller->name }}
                                                     </td>
                                                     <td class="text-center">
 
-                                                        <a href="{{ route('app.roles.edit', $customer->id) }}"
+                                                        <a href="{{ route('app.customers.edit', $customer->id) }}"
                                                             class="btn btn-outline-success btn-sm">
-                                                            <i class="fa fa-pencil-alt me-1" title="Edit Hak Akses">
+                                                            <i class="fa fa-pencil-alt me-1" title="Perbarui Outlet">
                                                             </i>
                                                         </a>
-
-
                                                         <button onclick="Delete(this.id)" id="{{ $customer->id }}"
                                                             class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"
-                                                                title="Hapus Hak Akses"></i>
+                                                                title="Hapus Outlet"></i>
                                                         </button>
 
                                                     </td>
@@ -129,19 +127,33 @@
 
 @push('scripts')
     <!-- JS Libraies -->
-    {{-- <script>
-        if (jQuery().summernote) {
-            $(".summernote-simple").summernote({
-                dialogsInBody: true,
-                minHeight: 150,
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough']],
-                    ['para', ['paragraph']]
-                ]
+    <script>
+        function changeSales(selectElement, customerId) {
+            var newSalesId = selectElement.value;
+            // Get the CSRF token from the meta tag
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            // Make an AJAX request to update the sales for the customer
+            $.ajax({
+                type: 'PUT',
+                url: '/app/update-sales/' + customerId,
+                data: {
+                    sales_id: newSalesId,
+                    _token: csrfToken
+                },
+                success: function(response) {
+                    // Update the table cell with the new sales name
+                    // $(selectElement).closest('td').html(response.newSalesName);
+
+                    // Update the select option with the new sales name
+                    $('#salesSelect option:selected').text(response.newSalesName);
+                },
+                error: function(error) {
+                    console.error('Error updating sales:', error);
+                }
             });
         }
-    </script> --}}
+    </script>
 
     <script>
         function resetPage() {

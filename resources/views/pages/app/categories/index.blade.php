@@ -11,9 +11,6 @@
 @endpush
 
 @section('main')
-    <div id="loading-container">
-        <div id="loading-spinner"></div>
-    </div>
     <div class="main-content">
         <section class="section">
             <div class="section-header">

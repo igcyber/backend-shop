@@ -72,13 +72,18 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //Details Product Route
     Route::resource('/detail-products', DetailProductController::class)->middleware('permission:detail_product.index|detail_product.create|detail_product.edit|detail_product.delete');
-
     // routes import for detail product
     Route::post('/detail-products/import', [DetailProductController::class, 'importExcel'])->name('detail-products.import');
-
+    // routes update sales for detail product
+    Route::put('/update-sales/product/{detailId}', [DetailProductController::class, 'updateSalesProduct'])->name('product.updateSales');
 
     //Customer's Route
     Route::resource('/customers', CustomerController::class);
+    // routes import
+    Route::post('/customers/import', [CustomerController::class, 'importExcel'])->name('customer.import');
+    // routes update sales
+    Route::put('/update-sales/{customerId}', [CustomerController::class, 'updateSales'])->name('customer.updateSales');
+
 
     // add cart
     Route::get('/cart/{detail}/{user}', [CartController::class, 'addCart'])->name('cart.add');
