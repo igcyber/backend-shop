@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('detail_products', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sales_id');
             $table->unsignedBigInteger('product_id');
             $table->bigInteger('sell_price_duz')->nullable();
             $table->bigInteger('sell_price_pak')->nullable();
@@ -24,6 +25,7 @@ return new class extends Migration
 
             //relationship categories
             $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('sales_id')->references('id')->on('users');
         });
     }
 

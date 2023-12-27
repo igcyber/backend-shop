@@ -50,16 +50,16 @@ class User extends Authenticatable
     ];
 
     // Define the relationship with the 'customers' table
-    public function sales(): HasMany
-    {
-        return $this->hasMany(Customer::class, 'sales_id');
-    }
+    // public function sales(): HasMany
+    // {
+    //     return $this->hasMany(Customer::class, 'sales_id');
+    // }
 
     // Define the relationship with the 'customers' table
-    public function outlet(): HasMany
-    {
-        return $this->hasMany(Customer::class, 'outlet_id');
-    }
+    // public function outlet(): HasMany
+    // {
+    //     return $this->hasMany(Customer::class, 'outlet_id');
+    // }
 
     /**
      * The accessors to append to the model's array form.

@@ -24,10 +24,10 @@ class CategoryDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $editBtn = "<a href='" . route('app.categories.edit', $query->id) . "'
-                class='btn btn-primary btn-sm mx-2'>
+                class='btn btn-outline-primary btn-sm mx-2'>
                 <i class='fas fa-pencil-alt'></i>
                 </a>";
-                $delBtn = "<button onClick='Delete(this.id)' class='btn btn-danger btn-sm'
+                $delBtn = "<button onClick='Delete(this.id)' class='btn btn-outline-danger btn-sm'
                 id=$query->id>
                 <i class='fas fa-trash'></i>
                 </button>";

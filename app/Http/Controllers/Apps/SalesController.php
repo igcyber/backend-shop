@@ -137,14 +137,17 @@ class SalesController extends Controller
     {
 
         $salesId = auth()->id();
-
+        // dd($salesId);
         $detailProducts = DetailProduct::join('products', 'detail_products.product_id', '=', 'products.id')
-            ->where('products.stock_duz', '>', 0)
-            ->orWhere('products.stock_pak', '>', 0)
-            ->orWhere('products.stock_pcs', '>', 0)
+            ->where('detail_products.sales_id', $salesId)
+            ->where(function ($query) {
+                $query->where('products.stock_duz', '>', 0)
+                    ->orWhere('products.stock_pak', '>', 0)
+                    ->orWhere('products.stock_pcs', '>', 0);
+            })
             ->select('detail_products.id', 'detail_products.product_id', 'detail_products.sell_price_duz', 'detail_products.sell_price_pak', 'detail_products.sell_price_pcs', 'detail_products.tax_type')
             ->get();
-
+        // dd($detailProducts);
 
         $salesCart = SalesCart::with('productDetail')->where('sales_id', $salesId)->get();
 
