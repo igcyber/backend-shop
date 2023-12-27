@@ -51,6 +51,7 @@ class DetailProductImport implements ToModel, WithHeadingRow
 
         return new DetailProduct([
             //row input
+            'sales_id' => $row['sales_id'],
             'product_id' => $row['product_id'],
             'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,

@@ -12,8 +12,8 @@ class Customer extends Model
     protected $fillable = [
         'klasifikasi',
         'nomor',
-        'sales_id',
         'outlet_id',
+        'sales_id',
         'no_telp',
         'address',
     ];

@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="form-row mt-3">
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label for="telp">No. Telp</label>
                                             <input id="telp" name="no_telp" type="text" value="{{ old('no_telp') }}"
                                                 placeholder="Tuliskan No. Telp"
@@ -67,7 +67,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label for="klasifikasi">Klasifikasi</label>
                                             <select name="klasifikasi" id="klasifikasi"
                                                 class="form-control @error('klasifikasi') is-invalid @enderror">
@@ -86,7 +86,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-4">
+                                        {{-- <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="sales">Sales</label>
                                                 <select name="sales_id" id="sales"
@@ -102,7 +102,7 @@
                                                     </div>
                                                 @enderror
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="form-row mt-3">
                                         <div class="col-md-12">

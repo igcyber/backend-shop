@@ -1,7 +1,7 @@
 <div class="copyright">
-    <div class="row mb-3">
+    <div class="row mb-3 px-auto mx-auto">
         <div class="col-md-4">
-            <p class="text-uppercase fw-bold p-2" style="text-align:left;padding-left:0 !important">Alamat Kantor</p>
+            <p class="text-uppercase fw-bold p-2" style="text-align:left;">Alamat Kantor</p>
             <p class="text-uppercase" style="text-align:left;font-size:0.9rem">
                 <i class="fas fa-map-marker-alt"></i> Jl. Mugirejo No. 2 A RT. 14 Kel. Mugirejo Kec. Sungai pinang
                 Samarinda, Kalimantan Timur
@@ -48,8 +48,6 @@
                         class="text-decoration-none text-light">Beranda</li></a>
                 <li><i class="fas fa-chevron-down text-primary me-3 mb-3"></i><a href="#"
                         class="text-decoration-none text-light">Produk</li></a>
-                <li><i class="fas fa-chevron-down text-primary me-3 mb-3"></i><a href="#"
-                        class="text-decoration-none text-light">Keranjang</li></a>
                 <li><i class="fas fa-chevron-down text-primary me-3"></i><a href="#"
                         class="text-decoration-none text-light">Login</li></a>
             </ul>

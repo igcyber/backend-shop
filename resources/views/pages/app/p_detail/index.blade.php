@@ -48,14 +48,15 @@
                                                 <th scope="col" style="width: 5%" class="align-middle">
                                                     No.
                                                 </th>
-                                                <th scope="col" style="width: 22%">Nama</th>
-                                                <th scope="col" style="width: 5%">Total</th>
-                                                <th scope="col" style="width: 7%">Stok</th>
+                                                <th scope="col" style="width: 22%">Sales</th>
+                                                <th scope="col" style="width: 22%">Produk</th>
+                                                {{-- <th scope="col" style="width: 5%">Total</th>
+                                                <th scope="col" style="width: 7%">Stok</th> --}}
                                                 <th scope="col" style="width: 5%">Diskon</th>
                                                 <th scope="col" style="width: 10%">Harga Jual</th>
-                                                <th scope="col" style="width: 6%">Jenis Pajak</th>
+                                                <th scope="col" style="width: 5%">Pajak</th>
                                                 <th scope="col" style="width: 5%">Periode</th>
-                                                <th scope="col" style="width: 9%">Tgl Kadaluarsa</th>
+                                                <th scope="col" style="width: 12%">Tgl. Kadaluarsa</th>
                                                 <th scope="col" style="width: 5%">Pilihan</th>
                                             </tr>
                                         </thead>
@@ -68,6 +69,17 @@
                                                     <td class="text-center align-middle" style="padding: 0px 0px;">
                                                         {{ $key + 1 }}
                                                     </td>
+                                                    <td class="align-middle" style="padding: 10px 10px;">
+                                                        <select class="form-control select2"
+                                                            onchange="changeSales(this, {{ $detail->id }})">
+                                                            @foreach ($salesOptions as $salesOption)
+                                                                <option value="{{ $salesOption->id }}"
+                                                                    {{ $detail->seller->id == $salesOption->id ? 'selected' : '' }}>
+                                                                    {{ $salesOption->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
                                                     <td class="align-middle" style="padding: 0px 0px;">
                                                         @can('products.edit')
                                                             <a href="{{ route('app.detail-products.edit', $detail->id) }}"
@@ -77,7 +89,7 @@
                                                             </a>
                                                         @endcan
                                                     </td>
-                                                    <td class="align-middle">
+                                                    {{-- <td class="align-middle">
                                                         <span
                                                             class="badge badge-{{ $detail->product->total_stock < $min_stok ? 'danger' : 'success' }}">
                                                             {{ $detail->product->total_stock }}
@@ -109,7 +121,7 @@
                                                                     Kosong</li>
                                                             @endif
                                                         </ul>
-                                                    </td>
+                                                    </td> --}}
                                                     <td class="align-middle">
                                                         {{ number_format($detail->discount, 0) }}%
                                                     </td>
@@ -125,10 +137,10 @@
                                                             @endif
                                                         </ul>
                                                     </td>
-                                                    <td class="align-middle" style="padding: 0px 0px;">
+                                                    <td class="align-center" style="padding: 0px 22px;">
                                                         {{ $detail->tax_type }}
                                                     </td>
-                                                    <td class="align-middle" style="padding: 0px 0px;">
+                                                    <td class="align-center" style="padding: 0px 22px;">
                                                         {{ $detail->periode }}
                                                     </td>
                                                     <td class="align-middle" style="padding: 0px 0px;">
@@ -166,10 +178,37 @@
 @push('scripts')
     <!-- JS Libraies -->
     <script>
+        function changeSales(selectElement, detailId) {
+            var newSalesId = selectElement.value;
+            // Get the CSRF token from the meta tag
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            // Make an AJAX request to update the sales for the customer
+            $.ajax({
+                type: 'PUT',
+                url: '/app/update-sales/product/' + detailId,
+                data: {
+                    sales_id: newSalesId,
+                    _token: csrfToken
+                },
+                success: function(response) {
+                    // Update the table cell with the new sales name
+                    // $(selectElement).closest('td').html(response.newSalesName);
+
+                    // Update the select option with the new sales name
+                    $('#salesSelect option:selected').text(response.newSalesName);
+                },
+                error: function(error) {
+                    console.error('Error updating sales:', error);
+                }
+            });
+        }
+    </script>
+    <script>
         $("#table-1").dataTable({
             "columnDefs": [{
                 "sortable": false,
-                "targets": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                "targets": [1, 2, 3, 4, 5, 6, 7]
             }],
             "iDisplayLength": 25,
             responsive: true,
