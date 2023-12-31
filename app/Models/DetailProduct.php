@@ -26,6 +26,7 @@ class DetailProduct extends Model
         return $this->belongsTo(Product::class);
     }
 
+
     /**
      * Belongs to Relationship model with User model
      *

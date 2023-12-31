@@ -33,12 +33,15 @@ class InvoiceController extends Controller
         // Format date when invoice printed
         $order->formatted_printed_at = now()->format('d/m/Y');
 
+        // Calculate the total quantity
+        $totalItem = $order->totalItem();
+
         //Nilai PPN
         $total = $order->total;
         $total = $total / 1.11;
         $total = $total * 0.11;
 
-        return view('pages.app.admin_sales.invoice-show', compact('order', 'taxTypesString', 'total'));
+        return view('pages.app.admin_sales.invoice-show', compact('order', 'taxTypesString', 'total', 'totalItem'));
     }
 
 
@@ -47,8 +50,8 @@ class InvoiceController extends Controller
         $order = Order::join('customers', 'orders.outlet_id', '=', 'customers.outlet_id')
             ->select('orders.*', 'customers.address as customer_address', 'customers.nomor as customer_id', 'customers.no_telp as customer_phone')
             ->with(['orderDetails' => function ($query) {
-                // Eager load the tax_type from order_details
-                $query->select('order_details.*', 'tax_type');
+                // Eager load the tax_type, qty_duz, qty_pak, qty_pcs from order_details
+                $query->select('order_details.*', 'tax_type', 'qty_duz', 'qty_pak', 'qty_pcs');
             }, 'outlet', 'sales'])
             ->where('orders.id', $order_id)
             ->first();
@@ -64,6 +67,9 @@ class InvoiceController extends Controller
 
         // Format date when invoice printted
         $order->formatted_printed_at = now()->format('d/m/Y');
+
+        // Calculate the total quantity
+        $totalItem = $order->totalItem();
 
         if ($order->exp_date) {
             // Check if $order->exp_date is a string
@@ -86,7 +92,7 @@ class InvoiceController extends Controller
         $total = $total / 1.11;
         $total = $total * 0.11;
 
-        return view('pages.app.admin_sales.invoice-print', compact('order', 'taxTypesString', 'total'));
+        return view('pages.app.admin_sales.invoice-print', compact('order', 'taxTypesString', 'total', 'totalItem'));
     }
 
     public function updateDiscount(Request $request, $orderDetailId)

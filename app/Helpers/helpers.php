@@ -52,7 +52,7 @@ if (!function_exists('getCountForMonthYear')) {
         return DB::table('orders')
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
-            ->count() + 10569;
+            ->count();
     }
 }
 

@@ -21,11 +21,12 @@ class CustomerImport implements ToModel, WithHeadingRow
 
         return new Customer([
             'klasifikasi' => $row['klasifikasi'],
-            'nomor' => $row['nomor'],
+            'nomor' => $row['nomor'] ?? "-",
             'outlet_id' => $row['outlet_id'],
             'sales_id' => $row['sales_id'],
             'no_telp' => $row['no_telp'],
             'address' => $row['address'],
+            'hrg_jual' => $row['hrg_jual'],
         ]);
     }
 }

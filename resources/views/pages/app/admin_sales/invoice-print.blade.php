@@ -11,6 +11,7 @@
     <style>
         @page {
             margin: 0;
+            size: continuous_form landscape;
         }
 
         body {
@@ -130,6 +131,12 @@
 
             body.continuous_form.landscape {
                 width: 218mm;
+
+            }
+
+            .pagebreak {
+                clear: both;
+                break-after: page;
             }
         }
 
@@ -150,7 +157,7 @@
         }
 
         tr {
-            height: 20px;
+            height: 12px;
         }
 
         table {
@@ -161,15 +168,11 @@
             /* font-family: arial; */
         }
 
-        .order-detail-row {
-            page-break-inside: avoid;
-        }
-
-        .sheet {
-            /* ... (existing styles) */
-            page-break-after: always;
+        .page-break {
+            page-break-before: always;
         }
     </style>
+
 </head>
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
@@ -177,12 +180,12 @@
 <body class="continuous_form landscape">
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
-    <section class="sheet padding-5mm" style="padding-top:0mm !important">
+    <div class="sheet padding-5mm" style="padding-top:3mm !important">
         <!-- Write HTML just like a web page -->
         <!-- <article>This is an Continuous Form document.</article> -->
         <?php $cols = [35, 180, 200, 70, 70, 100, 110]; ?>
 
-        <table style="table-layout: fixed;" border="0">
+        <table border="0">
             <colgroup>
                 <col style="<?= 'width: ' . $cols[0] . 'px' ?>">
                 <col style="<?= 'width: ' . $cols[1] . 'px' ?>">
@@ -196,11 +199,11 @@
                 <tr>
                     <td>
                     </td>
-                    <td style="padding-left:0px; margin-right:0px;vertical-align:top">
-                        <img style="height:60px;width:80px;vertical-align:top"
-                            src="{{ asset('front-end/img/loogoo (3).png') }}" alt="site icon" />
+                    <td style="padding-left:0px; margin-right:0px;">
+                        <img style="height:60px;width:80px;" src="{{ asset('front-end/img/loogoo (3).png') }}"
+                            alt="site icon" />
                     </td>
-                    <td style="vertical-align:top">
+                    <td>
                         <p
                             style="font-weight: bolder;font-size:1em;margin-bottom:0px;margin-top:0px;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;letter-spacing: 4px;">
                             FAKTUR PENJUALAN</p>
@@ -209,7 +212,7 @@
                             PT. UPINDO
                             RAYA SEMESTA BORNEO
                         </p>
-                        <p style="font-size: 0.8em;margin-top:0px;letter-spacing: 2.5px;">
+                        <p style="font-size: 0.8em;margin-top:0px;margin-bottom:0px;letter-spacing: 2.5px;">
                             JL.MUGIREJO RT.14 NO.2A <br>
                             (0541)282657 / 7074778 <br>
                             082158111409 <br>
@@ -227,7 +230,7 @@
                     <td style="font-size: 0.8em;vertical-align:top;letter-spacing: 2.5px;" colspan="3">
                         {{ $order->transaction_id }} <br>
                         {{ $order->formatted_printed_at }} <br>
-                        {{ $order->sales->name }} <br>
+                        {{ $order->sales->kode }} - {{ $order->sales->name }} <br>
                         {!! $order->customer_address !!}</td>
                     </td>
                 </tr>
@@ -244,67 +247,77 @@
                     <td style="border: 1px solid black; text-align: center; font-size: 0.8em;" colspan="5">TOTAL
                     </td>
                 </tr>
+                {{-- Jika melebihi 10 baris pagebreak --}}
+                <?php $rowCount = 0; ?>
                 @foreach ($order->orderDetails as $orderDetail)
-                    <tr class="order-detail-row" style="letter-spacing: 2.5px;">
-                        <td
-                            style="border: 1px solid black; text-align: center; font-size:0.7em;vertical-align:top;margin-bottom:0px;">
-                            {{ ++$loop->index }}
-                        </td>
-                        <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
-                            {{ $orderDetail->productDetail->product->serial_number }}</td>
-                        <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
-                            {{ $orderDetail->productDetail->product->title }}</td>
-                        <td style="border: 1px solid black; text-align: center;font-size:0.7em;vertical-align:top">
-                            @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
-                                @if ($orderDetail->qty_duz > 0)
-                                    {{ $orderDetail->qty_duz }} Dus
-                                @endif
-                                @if ($orderDetail->qty_pak > 0)
-                                    {{ $orderDetail->qty_pak }} Pak
-                                @endif
-                                @if ($orderDetail->qty_pcs > 0)
-                                    {{ $orderDetail->qty_pcs }} Pcs
-                                @endif
-                            @endif
-                        </td>
-                        <td style="border: 1px solid black; font-size: 0.7em; text-align: center; line-height: 5px;">
-                            {{-- <input type="checkbox" style="width: 30px;  height: 15px;"> --}}
-                            <div
-                                style="width: 20px; height: 13px; background-color: #ffffff; border: 1px solid #181818; display: inline-block;">
-                            </div>
-                        </td>
+                    @if ($rowCount > 0 && $rowCount % 10 === 0)
+            </tbody>
+            {{-- <div class="page-break"></div> --}}
 
-                        <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
-                            @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
-                                @if ($orderDetail->qty_duz > 0)
-                                    {{ moneyFormat($orderDetail->productDetail->sell_price_duz) }}
-                                @endif
-                                @if ($orderDetail->qty_pak > 0)
-                                    {{ moneyFormat($orderDetail->productDetail->sell_price_pak) }}
-                                @endif
-                                @if ($orderDetail->qty_pcs > 0)
-                                    {{ moneyFormat($orderDetail->productDetail->sell_price_pcs) }}
-                                @endif
+            <tbody>
+                @endif
+                <tr style="letter-spacing: 2.5px;">
+                    <td
+                        style="border: 1px solid black; text-align: center; font-size:0.7em;vertical-align:top;margin-bottom:0px;">
+                        {{ ++$loop->index }}
+                    </td>
+                    <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
+                        {{ $orderDetail->productDetail->product->serial_number }}</td>
+                    <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
+                        {{ $orderDetail->productDetail->product->title }}</td>
+                    <td style="border: 1px solid black; text-align: center;font-size:0.7em;vertical-align:top">
+                        @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
+                            @if ($orderDetail->qty_duz > 0)
+                                {{ $orderDetail->qty_duz }} Dus
                             @endif
-                        </td>
-                        <td style="border: 1px solid black; text-align: center;font-size:0.7em;vertical-align:top">
-                            {{ number_format($orderDetail->disc_atas, 0, ',', '.') }} %
-                        </td>
-                        <td colspan="5"
-                            style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
-                            @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
-                                @if ($orderDetail->qty_duz > 0)
-                                    {{ moneyFormat($orderDetail->price_duz * $orderDetail->qty_duz) }}
-                                @endif
-                                @if ($orderDetail->qty_pak > 0)
-                                    {{ moneyFormat($orderDetail->price_pak * $orderDetail->qty_pak) }}
-                                @endif
-                                @if ($orderDetail->qty_pcs > 0)
-                                    {{ moneyFormat($orderDetail->price_pcs * $orderDetail->qty_pcs) }}
-                                @endif
+                            @if ($orderDetail->qty_pak > 0)
+                                {{ $orderDetail->qty_pak }} Pak
                             @endif
-                        </td>
-                    </tr>
+                            @if ($orderDetail->qty_pcs > 0)
+                                {{ $orderDetail->qty_pcs }} Pcs
+                            @endif
+                        @endif
+                    </td>
+                    <td style="border: 1px solid black; font-size: 0.7em; text-align: center; line-height: 5px;">
+                        {{-- <input type="checkbox" style="width: 30px;  height: 15px;"> --}}
+                        <div
+                            style="width: 18px; height: 8px; background-color: #ffffff; border: 1px solid #181818; display: inline-block;">
+                        </div>
+                    </td>
+
+                    <td style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
+                        @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
+                            @if ($orderDetail->qty_duz > 0)
+                                {{ moneyFormat($orderDetail->productDetail->sell_price_duz) }}
+                            @endif
+                            @if ($orderDetail->qty_pak > 0)
+                                {{ moneyFormat($orderDetail->productDetail->sell_price_pak) }}
+                            @endif
+                            @if ($orderDetail->qty_pcs > 0)
+                                {{ moneyFormat($orderDetail->productDetail->sell_price_pcs) }}
+                            @endif
+                        @endif
+                    </td>
+                    <td style="border: 1px solid black; text-align: center;font-size:0.7em;vertical-align:top">
+                        {{ number_format($orderDetail->disc_atas, 0, ',', '.') }} %
+                    </td>
+                    <td colspan="5"
+                        style="border: 1px solid black; text-align: left;font-size:0.7em;vertical-align:top">
+                        @if ($orderDetail->qty_duz > 0 || $orderDetail->qty_pak > 0 || $orderDetail->qty_pcs > 0)
+                            @if ($orderDetail->qty_duz > 0)
+                                {{ moneyFormat($orderDetail->price_duz * $orderDetail->qty_duz) }}
+                            @endif
+                            @if ($orderDetail->qty_pak > 0)
+                                {{ moneyFormat($orderDetail->price_pak * $orderDetail->qty_pak) }}
+                            @endif
+                            @if ($orderDetail->qty_pcs > 0)
+                                {{ moneyFormat($orderDetail->price_pcs * $orderDetail->qty_pcs) }}
+                            @endif
+                        @endif
+                    </td>
+                </tr>
+
+                <?php $rowCount++; ?>
                 @endforeach
             </tbody>
             <tr>
@@ -319,17 +332,27 @@
                             <col style="<?= 'width: ' . $footer[4] . 'px' ?>">
                         </colgroup>
                         <thead>
-                            <tr>
-                                <p style="margin-top: 0px;margin-bottom:0px; letter-spacing: 1.5px; font-size:0.8em;">
-                                    Keterangan :</p>
-                                <p
-                                    style="text-align: center;margin-bottom:0px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em">
-                                    TIDAK MENERIMA
+                            {{-- <tr>
+                                        <p style="margin-top: 0px;margin-bottom:0px; letter-spacing: 2px; font-size:0.8em;">
+                                            Keterangan :</p>
+                                        <p
+                                            style="text-align: center;margin-bottom:0px;margin-top:0px; letter-spacing: 2px; font-size:0.8em">
+                                            TIDAK MENERIMA
+                                            KOMPLAIN
+                                            SETELAH <br> FAKTUR
+                                            DITANDA TANGANI</p>
+                                    </tr> --}}
+                            <tr style="margin-bottom:22px !important">
+                                <p style="margin-top: 0px;margin-bottom:0px; letter-spacing: 2px; font-size:0.8em;">
+                                    KETERANGAN : TIDAK MENERIMA
                                     KOMPLAIN
-                                    SETELAH <br> FAKTUR
-                                    DITANDA TANGANI</p>
-                            </tr>
-                            <tr>
+                                    SETELAH FAKTUR </p>
+                                <span style="letter-spacing: 2px; font-size:0.8em;margin-left:79.4px;">DITANDA
+                                    TANGANI</span>
+
+                                <p
+                                    style="text-align: center;margin-bottom:0px;margin-top:0px; letter-spacing: 2px; font-size:0.8em">
+                                </p>
                                 <th style="padding-top: 0px;letter-spacing: 2.5px;font-size:0.9em">Hormat Kami</th>
                                 <td></td>
                                 <td></td>
@@ -338,14 +361,15 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="padding-top:40px;">(......................)</td>
+                                <td style="padding-top:20px;">(......................)</td>
                                 <td></td>
                                 <td></td>
-                                <td style="padding-top:40px;">(......................)</td>
+                                <td style="padding-top:20px;">(......................)</td>
                             </tr>
                             <tr>
                                 <td colspan="5">
-                                    <p style="font-size:0.7em;letter-spacing: 2px" id="hasilTerbilang">Terbilang :</p>
+                                    <p style="font-size:0.7em;letter-spacing: 2px;margin-bottom:46px"
+                                        id="hasilTerbilang">Terbilang :</p>
                                 </td>
                             </tr>
                             <tr></tr>
@@ -366,20 +390,20 @@
                         <thead>
                             <tr>
                                 <p
-                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.8px">
                                     Jml
                                     Item
-                                    <span>: {{ $order->orderDetails->count() }}</span>
+                                    <span>: {{ $totalItem }}</span>
                                 </p>
                                 <p
-                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.8px">
                                     Potongan
                                     <span>: {{ number_format($order->disc_bawah, 0, ',', '.') }}%</span>
                                 </p>
                                 <p
-                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.8px">
                                     Pajak
-                                    <span style="margin-left:16.8px;">:
+                                    <span style="margin-left:17.4px;">:
                                         {{ $taxTypesString === 'PPN' ? '11' : '0' }} %
                                         @if ($taxTypesString === 'PPN')
                                             {{ number_format($total, 0, ',', '.') }}
@@ -387,9 +411,10 @@
                                     </span>
                                 </p>
                                 <p
-                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px;letter-spacing: 1.5px">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:26px;margin-top:0px;letter-spacing: 1.8px">
                                     Tgl.
-                                    JT <span style="margin-left:6px;">: {{ $order->formatted_exp_date }} <br></span>
+                                    JT <span style="margin-left:6px;">: {{ $order->formatted_exp_date }}
+                                        <br></span>
                                 </p>
                             </tr>
                         </thead>
@@ -416,31 +441,34 @@
                         <thead>
                             <tr>
                                 <p
-                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 2px; ">
                                     Sub
                                     Total
-                                    <span style="margin-left:75.6px;">: {{ moneyFormat($order->total) }}</span>
+                                    <span style="margin-left:73.6px;font-weight:bolder;font-size:1em;">:
+                                        {{ moneyFormat($order->total) }}</span>
                                 </p>
                                 <p
-                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.8px; ">
                                     Total
                                     Akhir
-                                    <span style="margin-left:64.8px;">: {{ moneyFormat($order->total) }}</span>
+                                    <span style="margin-left:64px;font-size:1em;">:
+                                        {{ moneyFormat($order->total) }}</span>
                                 </p>
                                 <p
-                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.8px; ">
                                     DP PO
-                                    <span style="margin-left:98.4px;">: 0</span>
+                                    <span style="margin-left:98.4px;font-size:1em;">: 0</span>
                                 </p>
                                 <p
-                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.8px; ">
                                     Tunai
-                                    <span style="margin-left:98.4px;">: 0</span>
+                                    <span style="margin-left:98.4px;font-size:1em;">: 0</span>
                                 </p>
                                 <p id="nilaiKredit"
-                                    style="font-size:0.6rem;text-align: left;margin-bottom:10px;margin-top:0px; letter-spacing: 1.5px; font-size:0.8em;">
+                                    style="font-size:0.8em;text-align: left;margin-bottom:20px;margin-top:0px; letter-spacing: 2px; ">
                                     Kredit
-                                    <span style="margin-left:92.4px;">: {{ moneyFormat($order->total) }}</span>
+                                    <span style="margin-left:91.4px;font-weight:bolder;font-size:1em;">:
+                                        {{ moneyFormat($order->total) }}</span>
                                 </p>
                             </tr>
                         </thead>
@@ -453,7 +481,7 @@
                 </td>
             </tr>
         </table>
-    </section>
+    </div>
 </body>
 <script>
     function terbilangRupiah(nominal) {
@@ -544,7 +572,7 @@
     // console.log("Terbilang:", terbilangNilai);
 
     // Menampilkan hasil terbilang pada elemen HTML
-    elemenHasilTerbilang.innerText = "Terbilang : " + "# " + terbilangNilai + " #";
+    elemenHasilTerbilang.innerText = "Terbilang : " + terbilangNilai;
 </script>
 
 </html>

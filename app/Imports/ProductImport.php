@@ -56,6 +56,7 @@ class ProductImport implements ToModel, WithHeadingRow
             'stock_pak' => $row['stock_pak'],
             'stock_pcs' => $row['stock_pcs'],
             'exp_date' => $row['exp_date'],
+            'duz_type' => $row['duz_type']
         ]);
     }
 }

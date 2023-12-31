@@ -37,6 +37,7 @@ class UserController extends Controller
             'username' => 'required|max:150|unique:users,username',
             'email' => 'email|unique:users,email|nullable',
             'password' => 'required|confirmed|min:8',
+            'kode' => 'nullable'
         ], [
             'name.*' => 'Data :attribute Wajib Diisi',
             'username.*' => 'Data :attribute Wajib Diisi',
@@ -45,6 +46,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
+            'kode' => $request->kode ?? "-",
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
@@ -78,6 +80,7 @@ class UserController extends Controller
         ]);
 
         $data = [
+            'kode' => $request->kode ?? "-",
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,

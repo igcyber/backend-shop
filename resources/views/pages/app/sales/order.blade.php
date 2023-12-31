@@ -102,26 +102,26 @@
                             </div>
                             <div class="card-body">
                                 <div class="table table-striped">
-                                    <table class="display" id="table-1">
+                                    <table class="display" id="table-1" style="width: 100% !important">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 2%" class="align-middle">
                                                     No
                                                 </th>
-                                                <th scope="col" style="width: 25%">Produk</th>
-                                                <th scope="col" style="width: 10%">Stok</th>
-                                                <th scope="col" style="width: 10%">Pajak</th>
-                                                <th scope="col" style="width: 10%">Harga</th>
+                                                <th scope="col" style="width: 40%">Produk</th>
+                                                <th scope="col" style="width: 20%">Stok</th>
+                                                {{-- <th scope="col" style="width: 10%">Pajak</th> --}}
+                                                <th scope="col" style="width: 20%">Harga</th>
                                                 <th scope="col" style="width: 2%">Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($detailProducts as $key => $detail)
                                                 <tr>
-                                                    <td class="text-center align-middle" style="padding: 0px 0px;">
-                                                        {{ $key + 1 }}
-                                                    </td>
-                                                    <td class="align-middle" style="padding: 0px 0px;">
+                                                    <th scope="row">
+                                                        {{ ++$key + ($detailProducts->currentPage() - 1) * $detailProducts->perPage() }}
+                                                    </th>
+                                                    <td class="px-2" style="padding: 0px 0px;">
                                                         {{ $detail->product->title }}
                                                     </td>
                                                     <td class="align-middle">
@@ -137,9 +137,9 @@
                                                             @endif
                                                         </ul>
                                                     </td>
-                                                    <td>
+                                                    {{-- <td>
                                                         {{ $detail->tax_type }}
-                                                    </td>
+                                                    </td> --}}
                                                     <td style="padding: 0px 0px;">
                                                         <ul
                                                             style="padding: 0; list-style-type: none; line-height: 19px;margin-top:5%;">
@@ -164,6 +164,9 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="card-footer pull-right p-0 pl-4">
+                                {{ $detailProducts->links('vendor.pagination.bootstrap-4') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -178,9 +181,13 @@
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
-                "sortable": false,
-                "targets": [1, 2, 4]
+                "sortable": true,
+                "targets": [1, 2, 3, 4]
             }],
+            "iDisplayLength": 25,
+            responsive: true,
+            scrollX: true,
+            paging: false,
         });
     </script>
 

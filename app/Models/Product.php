@@ -12,7 +12,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id', 'vendor_id', 'serial_number', 'image', 'title', 'short_description', 'dus_pak',
-        'pak_pcs', 'withoutpcs', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'exp_date'
+        'pak_pcs', 'withoutpcs', 'total_stock', 'stock_duz', 'stock_pak', 'stock_pcs', 'duz_type', 'exp_date'
     ];
 
     protected $casts = [

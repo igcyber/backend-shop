@@ -90,7 +90,8 @@ class ProductController extends Controller
             'dus_pak' => $data['dus_pak'],
             'pak_pcs' => $data['pak_pcs'],
             'exp_date' => $data['exp_date'],
-            'short_description' => $data['short_description']
+            'short_description' => $data['short_description'],
+            'duz_type' => $request->duz_type
         ];
 
         $product = Product::create($productData);
@@ -129,6 +130,7 @@ class ProductController extends Controller
             'total_stock' => $product->total_stock + $conversionResult['jumlah'],
             'stock_duz' => $product->stock_duz + $hasil_perhitungan['jumlah_dus'],
             'stock_pak' => $product->stock_pak + $hasil_perhitungan['sisa_pak'],
+            'duz_type' => $request->duz_type
         ];
 
         // Check if 'sisa_biji' key exists before accessing it

@@ -137,6 +137,7 @@ class SalesController extends Controller
     {
 
         $salesId = auth()->id();
+
         // dd($salesId);
         $detailProducts = DetailProduct::join('products', 'detail_products.product_id', '=', 'products.id')
             ->where('detail_products.sales_id', $salesId)
@@ -146,7 +147,8 @@ class SalesController extends Controller
                     ->orWhere('products.stock_pcs', '>', 0);
             })
             ->select('detail_products.id', 'detail_products.product_id', 'detail_products.sell_price_duz', 'detail_products.sell_price_pak', 'detail_products.sell_price_pcs', 'detail_products.tax_type')
-            ->get();
+            ->paginate(20);
+
         // dd($detailProducts);
 
         $salesCart = SalesCart::with('productDetail')->where('sales_id', $salesId)->get();

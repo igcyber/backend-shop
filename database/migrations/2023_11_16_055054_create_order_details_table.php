@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('price_pcs');
             $table->decimal('disc_atas', 5, 2)->nullable();
             $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
+            $table->integer('shipping_cost')->nullable();
             $table->timestamps();
 
             //relationship order

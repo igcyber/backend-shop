@@ -13,7 +13,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h4>PEMBAGIAN OUTLET</h4>
+                <h4>DATA OUTLET</h4>
                 <div class="ml-auto">
                     <a href="{{ route('app.customers.create') }}" class="btn btn-outline-primary ml-auto">
                         <i class="fas fa-plus"></i> TAMBAH OUTLET
@@ -48,32 +48,23 @@
                                     </div>
                                 </form>
                                 <hr>
-                                <form action="{{ route('app.customers.index') }}" method="GET">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="q"
-                                            placeholder="Cari Nama Outlet">
-                                        <button class="btn btn-outline-primary input-group-text" onclick="resetPage()">
-                                            <i class="fas fa-sync-alt me-2"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-m">
+                                <div class="table table-striped">
+                                    <table class="display" id="table-1" style="width: 100% !important">
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%">No.</th>
                                                 <th scope="col" style="width: 20%;">Sales</th>
-                                                <th scope="col">Outlet</th>
-                                                <th scope="col">Klasifikasi</th>
-                                                <th scope="col">Alamat</th>
-                                                <th scope="col" style="width: 15%">Pilihan</th>
+                                                <th scope="col" style="width: 12%;">Outlet</th>
+                                                <th scope="col" style="width: 35%;">Alamat</th>
+                                                <th scope="col">Harga Jual</th>
+                                                <th scope="col" style="width: 15%;text-align:center;">Pilihan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($customers as $no => $customer)
                                                 <tr>
                                                     <th scope="row">
-                                                        {{ ++$no + ($customers->currentPage() - 1) * $customers->perPage() }}
+                                                        {{ $no + 1 }}
                                                     </th>
                                                     <td>
                                                         <select class="form-control select2"
@@ -81,7 +72,7 @@
                                                             @foreach ($salesOptions as $salesOption)
                                                                 <option value="{{ $salesOption->id }}"
                                                                     {{ $customer->seller->id == $salesOption->id ? 'selected' : '' }}>
-                                                                    {{ $salesOption->name }}
+                                                                    {{ $salesOption->kode }}-{{ $salesOption->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -90,10 +81,10 @@
                                                         {{ $customer->outlet->name }}
                                                     </td>
                                                     <td>
-                                                        {{ $customer->klasifikasi }}
+                                                        {!! $customer->address !!}
                                                     </td>
                                                     <td>
-                                                        {!! $customer->address !!}
+                                                        {{ $customer->hrg_jual }}
                                                     </td>
                                                     <td class="text-center">
 
@@ -114,9 +105,6 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="card-footer pull-right">
-                                {{ $customers->links('vendor.pagination.bootstrap-4') }}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,6 +114,17 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $("#table-1").dataTable({
+            "columnDefs": [{
+                "sortable": true,
+                "targets": [1, 2, 3, 4, 5]
+            }],
+            "iDisplayLength": 25,
+            responsive: true,
+            scrollX: true
+        });
+    </script>
     <!-- JS Libraies -->
     <script>
         function changeSales(selectElement, customerId) {
@@ -156,12 +155,16 @@
     </script>
 
     <script>
-        function resetPage() {
-            window.location.reload();
-        }
+        $(document).ready(function() {
+            var dataTable = $('#table-1').DataTable();
+
+            $('#search').on('keyup', function() {
+                dataTable.search(this.value).draw();
+            });
+        });
     </script>
 
-    {{-- <script>
+    <script>
         function Delete(id) {
             var id = id;
             var token = $("meta[name='csrf-token']").attr("content");
@@ -180,7 +183,7 @@
 
                     //ajax delete
                     jQuery.ajax({
-                        url: "/app/roles/" + id,
+                        url: "/app/customers/" + id,
                         data: {
                             "id": id,
                             "_token": token
@@ -220,6 +223,6 @@
                 }
             })
         }
-    </script> --}}
+    </script>
     <!-- Page Specific JS File -->
 @endpush

@@ -57,7 +57,8 @@
                                                 </tr>
                                                 <tr>
                                                     <td style="font-size: 0.9rem">Kode Sales</td>
-                                                    <td style="font-size: 0.9rem">: {{ $order->sales->name }}</td>
+                                                    <td style="font-size: 0.9rem">
+                                                        : {{ $order->sales->kode }}-{{ $order->sales->name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-size: 0.9rem">Pelanggan</td>
@@ -88,6 +89,7 @@
                                                         <th scope="col" style="width: 10%">Harga</th>
                                                         <th scope="col" style="width: 10%">Pot</th>
                                                         <th scope="col" style="width: 10%">Total</th>
+                                                        <th scope="col" style="width: 10%">Harga Kirim</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -163,6 +165,30 @@
                                                                     @endif
                                                                 @endif
                                                             </td>
+                                                            <td>
+                                                                <!-- Tambahkan form input ongkos kirim per-item -->
+                                                                <form
+                                                                    action="{{ route('app.update-shipping-cost', ['orderDetailId' => $orderDetail->id]) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('POST')
+                                                                    <div class="form-row">
+                                                                        <div class="input-group">
+                                                                            <input type="text"
+                                                                                class="form-control col-md-12"
+                                                                                id="shipping_cost" placeholder="0"
+                                                                                name="shipping_cost"
+                                                                                value="{{ $orderDetail->shipping_cost }}">
+                                                                            <button type="submit"
+                                                                                onclick="alert('Konfirmasi Nilai Ongkos Kirim')"
+                                                                                class="btn btn-sm btn-outline-primary">
+                                                                                <i class="fas fa-calculator"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </td>
+
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -190,7 +216,7 @@
                                                                 Jumlah Item
                                                             </td>
                                                             <td style="font-weight: bolder;font-size: 1.1rem">
-                                                                : {{ $order->orderDetails->count() }}
+                                                                : {{ $totalItem }}
                                                             </td>
                                                         </tr>
                                                         <tr class="align-top">
@@ -209,7 +235,8 @@
                                                             <td style="font-size: 1.1rem">:
                                                                 <input type="text" style="width: 30px;border:none;"
                                                                     readonly
-                                                                    value="{{ $taxTypesString === 'PPN' ? '11' : '0' }}"> %
+                                                                    value="{{ $taxTypesString === 'PPN' ? '11' : '0' }}">
+                                                                %
                                                                 @if ($taxTypesString === 'PPN')
                                                                     {{ number_format($total, 0, ',', '.') }}
                                                                 @endif

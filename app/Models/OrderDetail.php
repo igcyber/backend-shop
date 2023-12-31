@@ -9,18 +9,22 @@ class OrderDetail extends Model
 {
     use HasFactory;
 
+    // Allows mass assignment for all attributes
     protected $guarded = [];
 
+    // Relationship with Order model - each order detail belongs to a single order
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
 
+    // Relationship with DetailProduct model
     public function productDetail()
     {
         return $this->belongsTo(DetailProduct::class, 'detail_id');
     }
 
+    // Calculate subtotal for the order detail
     public function calculateSubtotal()
     {
         $subtotal = 0;
@@ -37,17 +41,23 @@ class OrderDetail extends Model
             $subtotal += $this->price_pcs * $this->qty_pcs;
         }
 
-        // Terapkan diskon atas jika ada
+        // Add shipping cost to the subtotal
+        $subtotal += $this->shipping_cost;
+
+
+        // Apply disc_atas if exists
         if ($this->disc_atas > 0) {
             $subtotal -= ($subtotal * ($this->disc_atas / 100));
 
-            // Update harga pada order_details setelah diskon
+            //update price each units i.e (price_duz, price_pak, price_pcs)
             $this->update([
                 'price_duz' => $this->price_duz - ($this->price_duz * ($this->disc_atas / 100)),
                 'price_pak' => $this->price_pak - ($this->price_pak * ($this->disc_atas / 100)),
                 'price_pcs' => $this->price_pcs - ($this->price_pcs * ($this->disc_atas / 100)),
             ]);
         }
+
+
 
         return $subtotal;
     }

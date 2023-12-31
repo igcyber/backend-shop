@@ -16,11 +16,13 @@ class CustomerController extends Controller
     public function index()
     {
         //get customers
-        $customers = Customer::when(request()->q, function ($query, $search) {
-            $query->orWhereHas('outlet', function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
-            });
-        })->with('outlet')->paginate(20);
+        // $customers = Customer::when(request()->q, function ($query, $search) {
+        //     $query->orWhereHas('outlet', function ($query) use ($search) {
+        //         $query->where('name', 'like', '%' . $search . '%');
+        //     });
+        // })->with('outlet')->paginate(20);
+
+        $customers = Customer::with('outlet')->get();
 
         // Get sales options
         $salesOptions = Role::where('name', 'Sales')->first()->users;
@@ -42,7 +44,6 @@ class CustomerController extends Controller
         return view('pages.app.customers._create', compact('sales', 'outlets', 'existingOutletIds'));
     }
 
-
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -52,15 +53,42 @@ class CustomerController extends Controller
             'nomor' => 'nullable',
             'sales_id' => 'nullable|exists:users,id',
             'outlet_id' => 'required',
+            'hrg_jual' => 'nullable'
         ]);
 
         $customer = Customer::create([
             'klasifikasi' => $validatedData['klasifikasi'],
             'address' => $validatedData['address'],
             'no_telp' => $validatedData['no_telp'] ?? '-',
+            'hrg_jual' => $validatedData['hrg_jual'],
             'nomor' => $validatedData['nomor'],
             'sales_id' => $validatedData['sales_id'] ?? null,
             'outlet_id' => $validatedData['outlet_id'],
+        ]);
+
+        $message = $customer ? 'Data Berhasil Disimpan!' : 'Data Gagal Disimpan!';
+        return redirect()->route('app.customers.index')->with(['success' => $message]);
+    }
+
+
+    public function edit($id)
+    {
+        $customer = Customer::with('outlet', 'seller')->findOrFail($id);
+        // dd($customer);
+        return view('pages.app.customers._edit', compact('customer'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $customer = Customer::findOrFail($id);
+
+        $customer->update([
+            'hrg_jual' => $request->hrg_jual,
+            'no_telp' => $request->no_telp,
+            'nomor' => $request->nomor,
+            'address' => $request->address,
+            'klasifikasi' => $request->klasifikasi,
         ]);
 
         $message = $customer ? 'Data Berhasil Disimpan!' : 'Data Gagal Disimpan!';
@@ -97,5 +125,25 @@ class CustomerController extends Controller
         }
 
         return response()->json(['error' => 'Customer not found'], 404);
+    }
+
+    public function destroy($id)
+    {
+        //find outlet
+        $customer = Customer::findOrFail($id);
+
+        //delete user
+        $customer->delete();
+
+        //check for status destroy
+        if ($customer) {
+            return response()->json([
+                'status' => 'success'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
     }
 }
