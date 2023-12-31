@@ -14,24 +14,7 @@ use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
-    public function checkout($user)
-    {
-        $carts = Cart::where('outlet_id', $user)->get();
 
-        // Filter carts with non-zero quantities
-        $nonZeroQuantityCarts = $carts->filter(function ($cart) {
-            return $cart->qty_duz > 0 || $cart->qty_pak > 0 || $cart->qty_pcs > 0;
-        });
-
-        $subtotal = 0;
-        foreach ($nonZeroQuantityCarts as $item) {
-            $subtotal += $item->qty_duz * $item->productDetail->sell_price_duz;
-            $subtotal += $item->qty_pak * $item->productDetail->sell_price_pak;
-            $subtotal += $item->qty_pcs * $item->productDetail->sell_price_pcs;
-        }
-
-        return view('front-end.order.index', compact('nonZeroQuantityCarts', 'subtotal'));
-    }
     // public function order(Request $request, $user)
     // {
     //     try {
@@ -113,102 +96,102 @@ class OrderController extends Controller
     //     }
     // }
 
-    public function order(Request $request, $user)
-    {
-        try {
-            $customers = $this->getCustomers($user);
+    // public function order(Request $request, $user)
+    // {
+    //     try {
+    //         $customers = $this->getCustomers($user);
 
-            DB::transaction(function () use ($customers, $request) {
-                foreach ($customers as $customer) {
-                    $order = $this->createOrder($customer, $request);
+    //         DB::transaction(function () use ($customers, $request) {
+    //             foreach ($customers as $customer) {
+    //                 $order = $this->createOrder($customer, $request);
 
-                    $this->createOrderDetails($order, $request);
+    //                 $this->createOrderDetails($order, $request);
 
-                    $this->updateProductStock($order);
-                }
-            });
+    //                 $this->updateProductStock($order);
+    //             }
+    //         });
 
-            $this->clearCart($user);
+    //         $this->clearCart($user);
 
-            return redirect(route('front.home'))->with('success', 'Pesanan Berhasil Dikirim');
-        } catch (\Exception $e) {
-            // Log::error('Error during order processing: ' . $e->getMessage(), ['exception' => $e]);
-            return redirect()->back()->with('error', $e->getMessage(), ['exception' => $e]);
-        }
-    }
+    //         return redirect(route('front.home'))->with('success', 'Pesanan Berhasil Dikirim');
+    //     } catch (\Exception $e) {
+    //         // Log::error('Error during order processing: ' . $e->getMessage(), ['exception' => $e]);
+    //         return redirect()->back()->with('error', $e->getMessage(), ['exception' => $e]);
+    //     }
+    // }
 
-    private function getCustomers($user)
-    {
-        return Customer::with(['outlet', 'seller'])->where('outlet_id', $user)->get();
-    }
+    // private function getCustomers($user)
+    // {
+    //     return Customer::with(['outlet', 'seller'])->where('outlet_id', $user)->get();
+    // }
 
-    private function createOrder($customer, $request)
-    {
-        $transactionId = now()->format('Ymd') . Str::random(3);
+    // private function createOrder($customer, $request)
+    // {
+    //     $transactionId = now()->format('Ymd') . Str::random(3);
 
-        return Order::create([
-            'sales_id' => $customer->sales_id,
-            'outlet_id' => $customer->outlet_id,
-            // 'customer_name' => $customer->outlet->name,
-            // 'customer_sales' => $customer->seller->name,
-            // 'customer_address' => $customer->address,
-            'transaction_id' => $transactionId,
-            'total' => $request['subtotal'],
-            'payment_status' => 0,
-            'order_status' => 0,
-        ]);
-    }
+    //     return Order::create([
+    //         'sales_id' => $customer->sales_id,
+    //         'outlet_id' => $customer->outlet_id,
+    //         // 'customer_name' => $customer->outlet->name,
+    //         // 'customer_sales' => $customer->seller->name,
+    //         // 'customer_address' => $customer->address,
+    //         'transaction_id' => $transactionId,
+    //         'total' => $request['subtotal'],
+    //         'payment_status' => 0,
+    //         'order_status' => 0,
+    //     ]);
+    // }
 
-    private function createOrderDetails($order, $request)
-    {
-        foreach ($request['detail_id'] as $index => $detailId) {
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'detail_id' => $detailId,
-                'qty_duz' => $request['qty_duz'][$index],
-                'qty_pak' => $request['qty_pak'][$index],
-                'qty_pcs' => $request['qty_pcs'][$index],
-                'price_duz' => $request['price_duz'][$index],
-                'price_pak' => $request['price_pak'][$index],
-                'price_pcs' => $request['price_pcs'][$index],
-            ]);
-        }
-    }
+    // private function createOrderDetails($order, $request)
+    // {
+    //     foreach ($request['detail_id'] as $index => $detailId) {
+    //         OrderDetail::create([
+    //             'order_id' => $order->id,
+    //             'detail_id' => $detailId,
+    //             'qty_duz' => $request['qty_duz'][$index],
+    //             'qty_pak' => $request['qty_pak'][$index],
+    //             'qty_pcs' => $request['qty_pcs'][$index],
+    //             'price_duz' => $request['price_duz'][$index],
+    //             'price_pak' => $request['price_pak'][$index],
+    //             'price_pcs' => $request['price_pcs'][$index],
+    //         ]);
+    //     }
+    // }
 
-    private function updateProductStock($order)
-    {
-        $orderList = Order::with('orderDetails.productDetail')->find($order->id);
+    // private function updateProductStock($order)
+    // {
+    //     $orderList = Order::with('orderDetails.productDetail')->find($order->id);
 
-        if ($orderList) {
-            foreach ($orderList->orderDetails as $orderDetail) {
-                $this->updateProductStockForOrderDetail($orderDetail);
-            }
-        }
-    }
+    //     if ($orderList) {
+    //         foreach ($orderList->orderDetails as $orderDetail) {
+    //             $this->updateProductStockForOrderDetail($orderDetail);
+    //         }
+    //     }
+    // }
 
-    private function updateProductStockForOrderDetail($orderDetail)
-    {
-        $productDetail = $orderDetail->productDetail;
-        $duzToPakFactor = $productDetail->product->dus_pak;
-        $pakToPcsFactor = $productDetail->product->pak_pcs;
+    // private function updateProductStockForOrderDetail($orderDetail)
+    // {
+    //     $productDetail = $orderDetail->productDetail;
+    //     $duzToPakFactor = $productDetail->product->dus_pak;
+    //     $pakToPcsFactor = $productDetail->product->pak_pcs;
 
-        if ($productDetail->product->withoutPcs) {
-            $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
-            $onlyPak = $orderDetail->qty_pak;
-            $productDetail->product->decStockPack($duzToPak, $onlyPak);
-        } else {
-            $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
-            $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor;
-            $pcs = $orderDetail->qty_pcs;
+    //     if ($productDetail->product->withoutPcs) {
+    //         $duzToPak = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
+    //         $onlyPak = $orderDetail->qty_pak;
+    //         $productDetail->product->decStockPack($duzToPak, $onlyPak);
+    //     } else {
+    //         $duzToPcs = $orderDetail->qty_duz * $duzToPakFactor * $pakToPcsFactor;
+    //         $pakToPcs = $orderDetail->qty_pak * $pakToPcsFactor;
+    //         $pcs = $orderDetail->qty_pcs;
 
-            $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
-        }
-    }
+    //         $productDetail->product->decrementStock($duzToPcs, $pakToPcs, $pcs);
+    //     }
+    // }
 
-    private function clearCart($user)
-    {
-        Cart::where('outlet_id', $user)->delete();
-    }
+    // private function clearCart($user)
+    // {
+    //     Cart::where('outlet_id', $user)->delete();
+    // }
 
     public function updateTotalAmount(Order $order)
     {
@@ -242,5 +225,27 @@ class OrderController extends Controller
 
         // Return a response (optional)
         return response()->json(['message' => 'Exp_date updated successfully']);
+    }
+
+    public function updateShippingCost(Request $request, $orderDetailId)
+    {
+
+        // dd($request);
+        $request->validate([
+            'shipping_cost' => 'nullable|numeric|min:0',
+        ]);
+
+        $orderDetail = OrderDetail::findOrFail($orderDetailId);
+        // dd($orderDetail);
+
+        $orderDetail->update([
+            'shipping_cost' => $request->input('shipping_cost'),
+        ]);
+
+        // Recalculate the total order cost
+        $order = $orderDetail->order;
+        $order->calculateTotal();
+
+        return back()->with('success', 'Shipping cost updated successfully');
     }
 }

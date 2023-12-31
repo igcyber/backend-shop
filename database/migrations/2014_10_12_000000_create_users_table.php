@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('kode', 10)->nullable();
             $table->string('name', 150);
             $table->string('username', 150);
             $table->string('email')->nullable();

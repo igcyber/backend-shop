@@ -66,16 +66,16 @@
                                                     @php
                                                         $min_stok = $detail->product->dus_pak * $detail->product->pak_pcs;
                                                     @endphp
-                                                    <td class="text-center align-middle" style="padding: 0px 0px;">
+                                                    <th scope="row">
                                                         {{ $key + 1 }}
-                                                    </td>
+                                                    </th>
                                                     <td class="align-middle" style="padding: 10px 10px;">
                                                         <select class="form-control select2"
                                                             onchange="changeSales(this, {{ $detail->id }})">
                                                             @foreach ($salesOptions as $salesOption)
                                                                 <option value="{{ $salesOption->id }}"
                                                                     {{ $detail->seller->id == $salesOption->id ? 'selected' : '' }}>
-                                                                    {{ $salesOption->name }}
+                                                                    {{ $salesOption->kode }}-{{ $salesOption->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -207,12 +207,20 @@
     <script>
         $("#table-1").dataTable({
             "columnDefs": [{
-                "sortable": false,
-                "targets": [1, 2, 3, 4, 5, 6, 7]
+                "sortable": true,
+                "targets": [1, 2, 3, 4, 5]
             }],
             "iDisplayLength": 25,
             responsive: true,
             scrollX: true,
+        });
+
+        $(document).ready(function() {
+            var dataTable = $('#table-1').DataTable();
+
+            $('#search').on('keyup', function() {
+                dataTable.search(this.value).draw();
+            });
         });
     </script>
 

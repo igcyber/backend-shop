@@ -165,7 +165,7 @@
                                     {{-- INPUT Stok & Unit PRODUK  --}}
                                     {{-- Stock Dengan Masing-Masing Satuan --}}
                                     <div class="form-row">
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary" style="font-weight: bolder">
@@ -184,7 +184,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
@@ -204,7 +204,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
@@ -224,7 +224,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
@@ -234,6 +234,24 @@
                                                     </div>
                                                 </div>
                                                 <span class="form-control">Tanpa Pcs</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-lg-4 mt-3">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-secondary"
+                                                        style="font-weight: bolder">
+                                                        Jenis Duz
+                                                    </div>
+                                                </div>
+                                                <select name="duz_type" class="form-control">
+                                                    @foreach (['Kecil', 'Sedang', 'Besar'] as $option)
+                                                        <option value="{{ $option }}"
+                                                            {{ $option == $product->duz_type ? 'selected' : '' }}>
+                                                            {{ $option }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 

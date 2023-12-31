@@ -26,6 +26,7 @@ class UserImport implements ToModel, WithHeadingRow
         $username = generateUsername($row['name']);
 
         $user = new User([
+            'kode' => $row['kode'],
             'name' => $row['name'],
             'username' => $username,
             'password' => $enc_pass,

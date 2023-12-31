@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apps;
 
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\DetailProduct;
@@ -28,7 +29,10 @@ class DetailProductController extends Controller
         $products = Product::select('id', 'title')->get();
         $existProduct = DetailProduct::pluck('product_id')->toArray();
         $existProducIds = array_unique($existProduct);
-        return view('pages.app.p_detail._create', compact('products', 'existProducIds'));
+
+        $salesRole = Role::where('name', 'Sales')->first();
+        $sales = User::role($salesRole->name)->get();
+        return view('pages.app.p_detail._create', compact('sales', 'products', 'existProducIds'));
     }
 
     public function edit(Request $request, $id)
@@ -43,9 +47,10 @@ class DetailProductController extends Controller
         $this->validate($request, [
             'product_id' => 'required',
             'sell_price_duz' => 'required',
-            'tax_type' => 'required',
-            'periode' => 'required',
-            'discount' => 'nullable|numeric'
+            'tax_type' => 'nullable',
+            'periode' => 'nullable',
+            'discount' => 'nullable|numeric',
+            'sales_id' => 'required'
         ]);
 
         $productContent = Product::findOrFail($request->product_id);
@@ -74,6 +79,7 @@ class DetailProductController extends Controller
         }
 
         $detail = DetailProduct::create([
+            'sales_id' => $request->sales_id,
             'product_id' => $request->product_id,
             'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,
@@ -134,8 +140,8 @@ class DetailProductController extends Controller
             'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,
             'sell_price_pcs' => $getPricePcs ?? 0,
-            'tax_type' => $detailProduct->tax_type,
-            'periode' => $detailProduct->periode,
+            'tax_type' => $request->tax_type,
+            'periode' => $request->periode,
             'discount' => $newDiscountPercentage ?? 0,
         ]);
 

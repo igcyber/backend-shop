@@ -30,6 +30,6 @@ class MarkedProductController extends Controller
             'detail_id' => $detailId,
         ]);
 
-        return back()->with(['success' => 'Product successfully marked']);
+        return back()->with(['success' => 'Produk Berhasil Dipesan']);
     }
 }
