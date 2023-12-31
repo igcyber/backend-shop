@@ -86,7 +86,7 @@
 
                                     {{-- SELECT JENIS PAJAK & PERIODE --}}
                                     <div class="form-row">
-                                        <div class="col-md-4 mt-2">
+                                        <div class="col-md-3 mt-2">
                                             <label for="tax" style="font-weight: bold">Jenis Pajak</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -108,7 +108,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 mt-2">
+                                        <div class="col-md-3 mt-2">
                                             <label for="discount" style="font-weight: bold">Diskon (%)</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -127,7 +127,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 mt-2">
+                                        <div class="col-md-3 mt-2">
                                             <label for="per" style="font-weight: bold">Periode</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -142,6 +142,24 @@
                                                     <option value="Seasonal">Seasonal</option>
                                                 </select>
                                                 @error('periode')
+                                                    <div class="invalid-feedback" style="display: block">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 mt-2">
+                                            <div class="form-group">
+                                                <label for="sales">Sales</label>
+                                                <select name="sales_id" id="sales"
+                                                    class="form-control @error('sales_id') is-invalid @enderror select2">
+                                                    <option disabled selected>PILIH SALES</option>
+                                                    @foreach ($sales as $sale)
+                                                        <option value="{{ $sale->id }}">{{ $sale->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('sales_id')
                                                     <div class="invalid-feedback" style="display: block">
                                                         {{ $message }}
                                                     </div>

@@ -48,15 +48,6 @@
                                     </div>
                                 </form>
                                 <hr>
-                                {{-- <form action="{{ route('app.customers.index') }}" method="GET">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="q"
-                                            placeholder="Cari Nama Outlet">
-                                        <button class="btn btn-outline-primary input-group-text" onclick="resetPage()">
-                                            <i class="fas fa-sync-alt me-2"></i>
-                                        </button>
-                                    </div>
-                                </form> --}}
                                 <div class="table table-striped">
                                     <table class="display" id="table-1" style="width: 100% !important">
                                         <thead>
@@ -73,7 +64,7 @@
                                             @foreach ($customers as $no => $customer)
                                                 <tr>
                                                     <th scope="row">
-                                                        {{ ++$no + ($customers->currentPage() - 1) * $customers->perPage() }}
+                                                        {{ $no + 1 }}
                                                     </th>
                                                     <td>
                                                         <select class="form-control select2"
@@ -81,7 +72,7 @@
                                                             @foreach ($salesOptions as $salesOption)
                                                                 <option value="{{ $salesOption->id }}"
                                                                     {{ $customer->seller->id == $salesOption->id ? 'selected' : '' }}>
-                                                                    {{ $salesOption->name }}
+                                                                    {{ $salesOption->kode }}-{{ $salesOption->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -114,9 +105,6 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="card-footer pull-right p-0 pl-4">
-                                {{ $customers->links('vendor.pagination.bootstrap-4') }}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,8 +122,7 @@
             }],
             "iDisplayLength": 25,
             responsive: true,
-            scrollX: true,
-            paging: false,
+            scrollX: true
         });
     </script>
     <!-- JS Libraies -->
@@ -168,9 +155,13 @@
     </script>
 
     <script>
-        function resetPage() {
-            window.location.reload();
-        }
+        $(document).ready(function() {
+            var dataTable = $('#table-1').DataTable();
+
+            $('#search').on('keyup', function() {
+                dataTable.search(this.value).draw();
+            });
+        });
     </script>
 
     <script>

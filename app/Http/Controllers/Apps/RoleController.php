@@ -60,20 +60,27 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         //validate request updated form
+        // / Validate request updated form
         $this->validate($request, [
             'name' => 'required',
-            'permissions' => 'required'
+            'permissions' => 'nullable', // nullable
         ], [
             'name.required' => 'Nama Hak Akses Harus Diisi',
         ]);
 
-        //update role
+        // Update role
         $role->update([
             'name' => $request->name
         ]);
 
-        //sync permissions to role
-        $role->syncPermissions($request->permissions);
+        // Check if permissions are provided
+        if ($request->has('permissions')) {
+            // Sync provided permissions to the role
+            $role->syncPermissions($request->permissions);
+        } else {
+            // If no permissions are provided, remove all permissions from the role
+            $role->syncPermissions([]);
+        }
 
         //redirect back to roles page
         if ($role) {

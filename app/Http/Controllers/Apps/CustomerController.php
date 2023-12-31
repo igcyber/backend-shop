@@ -22,7 +22,7 @@ class CustomerController extends Controller
         //     });
         // })->with('outlet')->paginate(20);
 
-        $customers = Customer::with('outlet')->paginate(20);
+        $customers = Customer::with('outlet')->get();
 
         // Get sales options
         $salesOptions = Role::where('name', 'Sales')->first()->users;
