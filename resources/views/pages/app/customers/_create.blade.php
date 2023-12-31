@@ -41,6 +41,29 @@
                                         </div>
 
                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="sales">Sales</label>
+                                                <select name="sales_id" id="sales"
+                                                    class="form-control @error('sales_id') is-invalid @enderror select2">
+                                                    <option disabled selected>PILIH SALES</option>
+                                                    @foreach ($sales as $sale)
+                                                        <option value="{{ $sale->id }}">{{ $sale->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('sales_id')
+                                                    <div class="invalid-feedback" style="display: block">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="form-row mt-1">
+                                        <div class="col-md-3">
                                             <label for="nomor">Nomor</label>
                                             <input type="text" id="nomor"
                                                 class="form-control @error('nomor') is-invalid @enderror" name="nomor"
@@ -52,22 +75,7 @@
                                             @enderror
                                         </div>
 
-                                    </div>
-                                    <div class="form-row mt-3">
-
-                                        <div class="col-md-6">
-                                            <label for="telp">No. Telp</label>
-                                            <input id="telp" name="no_telp" type="text" value="{{ old('no_telp') }}"
-                                                placeholder="Tuliskan No. Telp"
-                                                class="form-control @error('no_telp') is-invalid @enderror">
-                                            @error('no_telp')
-                                                <div class="invalid-feedback" style="display: block">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <label for="klasifikasi">Klasifikasi</label>
                                             <select name="klasifikasi" id="klasifikasi"
                                                 class="form-control @error('klasifikasi') is-invalid @enderror">
@@ -86,29 +94,37 @@
                                             @enderror
                                         </div>
 
-                                        {{-- <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="sales">Sales</label>
-                                                <select name="sales_id" id="sales"
-                                                    class="form-control @error('sales_id') is-invalid @enderror select2">
-                                                    <option disabled selected>PILIH SALES</option>
-                                                    @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('sales_id')
-                                                    <div class="invalid-feedback" style="display: block">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div> --}}
+                                        <div class="col-md-3">
+                                            <label for="telp">No. Telp</label>
+                                            <input id="telp" name="no_telp" type="text"
+                                                value="{{ old('no_telp') }}" placeholder="Tuliskan No. Telp Outlet"
+                                                class="form-control @error('no_telp') is-invalid @enderror">
+                                            @error('no_telp')
+                                                <div class="invalid-feedback" style="display: block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="hrg_jual">Harga Jual</label>
+                                            <input id="hrg_jual" name="hrg_jual" type="text"
+                                                value="{{ old('hrg_jual') }}" placeholder="Tuliskan Harga Jual"
+                                                class="form-control @error('hrg_jual') is-invalid @enderror">
+                                            @error('hrg_jual')
+                                                <div class="invalid-feedback" style="display: block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+
                                     </div>
                                     <div class="form-row mt-3">
                                         <div class="col-md-12">
                                             <label for="address" style="font-weight: bold">Alamat Outlet</label>
                                             <textarea id="address" name="address" class="summernote-simple @error('address') is-invalid @enderror">
-                                            {{ old('short_descriptions') }}
+                                            {{ old('address') }}
                                         </textarea>
                                         </div>
                                     </div>

@@ -43,8 +43,8 @@ class DetailProductController extends Controller
         $this->validate($request, [
             'product_id' => 'required',
             'sell_price_duz' => 'required',
-            'tax_type' => 'required',
-            'periode' => 'required',
+            'tax_type' => 'nullable',
+            'periode' => 'nullable',
             'discount' => 'nullable|numeric'
         ]);
 
@@ -134,8 +134,8 @@ class DetailProductController extends Controller
             'sell_price_duz' => $sell_price_duz,
             'sell_price_pak' => $getPricePak,
             'sell_price_pcs' => $getPricePcs ?? 0,
-            'tax_type' => $detailProduct->tax_type,
-            'periode' => $detailProduct->periode,
+            'tax_type' => $request->tax_type,
+            'periode' => $request->periode,
             'discount' => $newDiscountPercentage ?? 0,
         ]);
 

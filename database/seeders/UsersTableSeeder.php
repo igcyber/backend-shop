@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
          * Create Users Seeder
          */
         $user = User::create([
+            'kode' => 'AAA',
             'name' => 'Supervisor 1',
             'username' => 'spv01',
             'email' => 'supervisor@example.com',

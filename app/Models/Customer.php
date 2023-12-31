@@ -15,6 +15,7 @@ class Customer extends Model
         'outlet_id',
         'sales_id',
         'no_telp',
+        'hrg_jual',
         'address',
     ];
 

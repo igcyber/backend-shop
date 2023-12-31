@@ -6,6 +6,16 @@
         <form action="{{ route('app.users.store') }}" method="POST">
             @csrf
             <div class="form-group">
+                <label for="kode">Kode</label>
+                <input type="text" id="kode" class="form-control @error('kode') is-invalid @enderror"
+                    name="kode" placeholder="Tuliskan Kode" value="{{ old('kode') }}">
+                @error('kode')
+                    <div class="invalid-feedback" style="display: block">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label for="name">Nama Lengkap</label>
                 <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
                     name="name" placeholder="Tuliskan Nama Lengkap" value="{{ old('name') }}">

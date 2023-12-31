@@ -18,8 +18,8 @@ return new class extends Migration
             $table->bigInteger('sell_price_duz')->nullable();
             $table->bigInteger('sell_price_pak')->nullable();
             $table->bigInteger('sell_price_pcs')->nullable();
-            $table->enum('tax_type', ['PPN', 'NON-PPN'])->default('PPN');
-            $table->enum('periode', ['Reguler', 'Seasonal'])->default('Reguler');
+            $table->enum('tax_type', ['PPN', 'NON-PPN'])->nullable();
+            $table->enum('periode', ['Reguler', 'Seasonal'])->nullable();
             $table->decimal('discount', 5, 2)->nullable();
             $table->timestamps();
 

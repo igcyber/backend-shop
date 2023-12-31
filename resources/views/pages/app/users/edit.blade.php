@@ -21,6 +21,16 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="form-group">
+                                        <label>Kode</label>
+                                        <input type="text" class="form-control @error('kode') is-invalid @enderror"
+                                            name="kode" value="{{ $user->kode }}">
+                                        @error('kode')
+                                            <div class="invalid-feedback" style="display: block">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label>Nama Lengkap</label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                             name="name" value="{{ $user->name }}">

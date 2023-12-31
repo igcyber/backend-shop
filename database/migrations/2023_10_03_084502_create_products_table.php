@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('stock_duz')->nullable();
             $table->integer('stock_pak')->nullable();
             $table->integer('stock_pcs')->nullable();
+            $table->enum('duz_type', ['Kecil', 'Sedang', 'Besar'])->nullable();
             $table->date('exp_date')->nullable();
             $table->timestamps();
 

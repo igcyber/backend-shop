@@ -57,6 +57,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" style="width: 5%">No</th>
+                                                <th scope="col">Kode</th>
                                                 <th scope="col">Nama Lengkap</th>
                                                 <th scope="col">Nama Pengguna</th>
                                                 <th scope="col">Hak Akses</th>
@@ -69,6 +70,9 @@
                                                     <th scope="row">
                                                         {{ ++$no + ($users->currentPage() - 1) * $users->perPage() }}
                                                     </th>
+                                                    <td>
+                                                        {{ $user->kode }}
+                                                    </td>
                                                     <td>
                                                         {{ $user->name }}
                                                     </td>

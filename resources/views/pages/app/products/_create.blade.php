@@ -161,8 +161,7 @@
                                     {{-- Stock Dengan Masing-Masing Satuan --}}
 
                                     <div class="form-row">
-
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary" style="font-weight: bolder">
@@ -180,7 +179,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
@@ -200,7 +199,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text bg-secondary"
@@ -220,7 +219,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-3 col-lg-3 mt-3">
+                                        <div class="col-md-2 col-lg-2 mt-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
@@ -231,6 +230,21 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4 col-lg-4 mt-3">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-secondary"
+                                                        style="font-weight: bolder">
+                                                        Jenis Duz
+                                                    </div>
+                                                </div>
+                                                <select name="duz_type" class="form-control">
+                                                    <option value="Kecil">Kecil</option>
+                                                    <option value="Sedang">Sedang</option>
+                                                    <option value="Besar">Besar</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-md-12 mt-3" style="min-height:80px;">

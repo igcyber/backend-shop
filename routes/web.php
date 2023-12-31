@@ -131,8 +131,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app', 'as' => 'app.'], func
 
     //update order details
     Route::put('/sales/update-order-detail/{orderId}', [SalesController::class, 'updateOrderDetail'])->name('sales.updateOrderDetail');
-
     Route::post('/update-total-amount/{order}', [OrderController::class, 'updateTotalAmount'])->name('update.total_amount');
+    Route::post('/update-shipping-cost/{orderDetailId}', [OrderController::class, 'updateShippingCost'])
+        ->name('update-shipping-cost');
 
     //Flash Sale Route
     Route::get('/sales/flash', [FlashSaleController::class, 'index'])->name('flash.sales');
